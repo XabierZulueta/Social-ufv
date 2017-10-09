@@ -1,0 +1,16 @@
+<div *ngIf="user">
+    <h3 style="margin-bottom: 10px;">{{user.name}}</h3>
+    <button *ngIf="user.grupos.length>0 && grupos ==false" (click)="onSelect(user)" class="btn btn-secondary" style="cursor:pointer;">Ver grupos</button>
+    <button *ngIf="user.grupos.length>0 && grupos ==true" (click)="onSelect(user)" class="btn btn-secondary" style="cursor:pointer;">Ocultar grupos</button>
+    <div class="row" style="margin-top:10px;"  >
+            <div class="col-md-2" style="margin-right: 15px; "  *ngFor="let grupo of user.grupos">
+                <div *ngIf="grupos == true" style="width:200px;"  class="card">
+                        <img   class="card-img-top" style="width:198px" [src] = "grupo.imagen">
+                        <div class="card-block">
+                            <p class="card-title">{{grupo.nombre}}</p>
+                            <a [routerLink]="['/grupo', grupo.id]" class="btn btn-primary">Ver grupo</a>
+                        </div>
+                </div>
+            </div>
+        </div>
+</div>

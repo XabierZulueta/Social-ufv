@@ -1,0 +1,13 @@
+<h1>Grupos</h1>
+<div class="row" style=" text-align: center; ">
+    <div class="col-md-2" *ngFor="let g of grupos">
+        <div class="thumbnail">
+            <a [routerLink]="['/grupo', g.id]">
+                <img  style="width:100px; height:100px;"  [src] = "g.imagen">
+                <div class="caption">
+                     <p>{{g.nombre}}</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
