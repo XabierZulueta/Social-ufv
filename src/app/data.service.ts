@@ -3,15 +3,23 @@ import { DayPilot } from 'daypilot-pro-angular';
 import { Observable } from 'rxjs/Rx';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Evento } from './evento';
 
 @Injectable()
 export class DataService {
-
+    
     result: any;
-
+    events : any[];
+    private headers = new Headers({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
+    private options = new RequestOptions({ headers: this.headers });
     constructor(private _http: Http) {
      }
 
+     getMaxId(){
+         return this._http.get("/api/users/max")
+             .map(result => this.result = result.json().data);
+     }
+     
     getUsers() {
         return this._http.get("/api/users")
             .map(result => this.result = result.json().data);
@@ -32,14 +40,14 @@ export class DataService {
             .map(result => this.result = result.json().data);
     }
 
-    events: any[] = [
+    /*events: any[] = [
         {
             id: "1",
             start: "2017-06-05T00:00:00",
             end: "2017-06-08T00:00:00",
             text: "Event 1"
         }
-    ];
+    ];*/
     getEvents(from: DayPilot.Date, to: DayPilot.Date): Observable<any[]> {
 
         // simulating an HTTP request
@@ -57,4 +65,25 @@ export class DataService {
             .map(result => this.result = result.json().data);
     }
 
+    addUser(nombre:string, id:number) : Promise<any>{
+        return this._http.post("/api/xabi", JSON.stringify({ id: id, name: nombre, grupos:[] }), { headers: this.headers })
+        .toPromise()
+        .catch(this.handleError);
+       /*     .toPromise()
+            .then(res => { res.id=i, nombre: nombr })
+            .catch(this.handleError)  ;  */
+        //.subscribe();
+            //.map(this.extractData)
+        //return this._http.post("/api/xabi", JSON.stringify({ id: 3, nombre: "Carlos" })).map(response => response.json());
+    }
+
+    addEvent(event:Evento){
+        return this._http.post("/api/events", JSON.stringify(event), { headers: this.headers })
+            .toPromise()
+            .catch(this.handleError);
+    }
+    private handleError(error: any): Promise<any> {
+        console.error('An error occurred', error);
+        return Promise.reject(error.message || error);
+    }
 }

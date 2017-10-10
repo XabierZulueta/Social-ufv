@@ -3,6 +3,12 @@ const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 
+/*QUERIES
+
+    db.users.find().sort({id:-1}).limit(1)//RECUPERA EL USUARIO CON MAYOR ID
+
+    */
+
 // Connect
 const connection = (closure) => {
     //return MongoClient.connect('mongodb://xabier:xabier@ds159274.mlab.com:59274/social-ufv',(err,db) => {
@@ -26,6 +32,52 @@ let response = {
     data: [],
     message: null
 };
+
+//Post events
+router.post('/events', (req, res) => {
+    req.body.start = new Date(req.body.start);
+    connection((db) => {
+        db.collection('events')
+            .insert(req.body, function (err, result) {
+                if (err)
+                    res.send('Error');
+                else
+                    res.send('Success');
+            });
+    })
+});
+
+// Get users
+router.get('/users/max', (req, res) => {
+    connection((db) => {
+        db.collection('users')
+            .find({})
+            .sort({ "id": -1 })
+            .limit(1)
+            .toArray()
+            .then((users) => {
+                response.data = users;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+    });
+});
+
+//POst events
+router.post('/xabi', (req, res) => {
+    req.body.id=parseInt(req.body.id);
+    connection((db) => {
+        db.collection('users')
+            .insert(req.body, function (err, result) {
+                if (err)
+                    res.send('Error');
+                else
+                    res.send('Success');
+            }); 
+    })
+});
 
 // Get events
 router.get('/events', (req, res) => {
@@ -51,7 +103,7 @@ router.get('/groups', (req, res) => {
             .toArray()
             .then((users) => {
                 response.data = users;
-                res.json(response);
+                res.json(response); 
             })
             .catch((err) => {
                 sendError(err, res);

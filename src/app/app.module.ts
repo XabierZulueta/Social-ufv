@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { GrupoComponent } from './grupo.component';
@@ -10,6 +10,7 @@ import { UsersComponent } from './users.component';
 import { UserComponent } from './user.component';
 import { DataService } from './data.service';
 import { CalendarioComponent } from './calendario.component';
+import { EventoComponent } from './evento.component';
 
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
@@ -20,8 +21,10 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DayPilotModule } from "daypilot-pro-angular";
+//import { DatePickerModule } from 'ng2-datepicker-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
+
 
 
 @NgModule({
@@ -32,6 +35,7 @@ import { AppRoutingModule } from './app-routing.module';
     UserComponent,
     UsersComponent,
     CalendarioComponent,
+    EventoComponent
   //  UsuariosComponent
   ],
   imports: [
@@ -45,7 +49,8 @@ import { AppRoutingModule } from './app-routing.module';
     HttpModule,
     NgbModule,
     AppRoutingModule,
-    DemoUtilsModule
+    DemoUtilsModule,   
+   // DatePickerModule,
    // InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],
   providers: [//UsuariosService,

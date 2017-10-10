@@ -1,0 +1,45 @@
+
+        <div *ngFor="let event of events; let index = index">
+            <table class="table table-bordered">
+
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>Evento</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+            <tr>
+                <td><label>Organizador</label>
+                    <label>Grupo organizador</label>
+                </td>
+            </tr>
+        <tr>
+            <td>
+                Título:
+                <input type="text" class="form-control" [(ngModel)]="event.title" >
+                Descripción:
+            <textarea [(ngModel)]="event.descripcion" class="form-control" rows="5" id="comment"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>ECTs: <input type="number" step="0.01" class="form-control" [(ngModel)]="event.creditos"></td>
+        </tr>
+        <tr>
+            <td>Fecha comienzo:
+                <mwl-demo-utils-date-time-picker [(ngModel)]="event.start"  placeholder="Not set">
+                </mwl-demo-utils-date-time-picker>
+            </td>
+        </tr>
+        <tr>
+            <td>Fecha fin:
+                <mwl-demo-utils-date-time-picker [(ngModel)]="event.end"  placeholder="Not set">
+                </mwl-demo-utils-date-time-picker>
+            </td>
+        </tr>
+            </tbody>
+            <tfoot>
+                <tr><td><button class="btn btn-primary" (click)="addEvento(event);">Enviar</button></td></tr>
+            </tfoot>
+            </table>
+    </div>

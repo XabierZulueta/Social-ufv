@@ -5,3 +5,6 @@
        <a [routerLink]="['/user', u.id]">{{ u.name }}</a>
     </li>
 </ul>
+<label>Usuario:</label>
+<input #usuarioNombre />
+<button class="btn btn-primary" (click)="add(usuarioNombre.value, prueba[0].id +1);">Insertar</button>

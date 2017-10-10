@@ -1,9 +1,11 @@
+import { ActivatedRoute } from '@angular/router';
 import {
     Component, ChangeDetectionStrategy, ViewChild,
-    TemplateRef } from '@angular/core';
+    TemplateRef, OnInit  } from '@angular/core';
 import {
     CalendarEvent, CalendarEventAction,
     DAYS_OF_WEEK } from 'angular-calendar';
+import { Subject } from 'rxjs/Subject';
 import {
     isSameMonth,
     isSameDay,
@@ -16,7 +18,7 @@ import {
     format } from 'date-fns';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from './data.service';
-
+import { Evento } from './evento';
 const colors: any = {
     red: {
         primary: '#ad2121',
@@ -39,16 +41,16 @@ interface Film {
 
 @Component({
     selector: 'mwl-demo-component',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    //changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['styles.css'],
     templateUrl: 'calendario.template.html'
 })
 
-export class CalendarioComponent {
+export class CalendarioComponent implements OnInit{
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
     view: string = 'month';
-    events: any[] = [{
+    /*events: any[] = [{
         title: 'Escalada',
         start: new Date(),
         color: colors.blue,
@@ -56,7 +58,8 @@ export class CalendarioComponent {
         organizador: "Musgoletus",
         end: setHours(new Date(), 18),
         descripcion: 'Miriam no ha invitado a Manza a la montaña.'
-    }];
+    }];*/
+    events : any[];
     viewDate: Date = new Date();
     modalData: {
         action: string;
@@ -66,28 +69,35 @@ export class CalendarioComponent {
     activeDayIsOpen: boolean = false;
 
     locale:string='sp';
-    constructor(private modal: NgbModal, private _dataService: DataService) { 
-        console.log(this.events);
-        for(var i=0;i<this.events.length;i++)
-            console.log(this.events[i].start);
+    constructor(private modal: NgbModal, private _dataService: DataService, private route: ActivatedRoute) { 
+        this.refresh.next();
+    }
+
+    refresh: Subject<any> = new Subject();
+    ngOnInit() {
         this._dataService.getEventos()
-            .subscribe(res => { this.events = res; console.log(this.events); });
+            .subscribe(res => {
+                this.events = res;
+                for (var i = 0; i < this.events.length; i++) {
+                    this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
+                    this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
+                    this.events[i].color = colors.blue;
+                }
+                this.refresh.next();
+            });
+
+        this.events = this._dataService.events;
+        
+        this.refresh.next();
     }
 
-    
-
-    handleEvent(action: string, event: CalendarEvent): void {
+    handleEvent(action: string, event: Evento): void {
         this.modalData = { event, action };
-        this.modal.open(this.modalContent, { size: 'lg' });
+        this.modal.open(this.modalContent, { size: 'sm' });
+
     }
 
-    dayClicked({
-    date,
-        events
-  }: {
-            date: Date;
-            events: Array<CalendarEvent<{ film: Film }>>;
-        }): void {
+    dayClicked({date, events}: {date: Date;events: Array<Evento>;}): void {
         if (isSameMonth(date, this.viewDate)) {
             if (
                 (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -99,6 +109,7 @@ export class CalendarioComponent {
                 this.viewDate = date;
             }
         }
+        
     }
 
 }
