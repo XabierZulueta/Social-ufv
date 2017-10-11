@@ -15,10 +15,20 @@ export class DataService {
     constructor(private _http: Http) {
      }
 
-     getMaxId(){
+    getMaxId(){
          return this._http.get("/api/users/max")
              .map(result => this.result = result.json().data);
-     }
+    }
+
+    getEventMaxId(){
+         return this._http.get("/api/events/max")
+             .map(result => this.result = result.json().data);
+    }
+    
+    getGroupMaxId(){
+        return this._http.get("/api/groups/max")
+            .map(result => this.result = result.json().data);
+    }
      
     getUsers() {
         return this._http.get("/api/users")
@@ -80,6 +90,12 @@ export class DataService {
         //.subscribe();
             //.map(this.extractData)
         //return this._http.post("/api/xabi", JSON.stringify({ id: 3, nombre: "Carlos" })).map(response => response.json());
+    }
+
+    updateUser(u:any){
+        return this._http.post("/api/users", JSON.stringify(u), { headers: this.headers })
+            .toPromise()
+            .catch(this.handleError);
     }
 
     deleteUser(id:number){

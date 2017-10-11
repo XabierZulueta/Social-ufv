@@ -45,19 +45,31 @@ export class EventoComponent {
     view: string = 'month';
 
     viewDate: Date = new Date();
-    constructor(private modal: NgbModal, private _dataService: DataService,
-        private route: ActivatedRoute, private router: Router) { }
-    event: Evento = 
-        {
-            start: subDays(startOfDay(new Date()), 1),
-            end: addDays(new Date(), 1),
-            title: '',
-            color: '',
-            descripcion:'',
-            organizador: 1,
-            creditos:0,
-        }
+
+    maxId : Array<any>;
+
+    event: Evento =
+    {
+        id:0,
+        start: subDays(startOfDay(new Date()), 1),
+        end: addDays(new Date(), 1),
+        title: '',
+        color: '',
+        descripcion: '',
+        organizador: 1,
+        creditos: 0,
+    }
     ;
+
+    constructor(private modal: NgbModal, private _dataService: DataService,
+        private route: ActivatedRoute, private router: Router) {
+
+            this._dataService.getEventMaxId().subscribe(res => {
+                this.maxId = res;
+                this.event.id = this.maxId[0].id+1;
+            });
+    }
+   
 
     onSubmit(){
         this.addEvento(this.event);

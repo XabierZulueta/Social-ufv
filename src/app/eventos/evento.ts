@@ -5,6 +5,7 @@ import {
 } from 'angular-calendar';
 
 export class Evento implements CalendarEvent{
+    id:number;
     start: Date;
     end?: Date;
     title: string;
@@ -12,5 +13,4 @@ export class Evento implements CalendarEvent{
     descripcion: string;
     organizador: number;
     creditos:number;
-
 }

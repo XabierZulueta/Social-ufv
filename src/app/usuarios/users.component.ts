@@ -17,7 +17,7 @@ export class UsersComponent implements OnInit{
     grupos: Array<any>;
     usuario : User;
     idMax: number;
-    prueba : Array<User>;
+    userMaxId : Array<User>;
 
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService, private route: ActivatedRoute, private router: Router) {
@@ -29,7 +29,7 @@ export class UsersComponent implements OnInit{
             .subscribe(res => { this.users = res; });
         this._dataService.getMaxId()
             .subscribe(res => {
-                this.prueba = res;
+                this.userMaxId = res;
             });
     }
 

@@ -33,10 +33,58 @@ let response = {
     message: null
 };
 
+// Get group max id
+router.get('/groups/max', (req, res) => {
+    connection((db) => {
+        db.collection('grupos')
+            .find({})
+            .sort({ "id": -1 })
+            .limit(1)
+            .toArray()
+            .then((users) => {
+                response.data = users;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+    });
+});
+
+// Get events max id
+router.get('/events/max', (req, res) => {
+    connection((db) => {
+        db.collection('events')
+            .find({})
+            .sort({ "id": -1 })
+            .limit(1)
+            .toArray()
+            .then((users) => {
+                response.data = users;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+    });
+});
 
 
+//Update event
+router.put('/event/:id', (req, res) => {
+    req.body.id = parseInt(req.body.id);
+    connection((db) => {
+        db.collection('events')
+            .insert(req.body, function (err, result) {
+                if (err)
+                    res.send('Error');
+                else
+                    res.send('Success');
+            });
+    })
+});
 
-// Get events by id
+// Get events by group id
 router.get('/events/:id', (req, res) => {
     var idGrupo = req.params.id;
     connection((db) => {
@@ -56,6 +104,7 @@ router.get('/events/:id', (req, res) => {
 //Post events
 router.post('/events', (req, res) => {
     req.body.start = new Date(req.body.start);
+    req.body.id = parseInt(req.body.id);
     connection((db) => {
         db.collection('events')
             .insert(req.body, function (err, result) {
@@ -82,6 +131,7 @@ router.delete('/users/:id', (req, res) => {
             });
     })
 });
+
 
 // Get users max id
 router.get('/users/max', (req, res) => {

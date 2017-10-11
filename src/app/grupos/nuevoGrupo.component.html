@@ -1,0 +1,31 @@
+<form (ngSubmit)="onSubmit()" #eventoForm="ngForm">
+    <div>
+        <table class="table table-bordered">
+
+            <thead class="thead-inverse">
+                <tr>
+                    <th>Grupo/Organizacion</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td><label>Nombre</label>
+                        <input type="text" class="form-control" [(ngModel)]="grupo.nombre" name="nombre" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Descripción:
+                        <textarea [(ngModel)]="grupo.descripcion" name="descripcion" class="form-control" rows="5" id="comment" required></textarea>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><input type="submit" class="btn btn-primary" value="Enviar" [disabled]="!eventoForm.form.valid"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
