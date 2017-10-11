@@ -4,13 +4,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { GrupoComponent } from './grupo.component';
-import { GruposComponent } from './grupos.component';
-import { UsersComponent } from './users.component';
-import { UserComponent } from './user.component';
+import { GrupoComponent } from './grupos/grupo.component';
+import { GruposComponent } from './grupos/grupos.component';
+import { UsersComponent } from './usuarios/users.component';
+import { UserComponent } from './usuarios/user.component';
 import { DataService } from './data.service';
-import { CalendarioComponent } from './calendario.component';
-import { EventoComponent } from './evento.component';
+import { CalendarioComponent } from './eventos/calendario.component';
+import { EventoComponent } from './eventos/evento.component';
 
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 

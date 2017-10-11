@@ -1,7 +1,7 @@
 import { Component, TemplateRef } from '@angular/core';
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { Subject } from 'rxjs/Subject';
-import { DataService } from './data.service';
+import { DataService } from '../data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
     CalendarEvent,
@@ -36,6 +36,7 @@ const colors: any = {
         secondary: '#FDF1BA'
     }
 };
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
     selector: 'evento',
     templateUrl: './evento.component.html'
@@ -44,18 +45,24 @@ export class EventoComponent {
     view: string = 'month';
 
     viewDate: Date = new Date();
-    constructor(private modal: NgbModal, private _dataService: DataService) { }
-    events: Evento[] = [
+    constructor(private modal: NgbModal, private _dataService: DataService,
+        private route: ActivatedRoute, private router: Router) { }
+    event: Evento = 
         {
             start: subDays(startOfDay(new Date()), 1),
             end: addDays(new Date(), 1),
-            title: 'Título',
+            title: '',
             color: '',
-            descripcion:'Descripción',
+            descripcion:'',
             organizador: 1,
             creditos:0,
         }
-    ];
+    ;
+
+    onSubmit(){
+        this.addEvento(this.event);
+        this.router.navigateByUrl('/calendario');
+    }
 
     addEvento(event:Evento){
         this._dataService.addEvent(event);

@@ -33,6 +33,26 @@ let response = {
     message: null
 };
 
+
+
+
+// Get events by id
+router.get('/events/:id', (req, res) => {
+    var idGrupo = req.params.id;
+    connection((db) => {
+        db.collection('events')
+            .find({ organizador: Number(idGrupo) })
+            .toArray()
+            .then((user) => {
+                response.data = user;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+    });
+});
+
 //Post events
 router.post('/events', (req, res) => {
     req.body.start = new Date(req.body.start);
@@ -47,7 +67,23 @@ router.post('/events', (req, res) => {
     })
 });
 
-// Get users
+//Delete user
+router.delete('/users/:id', (req, res) => {
+    var id = req.params.id;
+    id = parseInt(id);
+    var objeto = { id: id };
+    connection((db) => {
+        db.collection('users')
+            .deleteOne(objeto, function (err, result) {
+                if (err)
+                    res.send('Error');
+                else
+                    res.send('Success');
+            });
+    })
+});
+
+// Get users max id
 router.get('/users/max', (req, res) => {
     connection((db) => {
         db.collection('users')
@@ -65,8 +101,8 @@ router.get('/users/max', (req, res) => {
     });
 });
 
-//POst events
-router.post('/xabi', (req, res) => {
+//POst users
+router.post('/users', (req, res) => {
     req.body.id=parseInt(req.body.id);
     connection((db) => {
         db.collection('users')

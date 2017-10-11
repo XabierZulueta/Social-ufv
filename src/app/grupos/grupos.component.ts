@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
-import { DataService } from './data.service';
+import { DataService } from '../data.service';
 
 @Component({
     selector: 'grupos',
     templateUrl: './grupos.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['../app.component.css']
 })
 
 export class GruposComponent {

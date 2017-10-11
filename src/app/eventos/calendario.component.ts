@@ -17,7 +17,7 @@ import {
     endOfDay, setHours, setMinutes,
     format } from 'date-fns';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DataService } from './data.service';
+import { DataService } from '../data.service';
 import { Evento } from './evento';
 const colors: any = {
     red: {
@@ -42,7 +42,7 @@ interface Film {
 @Component({
     selector: 'mwl-demo-component',
     //changeDetection: ChangeDetectionStrategy.OnPush,
-    styleUrls: ['styles.css'],
+    styleUrls: ['../styles.css'],
     templateUrl: 'calendario.template.html'
 })
 
@@ -93,7 +93,7 @@ export class CalendarioComponent implements OnInit{
 
     handleEvent(action: string, event: Evento): void {
         this.modalData = { event, action };
-        this.modal.open(this.modalContent, { size: 'sm' });
+        this.modal.open(this.modalContent, { size: 'lg' });
 
     }
 

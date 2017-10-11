@@ -3,7 +3,7 @@ import { DayPilot } from 'daypilot-pro-angular';
 import { Observable } from 'rxjs/Rx';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Evento } from './evento';
+import { Evento } from './eventos/evento';
 
 @Injectable()
 export class DataService {
@@ -65,8 +65,13 @@ export class DataService {
             .map(result => this.result = result.json().data);
     }
 
+    getEventosGrupo(idGrupo){
+        return this._http.get("/api/events/" + idGrupo)
+            .map(result => this.result = result.json().data);
+    }
+
     addUser(nombre:string, id:number) : Promise<any>{
-        return this._http.post("/api/xabi", JSON.stringify({ id: id, name: nombre, grupos:[] }), { headers: this.headers })
+        return this._http.post("/api/users", JSON.stringify({ id: id, name: nombre, grupos:[] }), { headers: this.headers })
         .toPromise()
         .catch(this.handleError);
        /*     .toPromise()
@@ -75,6 +80,11 @@ export class DataService {
         //.subscribe();
             //.map(this.extractData)
         //return this._http.post("/api/xabi", JSON.stringify({ id: 3, nombre: "Carlos" })).map(response => response.json());
+    }
+
+    deleteUser(id:number){
+        return this._http.delete("/api/users/"+id,{ headers: this.headers }).toPromise()
+            .catch(this.handleError);
     }
 
     addEvent(event:Evento){

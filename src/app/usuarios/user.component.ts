@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from './data.service';
+import { DataService } from '../data.service';
 import { ActivatedRoute } from '@angular/router';
 
-import { Grupo } from './grupo';
+import { Grupo } from '../grupos/grupo';
 
 @Component({
     selector: 'user',
     templateUrl: './user.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['../app.component.css']
 })
 
 export class UserComponent implements OnInit{

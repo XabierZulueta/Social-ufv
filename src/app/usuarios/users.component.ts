@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from './data.service';
+import { DataService } from '../data.service';
 import{User} from './user';
+import { ActivatedRoute, Router,  } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
+
 
 @Component({
     selector: 'users',
     templateUrl: './users.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['../app.component.css']
 })
 
 export class UsersComponent implements OnInit{
@@ -17,10 +20,7 @@ export class UsersComponent implements OnInit{
     prueba : Array<User>;
 
     // Create an instance of the DataService through dependency injection
-    constructor(private _dataService: DataService) {
-
-       
-
+    constructor(private _dataService: DataService, private route: ActivatedRoute, private router: Router) {
     }
 
     ngOnInit(){
@@ -40,7 +40,12 @@ export class UsersComponent implements OnInit{
 
     add(nombre: string, id: number){
         this._dataService.addUser(nombre,id);
-        
+        this.ngOnInit();
+    }
+
+    delete(id:number){
+        this._dataService.deleteUser(id);
+        this.ngOnInit();
     }
  /*   getGroupUsers(idGrupo) {
         this._dataService.getUserByGroup(idGrupo)

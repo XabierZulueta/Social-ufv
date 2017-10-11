@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { GruposComponent } from './grupos.component';
-import { GrupoComponent } from './grupo.component';
-import { UsersComponent } from './users.component';
-import { UserComponent } from './user.component';
-import { CalendarioComponent } from './calendario.component';
-import { EventoComponent } from './evento.component';
+import { GruposComponent } from './grupos/grupos.component';
+import { GrupoComponent } from './grupos/grupo.component';
+import { UsersComponent } from './usuarios/users.component';
+import { UserComponent } from './usuarios/user.component';
+import { CalendarioComponent } from './eventos/calendario.component';
+import { EventoComponent } from './eventos/evento.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full' },
