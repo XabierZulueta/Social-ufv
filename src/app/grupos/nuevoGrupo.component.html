@@ -1,3 +1,24 @@
+<style>
+    .my-drop-zone {
+        border: dotted 3px lightgray;
+    }
+
+    .nv-file-over {
+        border: dotted 3px red;
+    }
+
+    /* Default class applied to drop zones on over */
+
+    .another-file-over-class {
+        border: dotted 3px green;
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+</style>
+
 <form (ngSubmit)="onSubmit()" #eventoForm="ngForm">
     <div>
         <table class="table table-bordered">
@@ -7,8 +28,14 @@
                     <th>Grupo/Organizacion</th>
                 </tr>
             </thead>
-
             <tbody>
+                <tr>
+                    <label>Imagen</label>
+                    <div ng2FileDrop [ngClass]="{'another-file-over-class': hasAnotherDropZoneOver}" (fileOver)="fileOverAnother($event)" [uploader]="uploader"
+                        class="well my-drop-zone">
+                        Another drop zone
+                    </div>
+                </tr>
                 <tr>
                     <td><label>Nombre</label>
                         <input type="text" class="form-control" [(ngModel)]="grupo.nombre" name="nombre" required>

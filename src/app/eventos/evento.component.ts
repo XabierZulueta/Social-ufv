@@ -64,7 +64,7 @@ export class EventoComponent {
     constructor(private modal: NgbModal, private _dataService: DataService,
         private route: ActivatedRoute, private router: Router) {
 
-            this._dataService.getEventMaxId().subscribe(res => {
+            this._dataService.getMaxId('events').subscribe(res => {
                 this.maxId = res;
                 this.event.id = this.maxId[0].id+1;
             });

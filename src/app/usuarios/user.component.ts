@@ -25,7 +25,7 @@ export class UserComponent implements OnInit{
             this.id = +params['id']; // (+) converts string 'id' to a number
             // In a real app: dispatch action to load the details here.
         });
-        this._dataService.getUserById(this.id)
+        this._dataService.getById(this.id, '')
             .subscribe(res => {
             this.user = res;
             });
@@ -43,7 +43,7 @@ export class UserComponent implements OnInit{
             g = this.gruposid;
             user.grupos = new Array<Grupo>();
             for(var i=1; i< n+1;i++){
-                this._dataService.getGroup(g[i - 1])
+                this._dataService.getById(g[i - 1],'groups')
                     .subscribe(res => {
                         user.grupos.push(res);
                     });

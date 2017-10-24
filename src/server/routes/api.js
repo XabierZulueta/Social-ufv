@@ -33,6 +33,25 @@ let response = {
     message: null
 };
 
+//Get users by group id
+router.get('/users/grupo/:id' , (req, res) => {
+    var id = req.params.id;
+    id = parseInt(id);
+    var objeto = { id: id };
+    connection((db) => {
+        db.collection('users')
+            .find({ grupos: Number(id) })
+            .toArray()
+            .then((user) => {
+                response.data = user;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+    })
+});
+
 // Get group max id
 router.get('/groups/max', (req, res) => {
     connection((db) => {
@@ -89,7 +108,7 @@ router.get('/events/:id', (req, res) => {
     var idGrupo = req.params.id;
     connection((db) => {
         db.collection('events')
-            .find({ organizador: Number(idGrupo) })
+            .find({ "organizador.id": Number(idGrupo) })
             .toArray()
             .then((user) => {
                 response.data = user;

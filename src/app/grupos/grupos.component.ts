@@ -13,7 +13,7 @@ export class GruposComponent {
     grupo:any;
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService) {
-        this._dataService.getGroups()
+        this._dataService.getGeneral('groups')
             .subscribe(res => this.grupos = res);
     }
 /*

@@ -65,6 +65,7 @@ export class CalendarioComponent implements OnInit{
         action: string;
         event: CalendarEvent;
     };
+    organizador:any;
 
     activeDayIsOpen: boolean = false;
 
@@ -75,13 +76,14 @@ export class CalendarioComponent implements OnInit{
 
     refresh: Subject<any> = new Subject();
     ngOnInit() {
-        this._dataService.getEventos()
+        this._dataService.getGeneral('events')
             .subscribe(res => {
                 this.events = res;
                 for (var i = 0; i < this.events.length; i++) {
                     this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
                     this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
                     this.events[i].color = colors.blue;
+                    //this.events[i].organizador=this.getOrganizador(this.events[i]); 
                 }
                 this.refresh.next();
             });
@@ -94,6 +96,11 @@ export class CalendarioComponent implements OnInit{
     handleEvent(action: string, event: Evento): void {
         this.modalData = { event, action };
         this.modal.open(this.modalContent, { size: 'lg' });
+        this._dataService.getById(event.organizador.id, 'groups')
+            .subscribe(res => {
+            event.organizador = res;
+            });
+
 
     }
 

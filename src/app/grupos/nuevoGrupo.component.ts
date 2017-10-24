@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { DataService } from '../data.service';
 import { ActivatedRoute } from '@angular/router';
+import { FileUploader } from 'ng2-file-upload';
 
 const colors: any = {
     red: {
@@ -30,9 +31,21 @@ export class GrupoComponent {
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
         private route: ActivatedRoute) {
-        this._dataService.getGroupMaxId().subscribe(res => {
+        this._dataService.getMaxId('groups').subscribe(res => {
             this.maxId = res;
             this.grupo.id = this.maxId[0].id + 1;
         });
+    }
+
+    public uploader: FileUploader = new FileUploader({ url: 'http://localhost:3000/api/fotos/' });
+    public hasBaseDropZoneOver: boolean = false;
+    public hasAnotherDropZoneOver: boolean = false;
+
+    public fileOverBase(e: any): void {
+        this.hasBaseDropZoneOver = e;
+    }
+
+    public fileOverAnother(e: any): void {
+        this.hasAnotherDropZoneOver = e;
     }
 }

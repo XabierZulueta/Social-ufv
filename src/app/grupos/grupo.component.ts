@@ -28,6 +28,7 @@ export class GrupoComponent {
     grupo: any;
     id:number;
     eventos : any[];
+    miembros:any[];
 
 
     // Create an instance of the DataService through dependency injection
@@ -38,9 +39,9 @@ export class GrupoComponent {
 
             // In a real app: dispatch action to load the details here.
         });
-        this._dataService.getGroup(this.id)
+        this._dataService.getById(this.id,'groups')
             .subscribe(res => this.grupo = res);
-        this._dataService.getEventosGrupo(this.id)
+        this._dataService.getById(this.id,'events')
             .subscribe(res => {
                 this.eventos = res;
                 for (var i = 0; i < this.eventos.length; i++) {
@@ -50,5 +51,7 @@ export class GrupoComponent {
                 }
                 console.log(this.eventos);
             });
+        this._dataService.getById(this.id,'users/grupo')
+            .subscribe(res=>this.miembros = res);
     }
 }

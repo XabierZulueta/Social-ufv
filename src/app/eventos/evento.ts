@@ -11,6 +11,6 @@ export class Evento implements CalendarEvent{
     title: string;
     color: any;
     descripcion: string;
-    organizador: number;
+    organizador: any;
     creditos:number;
 }

@@ -25,16 +25,16 @@ export class UsersComponent implements OnInit{
 
     ngOnInit(){
         // Access the Data Service's getUsers() method we defined
-        this._dataService.getUsers()
+        this._dataService.getGeneral('users')
             .subscribe(res => { this.users = res; });
-        this._dataService.getMaxId()
+        this._dataService.getMaxId('users')
             .subscribe(res => {
                 this.userMaxId = res;
             });
     }
 
     getUserById(idUser) {
-        this._dataService.getUserById(idUser)
+        this._dataService.getById(idUser,'')
             .subscribe(res => this.user = res);
     }
 
