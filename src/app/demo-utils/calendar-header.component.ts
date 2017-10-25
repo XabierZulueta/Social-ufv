@@ -10,6 +10,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
             class="btn btn-primary"
             mwlCalendarPreviousView
             [view]="view"
+            role="button"
             [(viewDate)]="viewDate"
             (viewDateChange)="viewDateChange.next(viewDate)">
             Previous
@@ -17,6 +18,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
           <div
             class="btn btn-outline-secondary"
             mwlCalendarToday
+            role="button"
             [(viewDate)]="viewDate"
             (viewDateChange)="viewDateChange.next(viewDate)">
             Today
@@ -24,6 +26,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
           <div
             class="btn btn-primary"
             mwlCalendarNextView
+            role="button"
             [view]="view"
             [(viewDate)]="viewDate"
             (viewDateChange)="viewDateChange.next(viewDate)">
@@ -38,18 +41,21 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
         <div class="btn-group">
           <div
             class="btn btn-primary"
+            role="button"
             (click)="viewChange.emit('month')"
             [class.active]="view === 'month'">
             Month
           </div>
           <div
             class="btn btn-primary"
+            role="button"
             (click)="viewChange.emit('week')"
             [class.active]="view === 'week'">
             Week
           </div>
           <div
             class="btn btn-primary"
+            role="button"
             (click)="viewChange.emit('day')"
             [class.active]="view === 'day'">
             Day

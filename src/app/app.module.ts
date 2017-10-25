@@ -11,6 +11,8 @@ import { UserComponent } from './usuarios/user.component';
 import { DataService } from './data.service';
 import { CalendarioComponent } from './eventos/calendario.component';
 import { EventoComponent } from './eventos/evento.component';
+import { NuevoGrupoComponent } from './grupos/nuevoGrupo.component';
+
 
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
@@ -22,8 +24,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DayPilotModule } from "daypilot-pro-angular";
 //import { DatePickerModule } from 'ng2-datepicker-bootstrap';
-
+import { ActivatedRoute } from '@angular/router';
+import { Ng2FileInputModule } from 'ng2-file-input';
 import { AppRoutingModule } from './app-routing.module';
+import { ImageUploadModule } from "angular2-image-upload";
+import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 
 
 
@@ -35,7 +40,8 @@ import { AppRoutingModule } from './app-routing.module';
     UserComponent,
     UsersComponent,
     CalendarioComponent,
-    EventoComponent
+    EventoComponent,
+    NuevoGrupoComponent
   //  UsuariosComponent
   ],
   imports: [
@@ -46,15 +52,18 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserAnimationsModule,
     NgbModalModule.forRoot(),
     CalendarModule.forRoot(),
+    ImageUploadModule.forRoot(),
     HttpModule,
     NgbModule,
     AppRoutingModule,
     DemoUtilsModule,   
+    Ng2FileInputModule,
+    FancyImageUploaderModule,
    // DatePickerModule,
    // InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],
   providers: [//UsuariosService,
-     DataService],
+    DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

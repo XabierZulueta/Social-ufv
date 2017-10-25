@@ -1,56 +1,40 @@
-<style>
-    .my-drop-zone {
-        border: dotted 3px lightgray;
-    }
 
-    .nv-file-over {
-        border: dotted 3px red;
-    }
-
-    /* Default class applied to drop zones on over */
-
-    .another-file-over-class {
-        border: dotted 3px green;
-    }
-
-    html,
-    body {
-        height: 100%;
-    }
-</style>
-
-<form (ngSubmit)="onSubmit()" #eventoForm="ngForm">
+<form (ngSubmit)="onSubmit()" #grupoForm="ngForm">
     <div>
         <table class="table table-bordered">
 
             <thead class="thead-inverse">
                 <tr>
-                    <th>Grupo/Organizacion</th>
+                    <th>Grupo</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <label>Imagen</label>
-                    <div ng2FileDrop [ngClass]="{'another-file-over-class': hasAnotherDropZoneOver}" (fileOver)="fileOverAnother($event)" [uploader]="uploader"
-                        class="well my-drop-zone">
-                        Another drop zone
-                    </div>
+                    <td>
+                       <!-- <div <class="col-lg-6 col-sm-6 col-12">-->
+                            <label>Imagen</label>
+                            <label class="btn btn-block btn-primary">
+                               &hellip;
+                                <input type="file" style="display: none;" (change)="fileChangeEvent($event)">
+                            </label>
+                        <!--</div>-->
+                    </td>
                 </tr>
                 <tr>
                     <td><label>Nombre</label>
-                        <input type="text" class="form-control" [(ngModel)]="grupo.nombre" name="nombre" required>
+                        <input type="text" accept=".png, .jpg, .jpeg" class="form-control" [(ngModel)]="grupo.nombre" name="nombre" required>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Descripción:
-                        <textarea [(ngModel)]="grupo.descripcion" name="descripcion" class="form-control" rows="5" id="comment" required></textarea>
+                        Información:
+                        <textarea [(ngModel)]="grupo.informacion" name="descripcion" class="form-control" rows="5" id="comment" required></textarea>
                     </td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td><input type="submit" class="btn btn-primary" value="Enviar" [disabled]="!eventoForm.form.valid"></td>
+                    <td><input type="submit" class="btn btn-primary" value="Enviar" [disabled]="!grupoForm.form.valid"></td>
                 </tr>
             </tfoot>
         </table>

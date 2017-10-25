@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Rx';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Evento } from './eventos/evento';
+import { Grupo } from './grupos/grupo';
 
 @Injectable()
 export class DataService {
@@ -65,8 +66,16 @@ export class DataService {
             .catch(this.handleError);
     }
 
+    addGroup(group: Grupo) {
+        return this._http.post("/api/groups", JSON.stringify(group), { headers: this.headers })
+            .toPromise()
+            .catch(this.handleError);
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);
     }
+
+
 }

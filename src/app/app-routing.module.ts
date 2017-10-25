@@ -6,6 +6,7 @@ import { UsersComponent } from './usuarios/users.component';
 import { UserComponent } from './usuarios/user.component';
 import { CalendarioComponent } from './eventos/calendario.component';
 import { EventoComponent } from './eventos/evento.component';
+import { NuevoGrupoComponent } from './grupos/nuevoGrupo.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full' },
@@ -14,7 +15,8 @@ const routes: Routes = [
     { path: 'grupo/:id', component: GrupoComponent },
     { path: 'user/:id', component: UserComponent },
     { path: 'calendario', component: CalendarioComponent},
-    { path: 'evento', component: EventoComponent }
+    { path: 'evento', component: EventoComponent },
+    { path: 'nuevo/grupo', component: NuevoGrupoComponent },
 
 ];
 @NgModule({

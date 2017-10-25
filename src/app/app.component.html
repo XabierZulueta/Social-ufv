@@ -1,9 +1,40 @@
-<nav  style = "margin-bottom: 10px;margin-top:15px;">
-    <h3 class="navbar-brand" href="#">Social UFV</h3>
-    <a class="btn btn-secondary" routerLink="/usuarios" routerLinkActive="active">Usuarios</a>
-    <a class="btn btn-secondary" routerLink="/grupos" routerLinkActive="active">Grupos</a>
-     <a class="btn btn-secondary" routerLink="/calendario" routerLinkActive="active">Calendario</a>
-    <a class="btn btn-info"  routerLink="/evento">Nuevo evento</a>
+
+<nav class="navbar navbar-toggleable-md  navbar-inverse bg-inverse ">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+        aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" routerLink="" style="cursor:pointer;">Social UFV</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+            <li class="nav-item">
+                <a class="nav-link" routerLink=""  routerLinkActive="active">Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/usuarios" routerLinkActive="active">Usuarios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/grupos" routerLinkActive="active">Grupos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"routerLink="/calendario" routerLinkActive="active">Calendario</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"  id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" role="button">
+                    Nuevo
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" routerLink="/evento" routerLinkActive="active">Nuevo evento</a>
+                    <a class="dropdown-item" routerLink="/nuevo/grupo" routerLinkActive="active">Nuevo grupo</a>
+                </div>
+            </li>
+        </ul>
+    </div>
 </nav>
+<div class="container" style="margin-top:10px;">
 <router-outlet></router-outlet>
+</div>
 

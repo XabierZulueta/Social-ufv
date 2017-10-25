@@ -56,7 +56,7 @@ export class EventoComponent {
         title: '',
         color: '',
         descripcion: '',
-        organizador: 1,
+        organizador: {id:1},
         creditos: 0,
     }
     ;

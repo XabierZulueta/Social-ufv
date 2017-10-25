@@ -2,6 +2,27 @@ const express = require('express');
 const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
+const multer = require('multer');
+
+
+router.use(express.static(__dirname+ '/src/assets/uploads'));
+/*
+    SECCION SUBIDA DE FICHEROS
+*/
+var storage = multer.diskStorage({
+    // destination
+    destination: function (req, file, cb) {
+        cb(null, './src/assets/uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+var upload = multer({ storage: storage });
+
+router.post("/upload", upload.array("uploads[]", 12), function (req, res) {
+    res.send(req.files);
+});
 
 /*QUERIES
 
@@ -33,6 +54,19 @@ let response = {
     message: null
 };
 
+// New Group
+router.post('/groups', (req, res) => {
+    req.body.id = parseInt(req.body.id);
+    connection((db) => {
+        db.collection('grupos')
+            .insert(req.body, function (err, result) {
+                if (err)
+                    res.send('Error');
+                else
+                    res.send('Success');
+            });
+    })
+});
 //Get users by group id
 router.get('/users/grupo/:id' , (req, res) => {
     var id = req.params.id;

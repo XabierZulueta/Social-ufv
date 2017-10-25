@@ -1,23 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { DataService } from '../data.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Http } from '@angular/http';
 import { FileUploader } from 'ng2-file-upload';
-
-const colors: any = {
-    red: {
-        primary: '#ad2121',
-        secondary: '#FAE3E3'
-    },
-    blue: {
-        primary: '#1e90ff',
-        secondary: '#D1E8FF'
-    },
-    yellow: {
-        primary: '#e3bc08',
-        secondary: '#FDF1BA'
-    }
-};
+import { Ng2FileInputService, Ng2FileInputAction } from 'ng2-file-input';
+import { Grupo } from './grupo';
+import { FancyImageUploaderOptions, UploadedFile } from 'ng2-fancy-image-uploader';
 
 @Component({
     selector: 'nuevoGrupo',
@@ -25,27 +14,60 @@ const colors: any = {
     styleUrls: ['./grupo.component.css']
 })
 
-export class GrupoComponent {
+export class NuevoGrupoComponent {
+    @ViewChild('fileInput') fileInput;
+    filesToUpload: Array<File> = [];
     maxId:Array<any>;
-    grupo: any;
+    grupo: Grupo = {
+        id:0,
+        nombre:'',
+        imagen:'',
+        informacion:'',
+    };
+    id: any;//the file input's id that emits the action (useful if you use the service and handle multiple file inputs, see below)
+    currentFiles: any;//list of the current files
+    action: any;//see Enum below
+    file: any;//the file that caused the action
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
-        private route: ActivatedRoute) {
+        private route: ActivatedRoute, private http:Http,
+        private router: Router) {
         this._dataService.getMaxId('groups').subscribe(res => {
             this.maxId = res;
+            if(this.maxId[0]== null){
+                this.maxId[0] ={} ;
+                this.maxId[0].id=1;
+            }
+            else
             this.grupo.id = this.maxId[0].id + 1;
         });
     }
 
-    public uploader: FileUploader = new FileUploader({ url: 'http://localhost:3000/api/fotos/' });
-    public hasBaseDropZoneOver: boolean = false;
-    public hasAnotherDropZoneOver: boolean = false;
-
-    public fileOverBase(e: any): void {
-        this.hasBaseDropZoneOver = e;
+    onSubmit() {
+        this.upload();
+        const files: Array<File> = this.filesToUpload;
+        this.grupo.imagen='assets/uploads/'+files[0].name;        
+        //insertar en base de datos
+       this._dataService.addGroup(this.grupo);
+       this.router.navigateByUrl('/grupos');
     }
 
-    public fileOverAnother(e: any): void {
-        this.hasAnotherDropZoneOver = e;
+    upload() {
+        const formData: any = new FormData();
+        const files: Array<File> = this.filesToUpload;
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append("uploads[]", files[i], files[i]['name']);
+        }
+        // formData.append("uploads[]", files[0], files[0]['name']);
+        //this.address.documents = files.toString();
+
+        this.http.post('http://localhost:3000/api/upload', formData)
+            .map(files => files.json())
+            .subscribe()
+    }
+
+    fileChangeEvent(fileInput: any) {
+        this.filesToUpload = <Array<File>>fileInput.target.files;
     }
 }
