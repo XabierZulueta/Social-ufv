@@ -3,7 +3,7 @@ const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const multer = require('multer');
-
+var jwt = require('jwt-simple');
 
 router.use(express.static(__dirname+ '/src/assets/uploads'));
 /*
@@ -53,6 +53,31 @@ let response = {
     data: [],
     message: null
 };
+
+//Authenticate
+router.post('/authenticate', (req,res)=>{
+    connection((db) => {
+        db.collection('users')
+            .findOne({ name: req.body.username },function(err,user){
+                if(err) throw err;
+                if(!user){
+                    res.json({success:false, msg:'Ese usuario no existe.'});
+                }
+                else
+                {
+                    var token = jwt.encode(user, 'xxx','HS512');
+                    res.json({ success: true, msg: 'Ese usuario si existe', user:user, token:token});
+                }
+            })
+            ;/*.then((user) => {
+                response.data = user;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });*/
+    });
+});
 
 // New Group
 router.post('/groups', (req, res) => {

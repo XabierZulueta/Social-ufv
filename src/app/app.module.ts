@@ -12,6 +12,8 @@ import { DataService } from './data.service';
 import { CalendarioComponent } from './eventos/calendario.component';
 import { EventoComponent } from './eventos/evento.component';
 import { NuevoGrupoComponent } from './grupos/nuevoGrupo.component';
+import { LoginComponent } from './login/login.component'
+import { RegisterComponent } from './register/register.component'
 
 
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -31,6 +33,11 @@ import { ImageUploadModule } from "angular2-image-upload";
 import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 
 
+import { AuthenticationService } from './_services/authentication.service';
+import { AlertService } from './_services/alert.service';
+import { UserService } from './_services/user.service';
+import { AuthGuard } from './_guards/auth.guard'
+
 
 @NgModule({
   declarations: [
@@ -41,8 +48,9 @@ import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
     UsersComponent,
     CalendarioComponent,
     EventoComponent,
-    NuevoGrupoComponent
-  //  UsuariosComponent
+    NuevoGrupoComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,7 +71,12 @@ import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
    // InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],
   providers: [//UsuariosService,
-    DataService],
+    DataService,
+    AuthenticationService,
+    AlertService,
+    UserService,
+    AuthGuard,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -7,9 +7,11 @@ import { UserComponent } from './usuarios/user.component';
 import { CalendarioComponent } from './eventos/calendario.component';
 import { EventoComponent } from './eventos/evento.component';
 import { NuevoGrupoComponent } from './grupos/nuevoGrupo.component';
+import { LoginComponent } from './login/login.component'
+import { RegisterComponent } from './register/register.component'
 
 const routes: Routes = [
-    { path: '', redirectTo: '', pathMatch: 'full' },
+    { path: '', redirectTo: '', pathMatch: 'full', component: CalendarioComponent },
     { path: 'grupos', component: GruposComponent },
     { path: 'usuarios', component: UsersComponent },
     { path: 'grupo/:id', component: GrupoComponent },
@@ -17,6 +19,8 @@ const routes: Routes = [
     { path: 'calendario', component: CalendarioComponent},
     { path: 'evento', component: EventoComponent },
     { path: 'nuevo/grupo', component: NuevoGrupoComponent },
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent }
 
 ];
 @NgModule({

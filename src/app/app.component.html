@@ -19,7 +19,7 @@
                 <a class="nav-link" routerLink="/grupos" routerLinkActive="active">Grupos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"routerLink="/calendario" routerLinkActive="active">Calendario</a>
+                <a class="nav-link" routerLink="/calendario" routerLinkActive="active">Calendario</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle"  id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true"
@@ -30,6 +30,17 @@
                     <a class="dropdown-item" routerLink="/evento" routerLinkActive="active">Nuevo evento</a>
                     <a class="dropdown-item" routerLink="/nuevo/grupo" routerLinkActive="active">Nuevo grupo</a>
                 </div>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li *ngIf="!isLogged">
+                <a  class="nav-link" routerLink="/login" routerLinkActive="active">
+                    Login</a>
+            </li>
+            <li *ngIf="isLogged">
+                <p>{{userName}}</p>
+                <a class="nav-link" role="button" (click)="logout()">
+                Logout</a>
             </li>
         </ul>
     </div>
