@@ -72,6 +72,11 @@ export class DataService {
             .catch(this.handleError);
     }
 
+    getNUsers(id){
+        return this._http.get("/api/grupo/" + id+"/nusers")
+        .map(result => this.result = result.json().data);
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);

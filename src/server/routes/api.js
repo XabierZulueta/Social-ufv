@@ -32,8 +32,8 @@ router.post("/upload", upload.array("uploads[]", 12), function (req, res) {
 
 // Connect
 const connection = (closure) => {
-    //return MongoClient.connect('mongodb://xabier:xabier@ds159274.mlab.com:59274/social-ufv',(err,db) => {
-    return MongoClient.connect('mongodb://localhost:27017/mean', (err, db) => {
+    return MongoClient.connect('mongodb://xabier:xabier@ds159274.mlab.com:59274/social-ufv',(err,db) => {
+    //return MongoClient.connect('mongodb://localhost:27017/mean', (err, db) => {
         if (err) return console.log(err);
 
         closure(db);
@@ -53,6 +53,24 @@ let response = {
     data: [],
     message: null
 };
+
+//Get nusers by group
+router.get('/grupo/:id/nusers' , (req, res) => {
+    var id = req.params.id;
+    id = parseInt(id);
+    var objeto = { id: id };
+    connection((db) => {
+        db.collection('users')
+            .count({ grupos: Number(id) })
+            .then((nusers) => {
+                response.data = nusers;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+    })
+});
 
 //Authenticate
 router.post('/authenticate', (req,res)=>{

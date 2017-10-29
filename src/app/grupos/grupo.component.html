@@ -366,7 +366,7 @@
                 </div>
             </div>
             <div class="tab-pane fade in" id="tab2">
-                <h3>Miembros</h3>
+                <h3>Miembros <span class="badge" style="background-color: #343a40;">{{nusers}}</span></h3>
                 <ul class="list-group" style="margin-top: 20px;">
                     <li *ngFor="let miembro of miembros" class="list-group-item justify-content-between"> 
                         <a [routerLink]="['/user', miembro.id]">{{miembro.name}}</a>

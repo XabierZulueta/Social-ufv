@@ -32,10 +32,12 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('token');
+        localStorage.clear();
         this.authenticate.next(false);
     }
 
     saveToken(token: string){
+        localStorage.removeItem('token');
         localStorage.setItem('token',token);
         this.authenticate.next(true);
         console.log(this.authenticate);

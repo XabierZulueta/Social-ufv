@@ -29,7 +29,7 @@ export class GrupoComponent {
     id:number;
     eventos : any[];
     miembros:any[];
-
+    nusers:number;
 
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
@@ -53,5 +53,8 @@ export class GrupoComponent {
             });
         this._dataService.getById(this.id,'users/grupo')
             .subscribe(res=>this.miembros = res);
+
+        this._dataService.getNUsers(this.id)
+            .subscribe(res=>this.nusers = res);
     }
 }

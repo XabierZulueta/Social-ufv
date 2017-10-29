@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { AlertService } from '../_services/alert.service';
 import { UserService } from '../_services/user.service';
+import { AppComponent} from '../app.component';
 
 @Component({
     moduleId: module.id,
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService) { }
+        private alertService: AlertService,
+    private app : AppComponent) { }
 
     ngOnInit() {
         // reset login status
@@ -37,6 +39,7 @@ export class LoginComponent implements OnInit {
                 if (res.success) {
                     console.log(res.token);
                     this.authenticationService.saveToken(res.token);
+                    this.app.reload();
                     this.router.navigateByUrl(''); 
                 } else {
                     this.error = res.msg;

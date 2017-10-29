@@ -37,10 +37,15 @@
                 <a  class="nav-link" routerLink="/login" routerLinkActive="active">
                     Login</a>
             </li>
-            <li *ngIf="isLogged">
-                <p>{{userName}}</p>
-                <a class="nav-link" role="button" (click)="logout()">
-                Logout</a>
+            <li *ngIf="isLogged" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"  id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" role="button">
+                    {{userName}}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" [routerLink]="['/user', userId]" routerLinkActive="active">Ver perfil</a>
+                            <a class="dropdown-item" role="button" (click)="logout()">Logout</a>
+                    </div>
             </li>
         </ul>
     </div>
