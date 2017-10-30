@@ -32,8 +32,8 @@ router.post("/upload", upload.array("uploads[]", 12), function (req, res) {
 
 // Connect
 const connection = (closure) => {
-    return MongoClient.connect('mongodb://xabier:xabier@ds159274.mlab.com:59274/social-ufv',(err,db) => {
-    //return MongoClient.connect('mongodb://localhost:27017/mean', (err, db) => {
+    //return MongoClient.connect('mongodb://xabier:xabier@ds159274.mlab.com:59274/social-ufv',(err,db) => {
+    return MongoClient.connect('mongodb://localhost:27017/mean', (err, db) => {
         if (err) return console.log(err);
 
         closure(db);
@@ -54,11 +54,100 @@ let response = {
     message: null
 };
 
+//Apuntarse a un evento
+router.post('/apuntarEvento/:idUsuario/:idEvento', (req, res) => {
+    var idUsuario = req.params.idUsuario;
+    idUsuario = parseInt(idUsuario);
+    var idEvento = req.params.idEvento;
+    idEvento = parseInt(idEvento);
+    connection((db) => {
+        db.collection('events')
+            .update({ id: idEvento }, { $addToSet: { apuntados: idUsuario } });
+        db.close();
+    });
+});
+//Desapuntarse de un evento
+router.post('/desapuntarEvento/:idUsuario/:idEvento', (req, res) => {
+    var idUsuario = req.params.idUsuario;
+    idUsuario = parseInt(idUsuario);
+    var idEvento = req.params.idEvento;
+    idEvento = parseInt(idEvento);
+    connection((db) => {
+        db.collection('events')
+            .update({ id: idEvento }, { $pull: { apuntados: idUsuario } });
+        db.close();
+    });
+});
+
+//Apuntarse a un grupo
+router.post('/apuntar/:idUsuario/:idGrupo', (req, res) => {
+    var idUsuario = req.params.idUsuario;
+    idUsuario = parseInt(idUsuario);
+    var idGrupo = req.params.idGrupo;
+    idGrupo = parseInt(idGrupo);
+    connection((db) => {
+        db.collection('users')
+            .update({ id: idUsuario }, { $addToSet: { grupos: idGrupo } });
+        db.close();
+    });
+});
+//Desapuntarse de un grupo
+router.post('/desapuntar/:idUsuario/:idGrupo', (req, res) => {
+    var idUsuario = req.params.idUsuario;
+    idUsuario = parseInt(idUsuario);
+    var idGrupo = req.params.idGrupo;
+    idGrupo = parseInt(idGrupo);
+    connection((db) => {
+        db.collection('users')
+            .update({ id: idUsuario }, { $pull: { grupos: idGrupo } });
+        db.close();
+    });
+});
+
+//Ver si está apuntado a un evento
+router.get('/user/apuntado/:idUsuario/:idEvento', (req, res) => {
+    var idUsuario = req.params.idUsuario;
+    idUsuario = parseInt(idUsuario);
+    var idEvento = req.params.idEvento;
+    idEvento = parseInt(idEvento);
+    connection((db) => {
+        db.collection('events')
+            .findOne({ id: idEvento, apuntados: idUsuario })
+            .then((user) => {
+                response.data = user;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+        db.close();
+    });
+});
+
+//Ver si está apuntado a un grupo.
+router.get('/user/miembro/:idUsuario/:idGrupo', (req,res)=>{
+    var idUsuario = req.params.idUsuario;
+    idUsuario = parseInt(idUsuario);
+    var idGrupo = req.params.idGrupo;
+    idGrupo = parseInt(idGrupo);
+    connection((db) => {
+        db.collection('users')
+            .findOne({ id: idUsuario, grupos:idGrupo })
+            .then((user) => {
+                    response.data = user;
+                    res.json(response);
+                })
+            .catch((err) => {
+                sendError(err, res);
+            });
+        db.close();
+    });
+});
+
 //Get nusers by group
 router.get('/grupo/:id/nusers' , (req, res) => {
     var id = req.params.id;
     id = parseInt(id);
-    var objeto = { id: id };
     connection((db) => {
         db.collection('users')
             .count({ grupos: Number(id) })
@@ -69,6 +158,7 @@ router.get('/grupo/:id/nusers' , (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     })
 });
 
@@ -87,7 +177,8 @@ router.post('/authenticate', (req,res)=>{
                     res.json({ success: true, msg: 'Ese usuario si existe', user:user, token:token});
                 }
             })
-            ;/*.then((user) => {
+            ;
+        db.close();/*.then((user) => {
                 response.data = user;
                 res.json(response);
             })
@@ -108,6 +199,7 @@ router.post('/groups', (req, res) => {
                 else
                     res.send('Success');
             });
+        db.close();
     })
 });
 //Get users by group id
@@ -126,6 +218,7 @@ router.get('/users/grupo/:id' , (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     })
 });
 
@@ -144,6 +237,7 @@ router.get('/groups/max', (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     });
 });
 
@@ -162,6 +256,7 @@ router.get('/events/max', (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     });
 });
 
@@ -177,6 +272,7 @@ router.put('/event/:id', (req, res) => {
                 else
                     res.send('Success');
             });
+        db.close();
     })
 });
 
@@ -194,6 +290,7 @@ router.get('/events/:id', (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     });
 });
 
@@ -209,6 +306,7 @@ router.post('/events', (req, res) => {
                 else
                     res.send('Success');
             });
+        db.close();
     })
 });
 
@@ -225,6 +323,7 @@ router.delete('/users/:id', (req, res) => {
                 else
                     res.send('Success');
             });
+        db.close();
     })
 });
 
@@ -244,6 +343,7 @@ router.get('/users/max', (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     });
 });
 
@@ -258,6 +358,7 @@ router.post('/users', (req, res) => {
                 else
                     res.send('Success');
             }); 
+        db.close();
     })
 });
 
@@ -274,6 +375,7 @@ router.get('/events', (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     });
 });
 
@@ -290,6 +392,7 @@ router.get('/groups', (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     });
 });
 
@@ -307,6 +410,7 @@ router.get('/users', (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     });
 });
 
@@ -323,6 +427,7 @@ router.get('/:id', (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     });
 });
 
@@ -339,6 +444,7 @@ router.get('/groups/:id', (req, res) => {
             .catch((err) => {
                 sendError(err, res);
             });
+        db.close();
     });
 });
 

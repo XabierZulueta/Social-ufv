@@ -13,4 +13,5 @@ export class Evento implements CalendarEvent{
     descripcion: string;
     organizador: any;
     creditos:number;
+    apuntados?:any[];
 }

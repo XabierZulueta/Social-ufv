@@ -58,6 +58,7 @@ export class EventoComponent {
         descripcion: '',
         organizador: {id:1},
         creditos: 0,
+        apuntados:[]
     }
     ;
 

@@ -333,8 +333,11 @@
 
 <div class="" *ngIf="grupo">
     <div class="card hovercard" style="background-color: #013660;">
-        <div class="ml-auto" style="margin-top:10px; z-index: 1;">
-            <button class="btn btn-success align-items-end">Apuntarse</button>
+        <div *ngIf="miembro==false" class="ml-auto" style="margin-top:10px; z-index: 1;">
+            <button class="btn btn-success align-items-end" (click)="apuntarGrupo(userId, grupo.id);">Apuntarse</button>
+        </div>
+        <div *ngIf="miembro==true" class="ml-auto" style="margin-top:10px; z-index: 1;">
+            <button class="btn btn-danger align-items-end" (click)="desapuntarGrupo(userId, grupo.id);">Desapuntarse</button>
         </div>
         <div class="card-background">
             <img class="card-bkimg" alt="">
@@ -403,7 +406,12 @@
                                 </div>
                                 <br />
                                 <br />
-                                <button type="button" class="btn btn-success btn-lg btn-block">Apuntarse</button>
+                                <div *ngIf="evento.apuntado==false">
+                                    <button type="button" (click)="apuntarEvento(userId, evento.id);" class="btn btn-warning btn-lg btn-block">¡Quiero ir!</button>
+                                </div>
+                                <div *ngIf="evento.apuntado==true">
+                                    <button type="button" (click)="desapuntarEvento(userId, evento.id);" class="btn btn-danger btn-lg btn-block">Darme de baja</button>
+                                </div>
                             </form>
                         </div>
                     </li>

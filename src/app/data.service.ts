@@ -77,6 +77,40 @@ export class DataService {
         .map(result => this.result = result.json().data);
     }
 
+    esMiembro(idGrupo,idUsuario){
+        return this._http.get("/api/user/miembro/"+idUsuario+"/" + idGrupo )
+            .map(result => this.result = result.json().data);
+    }
+
+    esApuntado(idEvento, idUsuario) {
+        return this._http.get("/api/user/apuntado/" + idUsuario + "/" + idEvento)
+            .map(result => this.result = result.json().data);
+    }
+
+    desapuntarGrupo(idUsuario, idGrupo){
+        return this._http.post("/api/desapuntar/" + idUsuario + "/" + idGrupo, { headers: this.headers })
+            .toPromise()
+            .catch(this.handleError);
+    }
+
+    apuntarGrupo(idUsuario, idGrupo) {
+        return this._http.post("/api/apuntar/" + idUsuario + "/" + idGrupo, { headers: this.headers })
+            .toPromise()
+            .catch(this.handleError);
+    }
+
+    desapuntarEvento(idUsuario, idEvento) {
+        return this._http.post("/api/desapuntarEvento/" + idUsuario + "/" + idEvento, { headers: this.headers })
+            .toPromise()
+            .catch(this.handleError);
+    }
+
+    apuntarEvento(idUsuario, idEvento) {
+        return this._http.post("/api/apuntarEvento/" + idUsuario + "/" + idEvento, { headers: this.headers })
+            .toPromise()
+            .catch(this.handleError);
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);

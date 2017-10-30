@@ -40,7 +40,6 @@ export class AuthenticationService {
         localStorage.removeItem('token');
         localStorage.setItem('token',token);
         this.authenticate.next(true);
-        console.log(this.authenticate);
     }
 
     isAuthenticate():boolean{

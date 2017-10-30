@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { DataService } from '../data.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { JwtHelper } from 'angular2-jwt';
+import { Http } from '@angular/http';
+import { Evento } from '../eventos/evento';
 
 const colors: any = {
     red: {
@@ -24,37 +27,106 @@ const colors: any = {
     styleUrls: ['./grupo.component.css']
 })
 
-export class GrupoComponent {
+export class GrupoComponent implements OnInit {
     grupo: any;
     id:number;
+    evento : any={
+        id: 0,
+        start: new  Date(),
+        end: new Date(),
+        title: '',
+        color: colors.blue,
+        descripcion: '',
+        organizador: 11,
+        creditos: 1,
+        apuntados: '',
+        apuntado:false
+    };
     eventos : any[];
     miembros:any[];
     nusers:number;
+    miembro:boolean;
+    apuntado : boolean;
+    token: string;
+    tokenDecoded: Object;
+    userId:string;
+    prueba:any;
+    jwtHelper: JwtHelper = new JwtHelper();
 
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
-        private route: ActivatedRoute) {
-            var sub= this.route.params.subscribe(params => {
+        private route: ActivatedRoute,
+        private router: Router,
+        private http:Http) {
+         
+    }
+
+    ngOnInit() {
+        var sub = this.route.params.subscribe(params => {
             this.id = +params['id']; // (+) converts string 'id' to a number
 
             // In a real app: dispatch action to load the details here.
         });
-        this._dataService.getById(this.id,'groups')
+        this.token = localStorage.getItem('token');
+        this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
+        this.userId = this.tokenDecoded['id'];
+        this._dataService.getById(this.id, 'groups')
             .subscribe(res => this.grupo = res);
-        this._dataService.getById(this.id,'events')
+        this._dataService.getById(this.id, 'events')
             .subscribe(res => {
                 this.eventos = res;
                 for (var i = 0; i < this.eventos.length; i++) {
                     this.eventos[i].start = new Date(new Date(this.eventos[i].start).toUTCString());
                     this.eventos[i].end = new Date(new Date(this.eventos[i].end).toUTCString());
                     this.eventos[i].color = colors.blue;
+                    console.log(this.eventos[i].apuntados);
+                    console.log(this.isMember(this.eventos[i].apuntados));
+                    if (this.isMember(this.eventos[i].apuntados))
+                        this.eventos[i].apuntado=true;
+                    else 
+                        this.eventos[i].apuntado = false;
+                    console.log(this.eventos[i].apuntado);
                 }
-                console.log(this.eventos);
             });
-        this._dataService.getById(this.id,'users/grupo')
-            .subscribe(res=>this.miembros = res);
+        this._dataService.getById(this.id, 'users/grupo')
+            .subscribe(res => this.miembros = res);
 
         this._dataService.getNUsers(this.id)
-            .subscribe(res=>this.nusers = res);
+            .subscribe(res => this.nusers = res);
+        this._dataService.esMiembro(this.id, this.userId)
+            .subscribe(res => {
+                this.miembro = res;
+                if (this.miembro != null)
+                    this.miembro = true;
+                else
+                    this.miembro = false;
+            });
+    }
+
+    desapuntarGrupo(idUsuario, idGrupo){
+        this._dataService.desapuntarGrupo(idUsuario,idGrupo);
+        this.ngOnInit();
+    }
+
+    apuntarGrupo(idUsuario, idGrupo) {
+        this._dataService.apuntarGrupo(idUsuario, idGrupo);
+        this.ngOnInit();
+    }
+
+    desapuntarEvento(idUsuario, idEvento) {
+        this._dataService.desapuntarEvento(idUsuario, idEvento);
+        this.ngOnInit();
+    }
+
+    apuntarEvento(idUsuario, idEvento){
+        this._dataService.apuntarEvento(idUsuario, idEvento);
+        this.ngOnInit();
+    }
+
+    isMember(array:any[]){
+        if(array.indexOf(this.userId)!=-1)
+            return true;
+        else
+            return false;
     }
 }
