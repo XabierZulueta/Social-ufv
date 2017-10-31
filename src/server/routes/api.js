@@ -310,7 +310,7 @@ router.post('/events', (req, res) => {
     })
 });
 
-//Delete user
+//Delete user. Le elimina también de los eventos a los que está apuntado.
 router.delete('/users/:id', (req, res) => {
     var id = req.params.id;
     id = parseInt(id);
@@ -324,7 +324,12 @@ router.delete('/users/:id', (req, res) => {
                     res.send('Success');
             });
         db.close();
-    })
+    });
+    connection((db) => {
+        db.collection('events')
+            .update({}, { $pull: { apuntados: id }},{multi:true} );
+        db.close();
+    });
 });
 
 

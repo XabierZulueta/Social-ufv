@@ -19,6 +19,9 @@ import {
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../data.service';
 import { Evento } from './evento';
+
+import { JwtHelper } from 'angular2-jwt';
+
 const colors: any = {
     red: {
         primary: '#ad2121',
@@ -50,15 +53,6 @@ export class CalendarioComponent implements OnInit{
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
     view: string = 'month';
-    /*events: any[] = [{
-        title: 'Escalada',
-        start: new Date(),
-        color: colors.blue,
-        creditos: 0.0,
-        organizador: "Musgoletus",
-        end: setHours(new Date(), 18),
-        descripcion: 'Miriam no ha invitado a Manza a la montaña.'
-    }];*/
     events : any[];
     viewDate: Date = new Date();
     modalData: {
@@ -66,8 +60,11 @@ export class CalendarioComponent implements OnInit{
         event: CalendarEvent;
     };
     organizador:any;
-
+    token: string;
+    tokenDecoded: Object;
+    userId: string;
     activeDayIsOpen: boolean = false;
+    jwtHelper: JwtHelper = new JwtHelper();
 
     locale:string='sp';
     constructor(private modal: NgbModal, private _dataService: DataService, private route: ActivatedRoute) { 
@@ -83,13 +80,21 @@ export class CalendarioComponent implements OnInit{
                     this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
                     this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
                     this.events[i].color = colors.blue;
-                    //this.events[i].organizador=this.getOrganizador(this.events[i]); 
+                    //Si está en la lista de apuntados, ponemos el color del evento en rojo y el boolean apuntado a true, si no, lo pongo a false.
+                    if (this.isMember(this.events[i].apuntados)){
+                        this.events[i].apuntado = true;
+                        this.events[i].color = colors.red;
+                    }
+                    else
+                        this.events[i].apuntado = false;                    
                 }
                 this.refresh.next();
             });
 
         this.events = this._dataService.events;
-        
+        this.token = localStorage.getItem('token');
+        this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
+        this.userId = this.tokenDecoded['id'];
         this.refresh.next();
     }
 
@@ -100,8 +105,6 @@ export class CalendarioComponent implements OnInit{
             .subscribe(res => {
             event.organizador = res;
             });
-
-
     }
 
     dayClicked({date, events}: {date: Date;events: Array<Evento>;}): void {
@@ -119,4 +122,21 @@ export class CalendarioComponent implements OnInit{
         
     }
 
+    desapuntarEvento(idUsuario, idEvento) {
+        this._dataService.desapuntarEvento(idUsuario, idEvento);
+        this.ngOnInit();
+    }
+
+    apuntarEvento(idUsuario, idEvento) {
+        this._dataService.apuntarEvento(idUsuario, idEvento);
+        this.ngOnInit();
+    }
+
+    //Método que comprueba si el usuario está apuntado al evento.
+    isMember(array: any[]) {
+        if (array.indexOf(this.userId) != -1)
+            return true;
+        else
+            return false;
+    }
 }

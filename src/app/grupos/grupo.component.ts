@@ -79,13 +79,10 @@ export class GrupoComponent implements OnInit {
                     this.eventos[i].start = new Date(new Date(this.eventos[i].start).toUTCString());
                     this.eventos[i].end = new Date(new Date(this.eventos[i].end).toUTCString());
                     this.eventos[i].color = colors.blue;
-                    console.log(this.eventos[i].apuntados);
-                    console.log(this.isMember(this.eventos[i].apuntados));
                     if (this.isMember(this.eventos[i].apuntados))
                         this.eventos[i].apuntado=true;
                     else 
                         this.eventos[i].apuntado = false;
-                    console.log(this.eventos[i].apuntado);
                 }
             });
         this._dataService.getById(this.id, 'users/grupo')

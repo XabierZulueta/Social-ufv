@@ -13,7 +13,7 @@
             </div>
         </div>
         <div>
-            Grupo organizador: <b> {{ modalData?.event.organizador.nombre }}</b>
+            Grupo organizador: <a [routerLink]="['/grupo', modalData?.event.organizador.id]" (click)="close()"><b> {{ modalData?.event.organizador.nombre }}</b></a>
         <div style="float:right;">
             <tr >
             <td><div >
@@ -32,7 +32,12 @@
     </div>
     <div class="modal-footer">  
         <button type="button" class="btn btn-secondary " (click)="close()">Volver</button>
-        <button type="button" class="btn btn-primary " (click)="close()">Apuntarse</button>
+        <div *ngIf="modalData?.event.apuntado==false">
+        <button type="button" class="btn btn-info " (click)=" apuntarEvento(userId, modalData?.event.id);close();">Apuntarse</button>
+        </div>
+        <div *ngIf="modalData?.event.apuntado==true">
+        <button type="button" class="btn btn-danger " (click)=" desapuntarEvento(userId, modalData?.event.id); close();">Desapuntarse</button>
+        </div>
     </div>
 </ng-template>
 
