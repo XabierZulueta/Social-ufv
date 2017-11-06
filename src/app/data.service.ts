@@ -17,8 +17,8 @@ export class DataService {
      }
 
     getMaxId(db){
-         return this._http.get("/api/"+db+"/max")
-             .map(result => this.result = result.json().data);
+            return this._http.get("/api/" + db + "/max")
+                .map(result => this.result = result.json().data);
     }
      
     getGeneral(db){
@@ -109,6 +109,11 @@ export class DataService {
         return this._http.post("/api/apuntarEvento/" + idUsuario + "/" + idEvento, { headers: this.headers })
             .toPromise()
             .catch(this.handleError);
+    }
+
+    getLike(db:string,nombre:String){
+        return this._http.get("/api/"+db+"/nombre/" + nombre, { headers: this.headers })
+            .map(result => this.result = result.json().data);
     }
 
     private handleError(error: any): Promise<any> {

@@ -54,6 +54,64 @@ let response = {
     message: null
 };
 
+//get events like(, sin diferenciar entre mayusculas y minusculas
+router.get('/events/nombre/:nombre', (req, res) => {
+    var nombre = req.params.nombre;
+    connection((db) => {
+        db.collection('events')
+            .find({ 'title': { $regex: nombre, $options: 'i' } })
+            .sort({ 'title': 1 })
+            .toArray()
+            .then((users) => {
+                response.data = users;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+
+    });
+});
+
+
+//get grupos like, sin diferenciar entre mayusculas y minusculas
+router.get('/groups/nombre/:nombre', (req, res) => {
+    var nombre = req.params.nombre;
+    connection((db) => {
+        db.collection('grupos')
+            .find({ 'nombre': { $regex: nombre, $options: 'i' } })
+            .sort({ 'nombre': 1 })
+            .toArray()
+            .then((users) => {
+                response.data = users;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+
+    });
+});
+
+//get users like, sin diferenciar entre mayusculas y minusculas
+router.get('/users/nombre/:nombre', (req,res) => {
+    var nombre = req.params.nombre;
+    connection((db)=>{
+        db.collection('users')
+        .find({'name': {$regex : nombre, $options : 'i'} })
+        .sort({'name':1})
+        .toArray()
+        .then((users) => {
+            response.data = users;
+            res.json(response);
+        })
+        .catch((err) => {
+            sendError(err, res);
+        });
+        
+    });
+});
+
 //Apuntarse a un evento
 router.post('/apuntarEvento/:idUsuario/:idEvento', (req, res) => {
     var idUsuario = req.params.idUsuario;
@@ -282,6 +340,7 @@ router.get('/events/:id', (req, res) => {
     connection((db) => {
         db.collection('events')
             .find({ "organizador.id": Number(idGrupo) })
+            .sort({ "start":-1})//order by start desc
             .toArray()
             .then((user) => {
                 response.data = user;
@@ -407,6 +466,7 @@ router.get('/users', (req, res) => {
     connection((db) => {
         db.collection('users')
             .find()
+            .sort({'name':1})
             .toArray()
             .then((users) => {
                 response.data = users;

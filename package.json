@@ -32,6 +32,7 @@
     "angular2-moment": "^1.7.0",
     "axios": "^0.16.2",
     "body-parser": "^1.18.2",
+    "bootstrap-table": "^1.11.2",
     "cookie-parser": "^1.4.3",
     "core-js": "^2.4.1",
     "date-fns": "^1.28.5",

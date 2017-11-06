@@ -1,4 +1,8 @@
 <h1>Grupos</h1>
+<form class="form-inline my-2 my-lg-0 pull-right">
+    <input #buscarNombre class="form-control mr-sm-2"  type="search" placeholder="Buscar..." (keyup.enter)="search(buscarNombre.value)">
+    <!--<button class="btn btn-outline-success my-2 my-sm-0" (click)="search(buscarNombre.value)">Buscar</button>-->
+</form>
 <div class="row" style=" text-align: center; ">
     <div class="col-md-2" *ngFor="let g of grupos">
         <div class="thumbnail">

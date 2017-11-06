@@ -11,10 +11,21 @@ import { DataService } from '../data.service';
 export class GruposComponent {
     grupos: Array<any>;
     grupo:any;
+    nombre : String;
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService) {
         this._dataService.getGeneral('groups')
             .subscribe(res => this.grupos = res);
+    }
+    
+    search(nombre:any){
+        if (nombre.length==0)
+            this._dataService.getGeneral('groups')
+                .subscribe(res => this.grupos = res);
+        else{
+            this._dataService.getLike('groups', nombre)
+                .subscribe(res => this.grupos = res);
+        }
     }
 /*
     getGroupUsers(idGrupo) {

@@ -46,7 +46,6 @@ export class AuthenticationService {
         let isAuth:boolean;
         if(localStorage.getItem('token')){
             isAuth = true;
-            console.log(localStorage.getItem('token'));
         }
         else
             isAuth = false;
