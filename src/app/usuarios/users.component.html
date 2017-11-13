@@ -1,40 +1,17 @@
-<router-outlet></router-outlet>
-<style>
-  
-</style>
+
 <h1>Usuarios</h1>
-<form class="form-inline my-2 my-lg-0 pull-right">
-    <input #buscarNombre class="form-control mr-sm-2" type="search" placeholder="Buscar...">
-    <button class="btn btn-outline-success my-2 my-sm-0" (click)="search(buscarNombre.value)">Buscar</button>
-</form>
-<br/><br/>
-<div *ngIf="nrows!=0">
-<table class="table table-bordered" data-toggle="table" data-url="/api/users"
+<table class="table table-bordered" data-toggle="table" data-url="http://localhost:3000/api/users"
   data-pagination="true" data-page-number="1"
  data-page-size="5" data-smart-display="true" data-only-info-pagination="false"
  data-search="true"  data-page-list="[5, 10, 20, 50, 100, 200]">
     <thead class="thead-inverse">
         <tr>
             <th data-field="name" data-sortable="true">Nombre</th>
+            <th data-field="email" data-sortable="true">Email</th>
   <!--          <th>Acción</th>-->
         </tr>
     </thead>
-    <tbody>
-        <tr *ngFor="let u of users">
-            <td><a href="/user/{{u.id}}">{{ u.name }}</a></td>
-           <!-- <td><button class="btn btn-danger" (click)="delete(u.id);">Eliminar</button></td>-->
-        </tr>
-    </tbody>
 </table>
-</div>
-<div *ngIf="nrows==0">
-    <div class="alert alert-warning alert-dismissable" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)='buscarNombre.value="";search(buscarNombre.value);'>
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <strong>¡Lo sentimos! </strong>No existe ningún usuario con el nombre '{{buscarNombre.value}}'.
-    </div>
-</div>
 <label>Usuario:</label>
 <input #usuarioNombre />
 <button class="btn btn-primary" (click)="add(usuarioNombre.value, userMaxId[0].id +1);">Insertar</button>

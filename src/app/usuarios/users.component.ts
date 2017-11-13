@@ -21,22 +21,23 @@ export class UsersComponent implements OnInit{
     nombre : String = '';
     nrows:number;
     url: String ;
+
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService, private route: ActivatedRoute, private router: Router) {
-        this.nombre='';
-        this.ngOnInit();
+       /* this.nombre='';
+        this.ngOnInit();*/
     }
 
     ngOnInit(){
         // Access the Data Service's getUsers() method we defined
-        if (this.nombre.length==0)
+       /* if (this.nombre.length==0)
         this._dataService.getGeneral('users')
             .subscribe(res => { this.users = res;
                 this.nrows = this.users.length; });
         else
         this._dataService.getLike('users',this.nombre)
             .subscribe(res => { this.users = res;
-            this.nrows=this.users.length; });
+            this.nrows=this.users.length; });*/
         this._dataService.getMaxId('users')
             .subscribe(res => {
                 this.userMaxId = res;
@@ -46,13 +47,6 @@ export class UsersComponent implements OnInit{
     getUserById(idUser) {
         this._dataService.getById(idUser,'')
             .subscribe(res => this.user = res);
-    }
-
-    getUrl(){
-        if (this.nombre.length == 0)
-            this.url='/api/users';
-        else
-            this.url='/api/users/nombre/'+this.nombre;
     }
 
     add(nombre: string, id: number){

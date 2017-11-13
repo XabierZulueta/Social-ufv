@@ -9,6 +9,7 @@ import { AppComponent} from '../app.component';
 @Component({
     moduleId: module.id,
     templateUrl: 'login.component.html',
+    styles: ['body { background-color: #003265 !important; }']
 })
 
 export class LoginComponent implements OnInit {
@@ -22,7 +23,9 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private authenticationService: AuthenticationService,
         private alertService: AlertService,
-    private app : AppComponent) { }
+    private app : AppComponent) { 
+        document.body.style.backgroundColor ='#003265';
+    }
 
     ngOnInit() {
         // reset login status
@@ -40,6 +43,7 @@ export class LoginComponent implements OnInit {
                     console.log(res.token);
                     this.authenticationService.saveToken(res.token);
                     this.app.reload();
+                    document.body.style.backgroundColor = '#fff';
                     this.router.navigateByUrl(''); 
                 } else {
                     this.error = res.msg;

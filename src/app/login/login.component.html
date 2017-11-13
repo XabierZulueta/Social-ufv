@@ -1,3 +1,118 @@
+<style>
+    .login-form {
+    padding: 100px 0px 50px 0px;
+}
+.top-login {
+    width: 130px;
+    height: 130px;
+    display: block;
+    -webkit-transform: rotate(45deg) translate3d(0, 0, 0);
+    -moz-transform: rotate(45deg) translate3d(0, 0, 0);
+    -ms-transform: rotate(45deg) translate3d(0, 0, 0);
+    -o-transform: rotate(45deg) translate3d(0, 0, 0);
+    transform: rotate(45deg) translate3d(0, 0, 0);
+    margin: 0 auto 4em;
+    background: #fff;
+    position: relative;
+}
+.login-top {
+    width: 460px;
+    display: block;
+    margin: 0 auto;
+}
+.login-ic {
+    background: rgba(255, 255, 255, 0.32);
+    margin-bottom: 1.5em;
+    padding: 8px;
+}
+.log-bwn {
+    text-align: center;
+}
+.log-bwn input[type="submit"] {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    padding: 13px 0;
+    background: #ff3366;
+    display: inline-block;
+    width: 100%;
+    outline: none;
+    border: 2px solid #ff3366;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+.login-ic input[type="text"], .login-ic input[type="password"] {
+    float: left;
+    background: none;
+    outline: none;
+    font-size: 15px;
+    font-weight: 400;
+    color: #fff;
+    padding: 10px 16px;
+    border: none;
+    border-left: 1px solid #fff;
+    width: 82%;
+    display: inline-block;
+    margin-left: 7px;
+}
+.login-form h1 {
+    font-size: 2em;
+    color: #fff;
+    font-weight: 800;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 2em;
+}
+.clear {
+    clear: both;
+}
+.top-login span img {
+    /* -webkit-transform: rotate(-45deg) translate3d(0, 0, 0); */
+    -moz-transform: rotate(-45deg) translate3d(0, 0, 0);
+    -ms-transform: rotate(-45deg) translate3d(0, 0, 0);
+    -o-transform: rotate(-45deg) translate3d(0, 0, 0);
+    transform: rotate(-45deg) translate3d(0, 0, 0);
+    margin-top: unset;
+    margin-left: unset;
+}
+.login-ic i {
+    font-size: 40px;
+    color: white;
+    float: left;
+    display: inline-block;
+}
+</style>
+<div class="login-form">
+    <div class="top-login">
+        <span>
+            <img src="../../assets/logo.png" width="130px"  alt="">
+        </span>
+    </div>
+    <h1>Login</h1>
+    <!---728x90-->
+    <div class="login-top">
+        <form name= "form"(ngSubmit) = "f.form.valid && login()" #f = "ngForm" novalidate>
+            <div class="login-ic">
+                <i class="material-icons">person</i>
+                <input type="text" value="Usuario" name= "username"[(ngModel)] = "model.username" #username = "ngModel" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Usuario';}">
+                <div *ngIf="f.submitted && !username.valid" class="text text-danger"> El username es obligatorio</div>
+                <div class="clear"> </div>
+            </div>
+            <div class="login-ic">
+                <i class="material-icons">https</i>
+                <input type="password"  name= "password"[(ngModel)] = "model.password" #password = "ngModel" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required>
+                <div *ngIf="f.submitted && !password.valid" class="text text-danger"> La contraseña es obligatoria</div>
+                <div class="clear"> </div>
+            </div>
+
+            <div class="log-bwn">
+                <input type="submit" value="Iniciar sesión">
+            </div>
+        </form>
+    </div>
+    
+</div>
+<!--
 <div class="col-md-6 col-md-offset-3" >
     <h2>Login </h2>
     <div *ngIf="error" class="alert alert-danger">
@@ -19,4 +134,4 @@
             <a [routerLink]="['/register']" class="btn btn-link" > Register </a>
         </div>
     </form>
-</div>
+</div>-->
