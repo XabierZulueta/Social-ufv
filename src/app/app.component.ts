@@ -31,9 +31,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit(){
     this.isLogged = this.authService.isAuthenticate();
-    if(this.isLogged == false)
-      this.router.navigateByUrl('/login');
-    else{
+    if(this.isLogged != false){
+     
       this.token = localStorage.getItem('token');
       this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
       this.userName = this.tokenDecoded['name'];
@@ -43,9 +42,7 @@ export class AppComponent implements OnInit {
 
   reload(){
     this.isLogged = this.authService.isAuthenticate();
-    if(this.isLogged == false)
-      this.router.navigateByUrl('/login');
-    else{
+    if (this.isLogged != false) {
       this.token = localStorage.getItem('token');
       this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
       this.userName = this.tokenDecoded['name'];

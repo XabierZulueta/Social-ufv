@@ -37,6 +37,7 @@ const colors: any = {
     }
 };
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from '../_services/authentication.service';
 @Component({
     selector: 'evento',
     templateUrl: './evento.component.html'
@@ -47,7 +48,7 @@ export class EventoComponent {
     viewDate: Date = new Date();
 
     maxId : Array<any>;
-
+    isLogged:any;
     event: Evento =
     {
         id:0,
@@ -63,8 +64,12 @@ export class EventoComponent {
     ;
 
     constructor(private modal: NgbModal, private _dataService: DataService,
-        private route: ActivatedRoute, private router: Router) {
-
+        private route: ActivatedRoute, private router: Router,
+    private authService : AuthenticationService) {
+        this.isLogged = this.authService.isAuthenticate();
+        if (this.isLogged == false) {
+            this.router.navigateByUrl('/login');
+        }
             this._dataService.getMaxId('events').subscribe(res => {
                 this.maxId = res;
                 this.event.id = this.maxId[0].id+1;

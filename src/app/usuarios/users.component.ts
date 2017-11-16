@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import{User} from './user';
-import { ActivatedRoute, Router,  } from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { Subject } from 'rxjs/Subject';
+import { AuthenticationService } from '../_services/authentication.service';
 
 
 @Component({
@@ -21,9 +22,10 @@ export class UsersComponent implements OnInit{
     nombre : String = '';
     nrows:number;
     url: String ;
+    isLogged: any;
 
     // Create an instance of the DataService through dependency injection
-    constructor(private _dataService: DataService, private route: ActivatedRoute, private router: Router) {
+    constructor(private _dataService: DataService, private route: ActivatedRoute, private router: Router, private authService: AuthenticationService) {
        /* this.nombre='';
         this.ngOnInit();*/
     }
@@ -38,6 +40,10 @@ export class UsersComponent implements OnInit{
         this._dataService.getLike('users',this.nombre)
             .subscribe(res => { this.users = res;
             this.nrows=this.users.length; });*/
+        this.isLogged = this.authService.isAuthenticate();
+        if(this.isLogged == false){
+            this.router.navigateByUrl('/login');
+        }
         this._dataService.getMaxId('users')
             .subscribe(res => {
                 this.userMaxId = res;

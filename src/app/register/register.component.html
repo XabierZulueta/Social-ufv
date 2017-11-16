@@ -1,29 +1,164 @@
-<div class="col-md-6 col-md-offset-3">
-    <h2>Register</h2>
-    <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
-            <label for="firstName">First Name</label>
-            <input type="text" class="form-control" name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" required />
-            <div *ngIf="f.submitted && !firstName.valid" class="help-block">First Name is required</div>
-        </div>
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
-            <label for="lastName">Last Name</label>
-            <input type="text" class="form-control" name="lastName" [(ngModel)]="model.lastName" #lastName="ngModel" required />
-            <div *ngIf="f.submitted && !lastName.valid" class="help-block">Last Name is required</div>
-        </div>
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" name="username" [(ngModel)]="model.username" #username="ngModel" required />
-            <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
-        </div>
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required />
-            <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary">Enviar</button>
-            <a [routerLink]="['/login']" class="btn btn-link btn-danger">Cancelar</a>
-        </div>
-    </form>
+<style>
+    .login-form {
+        padding: 100px 0px 50px 0px;
+    }
+
+    .top-login {
+        width: 200px;
+        height: 200px;
+        display: block;
+        -webkit-transform: rotate(45deg) translate3d(0, 0, 0);
+        -moz-transform: rotate(45deg) translate3d(0, 0, 0);
+        -ms-transform: rotate(45deg) translate3d(0, 0, 0);
+        -o-transform: rotate(45deg) translate3d(0, 0, 0);
+        transform: rotate(45deg) translate3d(0, 0, 0);
+        margin: 0 auto 4em;
+        /* background: #fff;*/
+        position: relative;
+    }
+
+    .login-top {
+        width: 460px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .login-ic {
+        background: rgba(255, 255, 255, 0.32);
+        margin-bottom: 1.5em;
+        padding: 8px;
+    }
+
+    .log-bwn {
+        text-align: center;
+    }
+
+    .log-bwn input[type="submit"] {
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
+        padding: 13px 0;
+        background: #ff3366;
+        display: inline-block;
+        width: 100%;
+        outline: none;
+        border: 2px solid #ff3366;
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+    .login-ic input[type="text"],
+    .login-ic input[type="password"] {
+        float: left;
+        background: none;
+        outline: none;
+        font-size: 15px;
+        font-weight: 400;
+        color: #fff;
+        padding: 10px 16px;
+        border: none;
+        border-left: 1px solid #fff;
+        width: 82%;
+        display: inline-block;
+        margin-left: 7px;
+    }
+
+    .login-form h1 {
+        font-size: 2em;
+        color: #fff;
+        font-weight: 800;
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 2em;
+    }
+
+    .clear {
+        clear: both;
+    }
+
+    .top-login span img {
+        /* -webkit-transform: rotate(-45deg) translate3d(0, 0, 0); */
+        -moz-transform: rotate(-45deg) translate3d(0, 0, 0);
+        -ms-transform: rotate(-45deg) translate3d(0, 0, 0);
+        -o-transform: rotate(-45deg) translate3d(0, 0, 0);
+        transform: rotate(-45deg) translate3d(0, 0, 0);
+        margin-top: unset;
+        margin-left: unset;
+    }
+
+    .login-ic label {
+        font-size: 20px;
+        color: white;
+        float: left;
+        display: inline-block;
+    }
+</style>
+<div class="login-form">
+    <div class="top-login">
+        <span>
+            <img src="../../assets/logo2.png" width="200px" alt="">
+        </span>
+    </div>
+    <!---728x90-->
+    <div class="login-top">
+        <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="firstName" style="font-size: 20px;color: white;display: inline-block;">Nombre</label>
+                        </td>
+                        <td>
+                            <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !firstName.valid }">
+                                <input type="text" value='First Name' name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" onfocus="if (this.value == 'Nombre'){this.value = '';}"
+                                onblur="if (this.value == ''){this.value = 'Nombre';}" required>
+                                <div class="clear"> </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 160px;">
+                            <label for="lastName" style="font-size: 20px;color: white;display: inline-block;">Apellidos</label>
+                        </td>
+                        <td >
+                            <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !lastName.valid }">    
+                                <input type="text" value='Last Name' name="firstName" [(ngModel)]="model.lastName" #lastName="ngModel" onfocus="if (this.value == 'Apellidos'){this.value = '';}"
+                            onblur="if (this.value == ''){this.value = 'Apellidos';}" required>
+                                <div class="clear"> </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 160px;">
+                            <label for="username" style="font-size: 20px;color: white;display: inline-block;">Usuario</label>
+                        </td>
+                        <td>
+                            <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+                                <input type="text" value='Nombre de Usuario' name="username" [(ngModel)]="model.username" #username="ngModel" onfocus="if (this.value == 'Nombre de Usuario'){this.value = '';}"
+                            onblur="if (this.value == ''){this.value = 'Nombre de Usuario';}" required>
+                                <div class="clear"> </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 160px;">
+                            <label for="password" style="font-size: 20px;color: white;display: inline-block;">Contraseña</label>
+                        </td>
+                        <td>
+                            <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                                <input type="password" value='Contraseña' name="password" [(ngModel)]="model.password" #password="ngModel"  onfocus="this.value = ''"
+                                    onblur="if (this.value == ''){this.value = 'Contraseña';}" required>
+                                <div class="clear"> </div>
+                            <!-- <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>-->
+                            </div>
+                        </td>
+                    </tr>
+            </tbody></table>
+            <div class="log-bwn">
+                <input type="submit" value="Crear cuenta">
+            </div>
+        </form>
+        <a class="btn btn-primary" routerLink="/login" routerLinkActive="active" style="margin-top:10px;">Login</a>
+    </div>
+
 </div>

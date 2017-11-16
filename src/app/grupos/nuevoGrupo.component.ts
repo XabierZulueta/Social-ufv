@@ -7,6 +7,7 @@ import { FileUploader } from 'ng2-file-upload';
 import { Ng2FileInputService, Ng2FileInputAction } from 'ng2-file-input';
 import { Grupo } from './grupo';
 import { FancyImageUploaderOptions, UploadedFile } from 'ng2-fancy-image-uploader';
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
     selector: 'nuevoGrupo',
@@ -31,7 +32,11 @@ export class NuevoGrupoComponent {
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
         private route: ActivatedRoute, private http:Http,
-        private router: Router) {
+        private router: Router, private authService: AuthenticationService) {
+            
+        if (this.authService.isAuthenticate() == false) {
+            this.router.navigateByUrl('/login');
+        }
         this._dataService.getMaxId('groups').subscribe(res => {
             this.maxId = res;
             if(this.maxId[0]== null){

@@ -36,20 +36,6 @@ export class LoginComponent implements OnInit {
 
     login() {
         this.loading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
-        .subscribe(
-            res => {
-                if (res.success) {
-                    console.log(res.token);
-                    this.authenticationService.saveToken(res.token);
-                    this.app.reload();
-                    document.body.style.backgroundColor = '#fff';
-                    this.router.navigateByUrl(''); 
-                } else {
-                    this.error = res.msg;
-                    this.loading = false;
-                }
-            }
-        );
+        this.authenticationService.register(this.model.username, this.model.password);
     }
 }

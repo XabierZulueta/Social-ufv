@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 import { DataService } from '../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { JwtHelper } from 'angular2-jwt';
+import { JwtHelper, AuthConfig } from 'angular2-jwt';
 import { Http } from '@angular/http';
 import { Evento } from '../eventos/evento';
+import { AuthenticationService } from '../_services/authentication.service';
 
 const colors: any = {
     red: {
@@ -52,16 +53,22 @@ export class GrupoComponent implements OnInit {
     userId:string;
     prueba:any;
     jwtHelper: JwtHelper = new JwtHelper();
+    isLogged:any;
 
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
         private route: ActivatedRoute,
         private router: Router,
-        private http:Http) {
+        private http:Http,
+        private authService : AuthenticationService) {
          
     }
 
     ngOnInit() {
+        this.isLogged = this.authService.isAuthenticate();
+        if (this.isLogged == false) {
+            this.router.navigateByUrl('/login');
+        }
         var sub = this.route.params.subscribe(params => {
             this.id = +params['id']; // (+) converts string 'id' to a number
 

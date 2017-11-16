@@ -21,6 +21,8 @@ import { DataService } from '../data.service';
 import { Evento } from './evento';
 
 import { JwtHelper } from 'angular2-jwt';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../_services/authentication.service';
 
 const colors: any = {
     red: {
@@ -65,14 +67,18 @@ export class CalendarioComponent implements OnInit{
     userId: string;
     activeDayIsOpen: boolean = false;
     jwtHelper: JwtHelper = new JwtHelper();
-
+    isLogged:any;
     locale:string='sp';
-    constructor(private modal: NgbModal, private _dataService: DataService, private route: ActivatedRoute) { 
+    constructor(private modal: NgbModal, private _dataService: DataService, private route: ActivatedRoute,private router: Router,
+    private authService: AuthenticationService) { 
+        if (this.authService.isAuthenticate() == false) {
+            this.router.navigateByUrl('/login');
+        }
         this.refresh.next();
     }
 
     refresh: Subject<any> = new Subject();
-    ngOnInit() {
+    ngOnInit() {  
         this._dataService.getGeneral('events')
             .subscribe(res => {
                 this.events = res;

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-
+import { AuthenticationService } from '../_services/authentication.service';
 import { DataService } from '../data.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'grupos',
@@ -12,8 +13,14 @@ export class GruposComponent {
     grupos: Array<any>;
     grupo:any;
     nombre : String;
+    isLogged:any;
     // Create an instance of the DataService through dependency injection
-    constructor(private _dataService: DataService) {
+    constructor(private _dataService: DataService, private authService: AuthenticationService,
+    private router : Router) {
+        this.isLogged = this.authService.isAuthenticate();
+        if (this.isLogged == false) {
+            this.router.navigateByUrl('/login');
+        }
         this._dataService.getGeneral('groups')
             .subscribe(res => this.grupos = res);
     }

@@ -3,8 +3,8 @@
     padding: 100px 0px 50px 0px;
 }
 .top-login {
-    width: 130px;
-    height: 130px;
+    width: 200px;
+    height: 200px;
     display: block;
     -webkit-transform: rotate(45deg) translate3d(0, 0, 0);
     -moz-transform: rotate(45deg) translate3d(0, 0, 0);
@@ -12,7 +12,7 @@
     -o-transform: rotate(45deg) translate3d(0, 0, 0);
     transform: rotate(45deg) translate3d(0, 0, 0);
     margin: 0 auto 4em;
-    background: #fff;
+   /* background: #fff;*/
     position: relative;
 }
 .login-top {
@@ -85,30 +85,30 @@
 <div class="login-form">
     <div class="top-login">
         <span>
-            <img src="../../assets/logo.png" width="130px"  alt="">
+            <img src="../../assets/logo2.png" width="200px"  alt="">
         </span>
     </div>
-    <h1>Login</h1>
     <!---728x90-->
     <div class="login-top">
         <form name= "form"(ngSubmit) = "f.form.valid && login()" #f = "ngForm" novalidate>
             <div class="login-ic">
                 <i class="material-icons">person</i>
-                <input type="text" value="Usuario" name= "username"[(ngModel)] = "model.username" #username = "ngModel" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Usuario';}">
-                <div *ngIf="f.submitted && !username.valid" class="text text-danger"> El username es obligatorio</div>
+                <input type="text" value='Usuario' name= "username"  [(ngModel)] = "model.username" #username = "ngModel"   required>
                 <div class="clear"> </div>
             </div>
+            <div *ngIf="f.submitted && !username.valid" class="text text-danger" style="margin-top: -1.5em;"> El username es obligatorio<br/><br/></div>
             <div class="login-ic">
                 <i class="material-icons">https</i>
-                <input type="password"  name= "password"[(ngModel)] = "model.password" #password = "ngModel" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required>
-                <div *ngIf="f.submitted && !password.valid" class="text text-danger"> La contraseña es obligatoria</div>
+                <input type="password" value='Contraseña' name= "password"[(ngModel)] = "model.password" #password = "ngModel"  required>
+                
                 <div class="clear"> </div>
             </div>
-
+            <div *ngIf="f.submitted && !password.valid" class="text text-danger" style="margin-top: -1.5em;"> La contraseña es obligatoria<br/><br/></div>
             <div class="log-bwn">
                 <input type="submit" value="Iniciar sesión">
             </div>
         </form>
+        <a class="btn btn-primary" routerLink="/register" routerLinkActive="active" style="margin-top:10px;">Registrarse</a>
     </div>
     
 </div>

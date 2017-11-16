@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
-import { ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from '../_services/authentication.service';
 import { Grupo } from '../grupos/grupo';
 
 @Component({
@@ -15,12 +15,18 @@ export class UserComponent implements OnInit{
     grupos : boolean;
     gruposid : Array<any>;
     id:number;
+    isLogged:any;
 
     constructor(private _dataService: DataService,
-        private route: ActivatedRoute) {
+        private route: ActivatedRoute, private authService: AuthenticationService,
+    private router: Router) {
     }
 
     ngOnInit(){
+        this.isLogged = this.authService.isAuthenticate();
+        if (this.isLogged == false) {
+            this.router.navigateByUrl('/login');
+        }
         var sub = this.route.params.subscribe(params => {
             this.id = +params['id']; // (+) converts string 'id' to a number
             // In a real app: dispatch action to load the details here.
