@@ -90,6 +90,9 @@
     </div>
     <!---728x90-->
     <div class="login-top">
+        <div *ngIf="error" class="alert alert-danger">
+            <strong>{{error}}</strong>
+        </div>
         <form name= "form"(ngSubmit) = "f.form.valid && login()" #f = "ngForm" novalidate>
             <div class="login-ic">
                 <i class="material-icons">person</i>

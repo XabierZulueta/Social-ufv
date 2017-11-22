@@ -224,10 +224,10 @@ router.get('/grupo/:id/nusers' , (req, res) => {
 router.post('/authenticate', (req,res)=>{
     connection((db) => {
         db.collection('users')
-            .findOne({ name: req.body.username },function(err,user){
+            .findOne({ name: req.body.username, password: req.body.password  },function(err,user){
                 if(err) throw err;
                 if(!user){
-                    res.json({success:false, msg:'Ese usuario no existe.'});
+                    res.json({success:false, msg:'Los datos introducidos no coinciden.'});
                 }
                 else
                 {
@@ -236,13 +236,7 @@ router.post('/authenticate', (req,res)=>{
                 }
             })
             ;
-        db.close();/*.then((user) => {
-                response.data = user;
-                res.json(response);
-            })
-            .catch((err) => {
-                sendError(err, res);
-            });*/
+        db.close();
     });
 });
 
