@@ -18,7 +18,7 @@
     }
 
     .login-top {
-        width: 460px;
+        max-width: 460px;
         display: block;
         margin: 0 auto;
     }
@@ -101,14 +101,16 @@
     </div>
     <!---728x90-->
     <div class="login-top">
-        <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
-            <table>
+        <form style="margin-top: -40px;" name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
+            <table style="width:100%;">
                 <tbody>
                     <tr>
-                        <td>
+                        <td >
                             <label for="firstName" style="font-size: 20px;color: white;display: inline-block;">Nombre</label>
                         </td>
-                        <td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0;">
                             <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !firstName.valid }">
                                 <input type="text" value='First Name' name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" onfocus="if (this.value == 'Nombre'){this.value = '';}"
                                 onblur="if (this.value == ''){this.value = 'Nombre';}" required>
@@ -117,10 +119,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 160px;">
+                        <td >
                             <label for="lastName" style="font-size: 20px;color: white;display: inline-block;">Apellidos</label>
                         </td>
-                        <td >
+                    </tr>
+                    <tr>
+                        <td style="padding: 0;">
                             <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !lastName.valid }">    
                                 <input type="text" value='Last Name' name="firstName" [(ngModel)]="model.lastName" #lastName="ngModel" onfocus="if (this.value == 'Apellidos'){this.value = '';}"
                             onblur="if (this.value == ''){this.value = 'Apellidos';}" required>
@@ -129,10 +133,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 160px;">
+                        <td >
                             <label for="username" style="font-size: 20px;color: white;display: inline-block;">Usuario</label>
                         </td>
-                        <td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0;">
                             <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
                                 <input type="text" value='Nombre de Usuario' name="username" [(ngModel)]="model.username" #username="ngModel" onfocus="if (this.value == 'Nombre de Usuario'){this.value = '';}"
                             onblur="if (this.value == ''){this.value = 'Nombre de Usuario';}" required>
@@ -141,10 +147,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 160px;">
+                        <td>
                             <label for="password" style="font-size: 20px;color: white;display: inline-block;">Contraseña</label>
                         </td>
-                        <td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0;">
                             <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
                                 <input type="password" value='Contraseña' name="password" [(ngModel)]="model.password" #password="ngModel"  onfocus="this.value = ''"
                                     onblur="if (this.value == ''){this.value = 'Contraseña';}" required>

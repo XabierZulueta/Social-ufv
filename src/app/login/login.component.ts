@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit {
             .subscribe(
             res => {
                 if (res.success) {
-                    console.log(res.token);
                     this.authenticationService.saveToken(res.token);
                     this.app.reload();
                     document.body.style.backgroundColor = '#fff';
