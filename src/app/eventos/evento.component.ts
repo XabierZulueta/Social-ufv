@@ -38,15 +38,18 @@ const colors: any = {
 };
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
+import { Grupo } from '../grupos/grupo';
 @Component({
     selector: 'evento',
     templateUrl: './evento.component.html'
 })
 export class EventoComponent {
     view: string = 'month';
-
     viewDate: Date = new Date();
-
+    organizador:Grupo={id:0,
+        nombre:'',
+        imagen:'',
+        informacion:''};
     maxId : Array<any>;
     isLogged:any;
     event: Evento =
@@ -74,6 +77,17 @@ export class EventoComponent {
                 this.maxId = res;
                 this.event.id = this.maxId[0].id+1;
             });
+
+            var sub = this.route.params.subscribe(params => {
+                this.event.organizador.id = +params['id']; // (+) converts string 'id' to a number
+                // In a real app: dispatch action to load the details here.
+                this._dataService.getById(params['id'],'groups').subscribe(res => {
+                    this.organizador = res;
+                    
+                });
+            });
+          
+
     }
    
 

@@ -11,6 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 export class GruposComponent {
     grupos: Array<any>;
+    gruposTotal:Array<any>;
+    gruposTag : Array<any>;
     grupo:any;
     nombre : String;
     isLogged:any;
@@ -25,18 +27,27 @@ export class GruposComponent {
             .subscribe(res => this.grupos = res);
     }
     
-    search(nombre:any){
-        if (nombre.length==0)
-            this._dataService.getGeneral('groups')
-                .subscribe(res => this.grupos = res);
-        else{
-            this._dataService.getLike('groups', nombre)
-                .subscribe(res => this.grupos = res);
+    search(nombre){
+        if(!this.gruposTotal)
+            this.gruposTotal = this.grupos;
+        if(nombre.length != 0){
+        this.grupos = this.gruposTotal.filter(grupo =>
+        grupo.nombre.toUpperCase().includes(nombre.toUpperCase())) ;
+        this.gruposTag = this.gruposTotal.filter(grupo =>
+            grupo.imagen.toUpperCase().includes(nombre.toUpperCase()));
+            //en vez de imagen serían los tags.
+        for(var i = 0; i< this.gruposTag.length;i++){
+            if(this.grupos.indexOf(this.gruposTag[i])==-1)
+                this.grupos.push(this.gruposTag[i]);
         }
+        this.grupos.sort(function(a,b){
+            return (a.nombre > b.nombre) ? 1 : ((b.nombre > a.nombre) ? -1 : 0);
+        });
+        }
+        else{
+            this.grupos = this.gruposTotal;
+        }
+
     }
-/*
-    getGroupUsers(idGrupo) {
-        this._dataService.getUserByGroup(idGrupo)
-            .subscribe(res => this.grupo = res);
-    }*/
+
 }

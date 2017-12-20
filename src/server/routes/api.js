@@ -4,15 +4,15 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const multer = require('multer');
 var jwt = require('jwt-simple');
-
-router.use(express.static(__dirname+ '/src/assets/uploads'));
 /*
     SECCION SUBIDA DE FICHEROS
 */
 var storage = multer.diskStorage({
     // destination
     destination: function (req, file, cb) {
-        cb(null, './src/assets/uploads/')
+        cb(null, './dist/assets/uploads/');
+        //EXPLICAR A MANZA
+        cb(null,'./src/assets/uploads/' )
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -32,8 +32,8 @@ router.post("/upload", upload.array("uploads[]", 12), function (req, res) {
 
 // Connect
 const connection = (closure) => {
-    //return MongoClient.connect('mongodb://xabier:xabier@ds159274.mlab.com:59274/social-ufv',(err,db) => {
-    return MongoClient.connect('mongodb://localhost:27017/mean', (err, db) => {
+    return MongoClient.connect('mongodb://xabier:xabier@ds159274.mlab.com:59274/social-ufv',(err,db) => {
+    //return MongoClient.connect('mongodb://localhost:27017/mean', (err, db) => {
         if (err) return console.log(err);
 
         closure(db);
@@ -442,6 +442,7 @@ router.get('/groups', (req, res) => {
     connection((db) => {
         db.collection('grupos')
             .find()
+            .sort({ "nombre":1})//order by start desc
             .toArray()
             .then((users) => {
                 response.data = users;

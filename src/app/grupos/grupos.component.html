@@ -1,10 +1,10 @@
-<h1>Grupos</h1>
-<form class="form-inline my-2 my-lg-0 pull-right">
-    <input #buscarNombre class="form-control mr-sm-2"  type="search" placeholder="Buscar..." (keyup.enter)="search(buscarNombre.value)">
+<h1 style="display: inline;">Grupos</h1>
+<form class="form-inline my-2 my-lg-0 " style="padding:10px;">
+    <input #buscarNombre class="form-control mr-sm-2"  type="search" placeholder="Buscar..." (keyup)="search(buscarNombre.value)">
     <!--<button class="btn btn-outline-success my-2 my-sm-0" (click)="search(buscarNombre.value)">Buscar</button>-->
 </form>
 <div class="row" style=" text-align: center; ">
-    <div class="col-md-2" *ngFor="let g of grupos">
+    <div class="col-md-4" *ngFor="let g of grupos">
         <div class="thumbnail">
             <a [routerLink]="['/grupo', g.id]">
                 <img  style="width:100px; height:100px;"  [src] = "g.imagen">
