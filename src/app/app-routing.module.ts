@@ -17,7 +17,7 @@ const routes: Routes = [
     { path: 'grupo/:id', component: GrupoComponent },
     { path: 'user/:id', component: UserComponent },
     { path: 'calendario', component: CalendarioComponent},
-    { path: 'evento', component: EventoComponent },
+    { path: 'nuevoEvento/:id', component: EventoComponent },
     { path: 'nuevo/grupo', component: NuevoGrupoComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent }

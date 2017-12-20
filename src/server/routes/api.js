@@ -4,15 +4,15 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const multer = require('multer');
 var jwt = require('jwt-simple');
-
-router.use(express.static(__dirname+ '/src/assets/uploads'));
 /*
     SECCION SUBIDA DE FICHEROS
 */
 var storage = multer.diskStorage({
     // destination
     destination: function (req, file, cb) {
-        cb(null, './src/assets/uploads/')
+        cb(null, './dist/assets/uploads/');
+        //EXPLICAR A MANZA
+        cb(null,'./src/assets/uploads/' )
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
