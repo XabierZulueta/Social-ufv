@@ -77,8 +77,18 @@ export class DataService {
         .map(result => this.result = result.json().data);
     }
 
+    getNPeticiones(id){
+        return this._http.get("/api/grupo/" + id+"/npeticiones")
+        .map(result => this.result = result.json().data);
+    }
+
     esMiembro(idGrupo,idUsuario){
         return this._http.get("/api/user/miembro/"+idUsuario+"/" + idGrupo )
+            .map(result => this.result = result.json().data);
+    }
+
+    esperando(idGrupo,idUsuario){
+        return this._http.get("/api/peticiones/miembro/"+idUsuario+"/" + idGrupo )
             .map(result => this.result = result.json().data);
     }
 
@@ -93,10 +103,10 @@ export class DataService {
             .catch(this.handleError);
     }
 
-    apuntarGrupo(idUsuario, idGrupo) {
-        return this._http.post("/api/apuntar/" + idUsuario + "/" + idGrupo, { headers: this.headers })
-            .toPromise()
-            .catch(this.handleError);
+    apuntarGrupo(peticion) {
+        return this._http.post("/api/peticiones", JSON.stringify(peticion), { headers: this.headers })
+        .toPromise()
+        .catch(this.handleError);
     }
 
     desapuntarEvento(idUsuario, idEvento) {
@@ -121,5 +131,21 @@ export class DataService {
         return Promise.reject(error.message || error);
     }
 
+    deletePeticion(id){
+        return this._http.delete("/api/peticiones/"+id,{ headers: this.headers }).toPromise()
+            .catch(this.handleError);
+    }
+
+    insertPeticion(peticion){
+        return this._http.post("/api/peticiones", JSON.stringify(peticion), { headers: this.headers })
+        .toPromise()
+        .catch(this.handleError);
+    }
+
+    aceptarPeticion(idUsuario, idGrupo) {
+        return this._http.post("/api/apuntar/" + idUsuario + "/" + idGrupo, { headers: this.headers })
+            .toPromise()
+            .catch(this.handleError);
+    }
 
 }

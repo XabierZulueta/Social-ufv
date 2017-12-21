@@ -1,10 +1,39 @@
 <h1 style="display: inline;">Grupos</h1>
 <form class="form-inline my-2 my-lg-0 " style="padding:10px;">
-    <input #buscarNombre class="form-control mr-sm-2"  type="search" placeholder="Buscar..." (keyup)="search(buscarNombre.value)">
-    <!--<button class="btn btn-outline-success my-2 my-sm-0" (click)="search(buscarNombre.value)">Buscar</button>-->
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <input #buscarNombre class="form-control mr-sm-2"  type="search" placeholder="Buscar..." (keyup)="search(buscarNombre.value)">
+                </td>
+                <td>
+                    <div *ngIf="isLoading">
+                            <img style="width:25px;" src="http://www.freetoursbyfoot.com/wp-content/uploads/2017/05/loading.gif"/>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </form>
+<ul *ngIf="pager.pages && pager.pages.length && pager.totalPages>1" class="pagination justify-content-center">
+       <!-- <li [ngClass]="{disabled:pager.currentPage === 1}" class="page-item" role="button">
+            <a class="page-link"  (click)="setPage(1)"><i class="material-icons">first_page</i></a>
+        </li>-->
+        <li [ngClass]="{disabled:pager.currentPage === 1}" class="page-item"  role="button">
+            <a class="page-link" (click)="setPage(pager.currentPage - 1)">&laquo;</a>
+        </li>
+        <li *ngFor="let page of pager.pages" class="page-item" [ngClass]="{active:pager.currentPage === page}" role="button">
+            <a class="page-link"  (click)="setPage(page)">{{page}}</a>
+        </li>
+        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}" class="page-item" role="button">
+            <a class="page-link"  (click)="setPage(pager.currentPage + 1)">&raquo;</a>
+        </li>
+       <!-- <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}" class="page-item" role="button">
+            <a class="page-link"  (click)="setPage(pager.totalPages)"><i class="material-icons">last_page</i></a>
+        </li>-->
+    </ul>
 <div class="row" style=" text-align: center; ">
-    <div class="col-md-4" *ngFor="let g of grupos">
+    <div class="col-md-4" *ngFor="let g of pagedItems">
         <div class="thumbnail">
             <a [routerLink]="['/grupo', g.id]">
                 <img  style="width:100px; height:100px;"  [src] = "g.imagen">

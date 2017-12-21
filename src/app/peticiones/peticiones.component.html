@@ -1,0 +1,17 @@
+<table *ngIf="peticiones.length > 0" class="table table-bordered"><thead>
+    <tr><th>Usuario</th>
+    <th>Acción</th>
+</tr></thead>
+<tbody>
+    <tr *ngFor="let g of peticiones">
+        <td>{{g.idUsuario.name}}</td>
+        <td>
+            <button class="btn btn-success" (click)="aceptar(g)">Aceptar</button>
+            <button class="btn btn-danger" (click)="rechazar(g)">Rechazar</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="alert alert-success" *ngIf="peticiones.length == 0" role="alert">
+    <strong>No quedan peticiones que aceptar.</strong>
+</div>

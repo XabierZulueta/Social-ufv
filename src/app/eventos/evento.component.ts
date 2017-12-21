@@ -39,9 +39,13 @@ const colors: any = {
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { Grupo } from '../grupos/grupo';
+import { fadeInAnimation } from '../_animations/index';
 @Component({
     selector: 'evento',
-    templateUrl: './evento.component.html'
+    templateUrl: './evento.component.html',animations: [fadeInAnimation],
+ 
+    // attach the fade in animation to the host (root) element of this component
+    host: { '[@fadeInAnimation]': '' }
 })
 export class EventoComponent {
     view: string = 'month';

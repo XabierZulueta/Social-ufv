@@ -37,6 +37,8 @@ import { AuthenticationService } from './_services/authentication.service';
 import { AlertService } from './_services/alert.service';
 import { UserService } from './_services/user.service';
 import { AuthGuard } from './_guards/auth.guard'
+import { PeticionesComponent } from './peticiones/peticiones.component';
+import { PagerService } from './_services/index';
 
 
 @NgModule({
@@ -51,6 +53,7 @@ import { AuthGuard } from './_guards/auth.guard'
     NuevoGrupoComponent,
     LoginComponent,
     RegisterComponent,
+    PeticionesComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +70,7 @@ import { AuthGuard } from './_guards/auth.guard'
     DemoUtilsModule,   
     Ng2FileInputModule,
     FancyImageUploaderModule,
+    
    // DatePickerModule,
    // InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],
@@ -76,6 +80,7 @@ import { AuthGuard } from './_guards/auth.guard'
     AlertService,
     UserService,
     AuthGuard,
+    PagerService
   ],
   bootstrap: [AppComponent]
 })

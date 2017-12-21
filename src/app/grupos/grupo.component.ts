@@ -6,6 +6,7 @@ import { JwtHelper, AuthConfig } from 'angular2-jwt';
 import { Http } from '@angular/http';
 import { Evento } from '../eventos/evento';
 import { AuthenticationService } from '../_services/authentication.service';
+import { fadeInAnimation } from '../_animations/index';
 
 const colors: any = {
     red: {
@@ -25,7 +26,10 @@ const colors: any = {
 @Component({
     selector: 'grupos',
     templateUrl: './grupo.component.html',
-    styleUrls: ['./grupo.component.css']
+    styleUrls: ['./grupo.component.css'],animations: [fadeInAnimation],
+ 
+    // attach the fade in animation to the host (root) element of this component
+    host: { '[@fadeInAnimation]': '' }
 })
 
 export class GrupoComponent implements OnInit {
@@ -54,7 +58,11 @@ export class GrupoComponent implements OnInit {
     prueba:any;
     jwtHelper: JwtHelper = new JwtHelper();
     isLogged:any;
-
+    npeticiones:any;
+    maxIdPeticion:any;
+    peticion={id:0, idUsuario:0, idGrupo:0};
+    esperando:boolean;
+    ahora:any;
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
         private route: ActivatedRoute,
@@ -97,6 +105,8 @@ export class GrupoComponent implements OnInit {
 
         this._dataService.getNUsers(this.id)
             .subscribe(res => this.nusers = res);
+        this._dataService.getNPeticiones(this.id)
+            .subscribe(res => this.npeticiones = res);
         this._dataService.esMiembro(this.id, this.userId)
             .subscribe(res => {
                 this.miembro = res;
@@ -105,6 +115,16 @@ export class GrupoComponent implements OnInit {
                 else
                     this.miembro = false;
             });
+        this._dataService.esperando(this.id, this.userId)
+            .subscribe(res => {
+                this.esperando = res;
+                if (this.esperando != null)
+                    this.esperando = true;
+                else
+                    this.esperando = false;
+            });
+            this.ahora = new Date(new Date().toUTCString());
+            console.log(this.ahora);
     }
 
     desapuntarGrupo(idUsuario, idGrupo){
@@ -112,8 +132,26 @@ export class GrupoComponent implements OnInit {
         this.ngOnInit();
     }
 
-    apuntarGrupo(idUsuario, idGrupo) {
-        this._dataService.apuntarGrupo(idUsuario, idGrupo);
+    apuntarGrupo(idUser, idGrupo) {   
+        this.peticion.idGrupo = idGrupo;
+        this.peticion.idUsuario = idUser;
+        this.getMaxId(this.peticion);
+        this.ngOnInit();
+    }
+
+    getMaxId(peticion){
+        this._dataService.getMaxId('peticiones').subscribe(res => {
+            this.maxIdPeticion = res;
+            if(this.maxIdPeticion[0]== null){
+                this.maxIdPeticion[0] ={} ;
+                this.maxIdPeticion[0].id=1;
+                this.peticion.id = this.maxIdPeticion[0].id;
+            }
+            else{
+                this.peticion.id= this.maxIdPeticion[0].id + 1;
+            }
+           this._dataService.apuntarGrupo(this.peticion);
+        });
         this.ngOnInit();
     }
 
@@ -123,6 +161,7 @@ export class GrupoComponent implements OnInit {
     }
 
     apuntarEvento(idUsuario, idEvento){
+        
         this._dataService.apuntarEvento(idUsuario, idEvento);
         this.ngOnInit();
     }

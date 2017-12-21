@@ -341,9 +341,12 @@
         <div class="useravatar">
             <img alt="" [src]="grupo.imagen" style="border-radius:0px;background-color: white;">
         </div>
-        <div *ngIf="miembro==false" class="" style="margin-bottom:15px;">
-            <button class="btn btn-success " (click)="apuntarGrupo(userId, grupo.id);">Apuntarse</button>
+        <div *ngIf="miembro==false && esperando == false" class="" style="margin-bottom:15px;">
+            <button class="btn btn-success " (click)="apuntarGrupo(userId, grupo.id);">Enviar petición</button>
         </div>
+        <div *ngIf="miembro==false && esperando == true" class="" style="margin-bottom:15px;">
+                <button class="btn btn-info ">Esperando...</button>
+            </div>
         <div *ngIf="miembro==true" class="" style="margin-bottom:15px;">
                 <button class="btn btn-danger" (click)="desapuntarGrupo(userId, grupo.id);">Desapuntarse</button>
                 <div class="btn-group dropup">
@@ -353,13 +356,14 @@
                         <div class="dropdown-menu">
                           <a class="dropdown-item" [routerLink]="['/nuevoEvento', grupo.id]">Nuevo Evento</a>
                           <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">Peticiones <span _ngcontent-c4="" class="badge badge-notify" style="background: red;position:relative;/* top: -20px; *//* left: -24px; */z-index: 1000;">
-                                          3</span></a>
+                          <a class="dropdown-item"  [routerLink]="['/peticiones', grupo.id]">Peticiones 
+                            <span *ngIf="npeticiones>0" class="badge badge-notify" style="background: red;position:relative;/* top: -20px; *//* left: -24px; */z-index: 1000;">
+                                          {{npeticiones}}</span></a>
                           
                         </div>
                       </div>
-                                  <span class="badge badge-notify" style="background: red;position:relative;top: -20px;left: -24px;z-index: 1000;">
-                                          3</span>
+                                  <span *ngIf="npeticiones>0" class="badge badge-notify" style="background: red;position:relative;top: -20px;left: -24px;z-index: 1000;">
+                                        {{npeticiones}}</span>
         </div>
 
         <div class="card-info"> <span class="card-title" style="color:white;">{{grupo.nombre}}</span>
@@ -420,10 +424,10 @@
                                 </div>
                                 <br />
                                 <br />
-                                <div *ngIf="evento.apuntado==false">
+                                <div *ngIf="evento.apuntado==false && evento.start > ahora">
                                     <button type="button" (click)="apuntarEvento(userId, evento.id);" class="btn btn-warning btn-lg btn-block">¡Quiero ir!</button>
                                 </div>
-                                <div *ngIf="evento.apuntado==true">
+                                <div *ngIf="evento.apuntado==true && evento.start > ahora ">
                                     <button type="button" (click)="desapuntarEvento(userId, evento.id);" class="btn btn-danger btn-lg btn-block">Darme de baja</button>
                                 </div>
                             </form>
