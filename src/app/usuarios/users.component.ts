@@ -4,12 +4,16 @@ import{User} from './user';
 import { ActivatedRoute, Router} from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { AuthenticationService } from '../_services/authentication.service';
+import { fadeInAnimation } from '../_animations/index';
 
 
 @Component({
     selector: 'users',
     templateUrl: './users.component.html',
-    styleUrls: ['../app.component.css']
+    styleUrls: ['../app.component.css'],animations: [fadeInAnimation],
+ 
+    // attach the fade in animation to the host (root) element of this component
+    host: { '[@fadeInAnimation]': '' }
 })
 
 export class UsersComponent implements OnInit{

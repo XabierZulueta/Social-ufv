@@ -3,11 +3,14 @@ import { DataService } from '../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { Grupo } from '../grupos/grupo';
+import { fadeInAnimation } from '../_animations/index';
 
 @Component({
     selector: 'user',
     templateUrl: './user.component.html',
-    styleUrls: ['../app.component.css']
+    styleUrls: ['../app.component.css'],
+    animations: [fadeInAnimation],
+    host: { '[@fadeInAnimation]': '' }
 })
 
 export class UserComponent implements OnInit{

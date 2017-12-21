@@ -8,11 +8,15 @@ import { Ng2FileInputService, Ng2FileInputAction } from 'ng2-file-input';
 import { Grupo } from './grupo';
 import { FancyImageUploaderOptions, UploadedFile } from 'ng2-fancy-image-uploader';
 import { AuthenticationService } from '../_services/authentication.service';
+import { fadeInAnimation } from '../_animations/index';
 
 @Component({
     selector: 'nuevoGrupo',
     templateUrl: './nuevoGrupo.component.html',
-    styleUrls: ['./grupo.component.css']
+    styleUrls: ['./grupo.component.css'],animations: [fadeInAnimation],
+ 
+    // attach the fade in animation to the host (root) element of this component
+    host: { '[@fadeInAnimation]': '' }
 })
 
 export class NuevoGrupoComponent {

@@ -54,6 +54,93 @@ let response = {
     message: null
 };
 
+//Ver si está esperando la petición.
+router.get('/peticiones/miembro/:idUsuario/:idGrupo', (req,res)=>{
+    var idUsuario = req.params.idUsuario;
+    idUsuario = parseInt(idUsuario);
+    var idGrupo = req.params.idGrupo;
+    idGrupo = parseInt(idGrupo);
+    connection((db) => {
+        db.collection('peticiones')
+            .findOne({ idUsuario: idUsuario, idGrupo:idGrupo })
+            .then((user) => {
+                    response.data = user;
+                    res.json(response);
+                })
+            .catch((err) => {
+                sendError(err, res);
+            });
+        db.close();
+    });
+});
+
+//POst peticiones
+router.post('/peticiones', (req, res) => {
+    connection((db) => {
+        db.collection('peticiones')
+            .insert(req.body, function (err, result) {
+                if (err)
+                    res.send('Error');
+                else
+                    res.send('Success');
+            });
+        db.close();
+    })
+});
+
+//Delete peticion
+router.delete('/peticiones/:id', (req, res) => {
+    var id = req.params.id;
+    id = parseInt(id);
+    var objeto = { id: id };
+    connection((db) => {
+        db.collection('peticiones')
+            .deleteOne(objeto, function (err, result) {
+                if (err)
+                    res.send('Error');
+                else
+                    res.send('Success');
+            });
+        db.close();
+    });
+});
+
+//Get npeticiones by group
+router.get('/grupo/:id/npeticiones' , (req, res) => {
+    var id = req.params.id;
+    id = parseInt(id);
+    connection((db) => {
+        db.collection('peticiones')
+            .count({ idGrupo: Number(id) })
+            .then((nusers) => {
+                response.data = nusers;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+        db.close();
+    })
+});
+
+// Get peticiones by groupId
+router.get('/peticiones/:id', (req, res) => {
+    var idGrupo = req.params.id;
+    connection((db) => {
+        db.collection('peticiones')
+            .find({ idGrupo: Number(idGrupo) })
+            .toArray()
+            .then((user) => {
+                response.data = user;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+        db.close();
+    });
+});
+
 //get events like(, sin diferenciar entre mayusculas y minusculas
 router.get('/events/nombre/:nombre', (req, res) => {
     var nombre = req.params.nombre;

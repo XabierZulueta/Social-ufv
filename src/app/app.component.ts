@@ -4,11 +4,16 @@ import { Router } from '@angular/router';
 import { User } from './usuarios/user';
 import { JwtHelper } from 'angular2-jwt';
 import { Subject } from 'rxjs/Subject';
+// import fade in animation
+import { fadeInAnimation } from './_animations/index';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],animations: [fadeInAnimation],
+ 
+  // attach the fade in animation to the host (root) element of this component
+  host: { '[@fadeInAnimation]': '' }
 })
 
 export class AppComponent implements OnInit {
@@ -32,7 +37,7 @@ export class AppComponent implements OnInit {
   ngOnInit(){
     this.isLogged = this.authService.isAuthenticate();
     if(this.isLogged != false){
-     
+      document.body.style.backgroundColor ='#f0f0f0';
       this.token = localStorage.getItem('token');
       this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
       this.userName = this.tokenDecoded['name'];
@@ -43,6 +48,7 @@ export class AppComponent implements OnInit {
   reload(){
     this.isLogged = this.authService.isAuthenticate();
     if (this.isLogged != false) {
+      document.body.style.backgroundColor ='#f0f0f0';
       this.token = localStorage.getItem('token');
       this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
       this.userName = this.tokenDecoded['name'];

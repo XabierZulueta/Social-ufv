@@ -9,6 +9,7 @@ import { EventoComponent } from './eventos/evento.component';
 import { NuevoGrupoComponent } from './grupos/nuevoGrupo.component';
 import { LoginComponent } from './login/login.component'
 import { RegisterComponent } from './register/register.component'
+import { PeticionesComponent } from './peticiones/peticiones.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full', component: CalendarioComponent },
@@ -20,7 +21,8 @@ const routes: Routes = [
     { path: 'nuevoEvento/:id', component: EventoComponent },
     { path: 'nuevo/grupo', component: NuevoGrupoComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent }
+    { path: 'register', component: RegisterComponent },
+    { path: 'peticiones/:id', component: PeticionesComponent },
 
 ];
 @NgModule({

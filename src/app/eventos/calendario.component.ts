@@ -23,6 +23,7 @@ import { Evento } from './evento';
 import { JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
+import { fadeInAnimation } from '../_animations/index';
 
 const colors: any = {
     red: {
@@ -48,12 +49,16 @@ interface Film {
     selector: 'mwl-demo-component',
     //changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['../styles.css'],
-    templateUrl: 'calendario.template.html'
+    templateUrl: 'calendario.template.html',animations: [fadeInAnimation],
+ 
+    // attach the fade in animation to the host (root) element of this component
+    host: { '[@fadeInAnimation]': '' }
 })
 
 export class CalendarioComponent implements OnInit{
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
-
+    
+    isLoading:boolean;
     view: string = 'month';
     events : any[];
     viewDate: Date = new Date();
@@ -78,9 +83,11 @@ export class CalendarioComponent implements OnInit{
     }
 
     refresh: Subject<any> = new Subject();
-    ngOnInit() {  
+    ngOnInit() { 
+        this.isLoading=true; 
         this._dataService.getGeneral('events')
             .subscribe(res => {
+                this.isLoading=false;
                 this.events = res;
                 for (var i = 0; i < this.events.length; i++) {
                     this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
