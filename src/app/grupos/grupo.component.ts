@@ -124,7 +124,6 @@ export class GrupoComponent implements OnInit {
                     this.esperando = false;
             });
             this.ahora = new Date(new Date().toUTCString());
-            console.log(this.ahora);
     }
 
     desapuntarGrupo(idUsuario, idGrupo){

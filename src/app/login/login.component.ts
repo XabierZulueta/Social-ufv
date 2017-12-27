@@ -10,9 +10,8 @@ import { fadeInAnimation } from '../_animations/index';
 @Component({
     moduleId: module.id,
     templateUrl: 'login.component.html',
-    styles: ['body { background-color: #003265 !important; }'],animations: [fadeInAnimation],
- 
-    // attach the fade in animation to the host (root) element of this component
+    animations: [fadeInAnimation],
+     // attach the fade in animation to the host (root) element of this component
     host: { '[@fadeInAnimation]': '' }
 })
 
@@ -37,6 +36,7 @@ export class LoginComponent implements OnInit {
         this.authenticationService.logout();
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        document.getElementById('contenido').style.boxShadow="none";
     }
 
     login() {
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
                     this.app.reload();
                     document.body.style.backgroundColor = '#f0f0f0';
                     document.getElementById('contenido').style.backgroundColor = '#fff';
-                    document.getElementById('contenido').style.boxShadow=' 0 1px 6px rgba(0, 0, 0, 0.175);'
+                    document.getElementById('contenido').style.boxShadow=' 0 1px 6px rgba(0, 0, 0, 0.175)'
                     this.router.navigateByUrl('');
                 } else {
                     this.error = res.msg;

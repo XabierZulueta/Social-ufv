@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
     this.isLogged = this.authService.isAuthenticate();
     if(this.isLogged != false){
       document.body.style.backgroundColor ='#f0f0f0';
+      document.getElementById('contenido').style.boxShadow="0 1px 6px rgba(0, 0, 0, 0.175);";
       this.token = localStorage.getItem('token');
       this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
       this.userName = this.tokenDecoded['name'];
