@@ -54,6 +54,42 @@ let response = {
     message: null
 };
 
+//get Groups by tags
+router.get('/groups/tags', (req, res) => {
+    connection((db) => {
+        db.collection('grupos')
+            .find( { "tags": { $in: req.body } })
+            .toArray()
+            .then((tag) => {
+                response.data = tag;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+        db.close();
+    })
+});
+
+
+// Get tags
+router.get('/tags', (req, res) => {
+    connection((db) => {
+        db.collection('tags')
+            .find()
+            .sort({'descripcion':1})
+            .toArray()
+            .then((tags) => {
+                response.data = tags;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+        db.close();
+    });
+});
+
 //Ver si está esperando la petición.
 router.get('/peticiones/miembro/:idUsuario/:idGrupo', (req,res)=>{
     var idUsuario = req.params.idUsuario;
