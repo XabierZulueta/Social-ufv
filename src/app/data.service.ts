@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DayPilot } from 'daypilot-pro-angular';
 import { Observable } from 'rxjs/Rx';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Evento } from './eventos/evento';
 import { Grupo } from './grupos/grupo';
@@ -146,6 +146,13 @@ export class DataService {
         return this._http.post("/api/apuntar/" + idUsuario + "/" + idGrupo, { headers: this.headers })
             .toPromise()
             .catch(this.handleError);
+    }
+
+    searchTags(tags){
+        let params : URLSearchParams = new URLSearchParams();
+
+        return this._http.get("/api/groups/tags", { headers: this.headers, search:tags })
+            .map(result => this.result = result.json().data);
     }
 
 }

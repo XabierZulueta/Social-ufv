@@ -80,6 +80,7 @@ export class CalendarioComponent implements OnInit{
             this.router.navigateByUrl('/login');
         }
         this.refresh.next();
+        document.getElementById('contenido').style.boxShadow='0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;'
     }
 
     refresh: Subject<any> = new Subject();
@@ -108,6 +109,7 @@ export class CalendarioComponent implements OnInit{
         this.token = localStorage.getItem('token');
         this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
         this.userId = this.tokenDecoded['id'];
+        document.getElementById('contenido').style.boxShadow='0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;'
         this.refresh.next();
     }
 

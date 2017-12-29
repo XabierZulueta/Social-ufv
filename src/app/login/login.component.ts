@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
         private alertService: AlertService,
     private app : AppComponent) { 
         document.body.style.backgroundColor ='#003265';
-        document.getElementById('contenido').style.backgroundColor = 'inherit';
+        document.getElementById('contenido').style.backgroundColor = 'rgba(0, 0, 0, 0.13)';
     }
 
     ngOnInit() {
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
         this.authenticationService.logout();
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        document.getElementById('contenido').style.boxShadow="none";
+        
     }
 
     login() {
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
                     this.app.reload();
                     document.body.style.backgroundColor = '#f0f0f0';
                     document.getElementById('contenido').style.backgroundColor = '#fff';
-                    document.getElementById('contenido').style.boxShadow=' 0 1px 6px rgba(0, 0, 0, 0.175)'
+                    document.getElementById('contenido').style.boxShadow='0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important'
                     this.router.navigateByUrl('');
                 } else {
                     this.error = res.msg;
