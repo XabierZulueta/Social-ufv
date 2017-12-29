@@ -4,14 +4,28 @@
         <tbody>
             <tr>
                 <td>
-                    <input #buscarNombre class="form-control mr-sm-2"  type="search" placeholder="Buscar..." (keyup)="search(buscarNombre.value)">
+                        <mat-form-field class="example-full-width">
+                                <input matInput #buscarNombre placeholder="Buscar" (keyup)="search(buscarNombre.value)" >
+                        </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field [color]="accent">
+                        <mat-select placeholder="Filtros"  #filtros multiple >
+                            <mat-select-trigger>
+                                <span *ngIf="filtros.value?.length > 0" class="example-additional-selection">
+                                    (+{{filtros.value.length}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let tag of tags" [value]="tag.id" (click)="checkear2(tag.id,buscarNombre.value);">{{tag.descripcion}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </td>
                 <td>
                     <div *ngIf="isLoading">
                             <img style="width:25px;" src="http://www.freetoursbyfoot.com/wp-content/uploads/2017/05/loading.gif"/>
                     </div>
                 </td>
-                <td>
+               <!-- <td>
                     <div   id="accordion" role="tablist">
                         <div  class="card">
                             <div  class="card-header" id="headingOne" role="tab">
@@ -32,7 +46,7 @@
                             </div>
                         </div>
                     </div>
-                </td>
+                </td>-->
             </tr>
         </tbody>
     </table>
@@ -54,7 +68,7 @@
             <a class="page-link"  (click)="setPage(pager.totalPages)"><i class="material-icons">last_page</i></a>
         </li>-->
     </ul>
-<div [@fadeInAnimation] class="row" style=" text-align: center; ">
+<div class="row" style=" text-align: center; ">
     <div class="col-md-4" *ngFor="let g of pagedItems">
         <div class="thumbnail">
             <a [routerLink]="['/grupo', g.id]">

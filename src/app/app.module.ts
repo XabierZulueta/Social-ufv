@@ -40,6 +40,10 @@ import { AuthGuard } from './_guards/auth.guard'
 import { PeticionesComponent } from './peticiones/peticiones.component';
 import { PagerService } from './_services/index';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {FormControl} from '@angular/forms';
 
 
 @NgModule({
@@ -72,7 +76,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     DemoUtilsModule,   
     Ng2FileInputModule,
     FancyImageUploaderModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule
    // DatePickerModule,
    // InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],

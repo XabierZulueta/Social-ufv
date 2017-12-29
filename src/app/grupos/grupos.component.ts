@@ -7,6 +7,10 @@ import { fadeInAnimation } from '../_animations/index';
 import { PagerService } from '../_services/index';
 import { Tags } from '../tags/tags';
 import {MatCheckboxModule } from '@angular/material/checkbox';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {FormControl} from '@angular/forms';
 
 @Component({
     selector: 'grupos',
@@ -46,6 +50,7 @@ export class GruposComponent implements OnInit {
         if (this.isLogged == false) {
             this.router.navigateByUrl('/login');
         }
+
         this._dataService.getGeneral('groups')
             .subscribe(res => {this.isLoading=false;
                 this.grupos = res;
@@ -54,28 +59,72 @@ export class GruposComponent implements OnInit {
     }
 
     search(nombre){
-        this.isLoading=true;
         var grupo = null;
         var valor;
+        
         if(this.gruposTotal.length==0)
             this.gruposTotal = this.grupos;
-        if(nombre.length != 0){
+
+            this.grupos = [];
+        this.grupos = this.gruposTotal;
+
+        if(nombre.length != 0 && this.tagschecked.length==0){
             this.grupos = this.gruposTotal.filter(grupo =>
             grupo.nombre.toUpperCase().includes(nombre.toUpperCase())) ;
         }
-        else{
-            //No lo hace.
-            this.grupos = this.gruposTotal;
+        else if (this.tagschecked.length>0 && nombre.length == 0){
+            for(let g of this.grupos){
+               if(this.arrayContainsArray(g.tags, this.tagschecked)){
+                   if(this.gruposTag.indexOf(g)==-1)
+                    this.gruposTag.push(g);
+               }
+               if(!this.arrayContainsArray(g.tags, this.tagschecked)){
+                   this.gruposTag.splice(this.gruposTag.indexOf(g),1);
+               }
+            }
+            this.grupos =  this.gruposTag;
         }
-        this.isLoading=false;
+        else if(this.tagschecked.length>0 && nombre.length != 0){
+            this.grupos = this.gruposTotal.filter(grupo =>
+                grupo.nombre.toUpperCase().includes(nombre.toUpperCase())) ;  
+            if(this.grupos.length>0){
+                this.gruposTag=[];
+                for(let g of this.grupos){
+                    if(this.arrayContainsArray(g.tags, this.tagschecked)){
+                        if(this.gruposTag.indexOf(g)==-1)
+                            this.gruposTag.push(g);
+                    }
+                    if(!this.arrayContainsArray(g.tags, this.tagschecked)){
+                        this.gruposTag.splice(this.gruposTag.indexOf(g),1);
+                    }
+                }
+            this.grupos =  this.gruposTag;
+            }
+        }
+        else{
+        }
+        this.grupos.sort(function(a,b){
+            return (a.nombre > b.nombre) ? 1 : ((b.nombre > a.nombre) ? -1 : 0);
+        });
+
         this.setPage(1);
     }
 
+    arrayContainsArray(superset, subset){
+        if (0 === subset.length) {
+            return false;
+          }
+          return subset.every(function (value) {
+            return (superset.indexOf(value) >= 0);
+          });
+    }
+
     setPage(page: number) {
-        if (page < 1 || page > this.pager.totalPages) {
+        if (page < 1 || page > this.grupos.length) {
+            this.pagedItems = this.grupos;
+            this.pager=[];
             return;
         }
-
         // get pager object from service
         this.pager = this.pagerService.getPager(this.grupos.length, page);
 
@@ -84,15 +133,28 @@ export class GruposComponent implements OnInit {
     }
 
     checkear(event, nombre){
-        var index = this.tagschecked.indexOf(event.source.value); 
+        var index = this.tagschecked.indexOf(+event.source.value); 
         if(index == -1)
         {
-            this.tagschecked.push(event.source.value);
+            this.tagschecked.push(+event.source.value);
         }
         else{
             this.tagschecked.splice(index,1);
         }
-        
+
+        this.search(nombre);
+    }
+
+    checkear2(value,nombre){
+        var index = this.tagschecked.indexOf(+value); 
+        if(index == -1)
+        {
+            this.tagschecked.push(+value);
+        }
+        else{
+            this.tagschecked.splice(index,1);
+        }
+
         this.search(nombre);
     }
 
