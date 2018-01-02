@@ -4,10 +4,12 @@
         <tbody>
             <tr>
                 <td>
-                        <mat-form-field class="example-full-width">
-                                <input matInput #buscarNombre placeholder="Buscar" (keyup)="search(buscarNombre.value)" >
-                        </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                            <input matInput #buscarNombre placeholder="Buscar" (keyup)="search(buscarNombre.value)" >
+                    </mat-form-field>
                 </td>
+            </tr>
+            <tr>
                 <td>
                     <mat-form-field [color]="accent">
                         <mat-select placeholder="Filtros"  #filtros multiple >
@@ -20,6 +22,8 @@
                         </mat-select>
                     </mat-form-field>
                 </td>
+            </tr>
+            <tr>
                 <td>
                     <div *ngIf="isLoading">
                             <img style="width:25px;" src="http://www.freetoursbyfoot.com/wp-content/uploads/2017/05/loading.gif"/>
