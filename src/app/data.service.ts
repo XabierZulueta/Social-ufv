@@ -155,4 +155,9 @@ export class DataService {
             .map(result => this.result = result.json().data);
     }
 
+    getUltimoEvento(idUsuario){
+        return this._http.get("/api/ultimoEvento/"+idUsuario,{ headers: this.headers })
+            .map(result => this.result = result.json().data);
+    }
+
 }

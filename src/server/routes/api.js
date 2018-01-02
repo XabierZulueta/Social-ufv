@@ -54,6 +54,42 @@ let response = {
     message: null
 };
 
+// Get tags by id
+router.get('/tags/:id', (req, res) => {
+    var idGrupo = req.params.id;
+    connection((db) => {
+        db.collection('tags')
+            .findOne({ id: Number(idGrupo) })
+            .then((user) => {
+                response.data = user;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+        db.close();
+    });
+});
+
+// Get último evento de un usuario
+router.get('/ultimoEvento/:idUsuario', (req, res) => {
+    var idUsuario = req.params.idUsuario;
+    connection((db) => {
+        db.collection('events')
+            .find({ "apuntados": Number(idUsuario) })
+            .sort({ "end":-1})//order by start desc
+            .toArray()
+            .then((user) => {
+                response.data = user;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+        db.close();
+    });
+});
+
 //get Groups by tags
 router.get('/groups/tags', (req, res) => {
     connection((db) => {

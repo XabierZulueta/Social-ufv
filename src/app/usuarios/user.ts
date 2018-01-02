@@ -3,4 +3,5 @@ export class User{
     name: string;
     grupos : Array<any>;
     email:string;
+    tags?:Array<any>;
 }
