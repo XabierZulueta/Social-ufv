@@ -345,8 +345,9 @@
             <button class="btn btn-success " (click)="apuntarGrupo(userId, grupo.id);">Enviar petición</button>
         </div>
         <div *ngIf="miembro==false && esperando == true" class="" style="margin-bottom:15px;">
-                <button class="btn btn-info ">Esperando...</button>
-            </div>
+            <button class="btn btn-info ">Esperando...</button>
+        </div>
+        <p>{{miembro}}</p>
         <div *ngIf="miembro==true" class="" style="margin-bottom:15px;">
                 <button class="btn btn-danger" (click)="desapuntarGrupo(userId, grupo.id);">Desapuntarse</button>
                 <div class="btn-group dropup">
@@ -374,7 +375,6 @@
         <button type="button" class="btn btn-outline-primary" href="#tab2" data-toggle="tab">Miembros</button>
         <button type="button" class="btn btn-outline-primary" href="#tab3" data-toggle="tab">Eventos</button>
     </nav>
-
 
     <div class="well">
         <div class="tab-content">

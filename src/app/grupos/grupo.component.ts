@@ -26,7 +26,8 @@ const colors: any = {
 @Component({
     selector: 'grupos',
     templateUrl: './grupo.component.html',
-    styleUrls: ['./grupo.component.css'],animations: [fadeInAnimation],
+    styleUrls: ['./grupo.component.css'],
+    animations: [fadeInAnimation],
  
     // attach the fade in animation to the host (root) element of this component
     host: { '[@fadeInAnimation]': '' }
@@ -128,31 +129,30 @@ export class GrupoComponent implements OnInit {
     }
 
     desapuntarGrupo(idUsuario, idGrupo){
+        this.esperando=false;
         this._dataService.desapuntarGrupo(idUsuario,idGrupo);
         this.ngOnInit();
     }
 
-    apuntarGrupo(idUser, idGrupo) {   
+    apuntarGrupo(idUser, idGrupo) {
         this.peticion.idGrupo = idGrupo;
         this.peticion.idUsuario = idUser;
         this.getMaxId(this.peticion);
-        this.ngOnInit();
     }
 
     getMaxId(peticion){
         this._dataService.getMaxId('peticiones').subscribe(res => {
             this.maxIdPeticion = res;
             if(this.maxIdPeticion[0]== null){
-                this.maxIdPeticion[0] ={} ;
-                this.maxIdPeticion[0].id=1;
-                this.peticion.id = this.maxIdPeticion[0].id;
+                this.maxIdPeticion[0] = {} ;
+                this.maxIdPeticion[0].id = 1;
+                this.peticion.id = 1;
             }
             else{
                 this.peticion.id= this.maxIdPeticion[0].id + 1;
             }
            this._dataService.apuntarGrupo(this.peticion);
         });
-        this.ngOnInit();
     }
 
     desapuntarEvento(idUsuario, idEvento) {
