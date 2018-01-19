@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { GrupoComponent } from './grupos/grupo.component';
@@ -46,7 +46,6 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {FormControl} from '@angular/forms';
 
 
 @NgModule({
@@ -68,7 +67,6 @@ import {FormControl} from '@angular/forms';
     BrowserModule,
     DayPilotModule,
     CommonModule,
-   FormsModule, 
     BrowserAnimationsModule,
     NgbModalModule.forRoot(),
     CalendarModule.forRoot(),
@@ -86,6 +84,7 @@ import {FormControl} from '@angular/forms';
     MatButtonModule,
     MatIconModule,
     MatExpansionModule,
+    ReactiveFormsModule
    // DatePickerModule,
    // InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],

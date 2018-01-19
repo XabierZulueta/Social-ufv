@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
+import 'rxjs/add/operator/map';
+
 import { User } from '../usuarios/user';
 
 @Injectable()
 export class UserService {
+
+    domain = "localhost:8080";
+
     constructor(private http: Http) { }
+
+    registerUser(user){
+        return this.http.post(this.domain + '/authentication/register', user).map(res => res.json())
+    }
 
     getAll() {
         return this.http.get('/api/users', this.jwt()).map((response: Response) => response.json());

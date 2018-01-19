@@ -101,72 +101,77 @@
     </div>
     <!---728x90-->
     <div class="login-top">
-        <form style="margin-top: -40px;" name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
-            <table style="width:100%;">
-                <tbody>
-                    <tr>
-                        <td >
-                            <label for="firstName" style="font-size: 20px;color: white;display: inline-block;">Nombre</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 0;">
-                            <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !firstName.valid }">
-                                <input type="text" value='First Name' name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" onfocus="if (this.value == 'Nombre'){this.value = '';}"
-                                onblur="if (this.value == ''){this.value = 'Nombre';}" required>
-                                <div class="clear"> </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td >
-                            <label for="lastName" style="font-size: 20px;color: white;display: inline-block;">Apellidos</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 0;">
-                            <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !lastName.valid }">    
-                                <input type="text" value='Last Name' name="firstName" [(ngModel)]="model.lastName" #lastName="ngModel" onfocus="if (this.value == 'Apellidos'){this.value = '';}"
-                            onblur="if (this.value == ''){this.value = 'Apellidos';}" required>
-                                <div class="clear"> </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td >
-                            <label for="username" style="font-size: 20px;color: white;display: inline-block;">Usuario</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 0;">
-                            <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
-                                <input type="text" value='Nombre de Usuario' name="username" [(ngModel)]="model.username" #username="ngModel" onfocus="if (this.value == 'Nombre de Usuario'){this.value = '';}"
-                            onblur="if (this.value == ''){this.value = 'Nombre de Usuario';}" required>
-                                <div class="clear"> </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="password" style="font-size: 20px;color: white;display: inline-block;">Contraseña</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 0;">
-                            <div class="login-ic" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
-                                <input type="password" value='Contraseña' name="password" [(ngModel)]="model.password" #password="ngModel"  onfocus="this.value = ''"
-                                    onblur="if (this.value == ''){this.value = 'Contraseña';}" required>
-                                <div class="clear"> </div>
-                            <!-- <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>-->
-                            </div>
-                        </td>
-                    </tr>
-            </tbody></table>
-            <div class="log-bwn">
-                <input type="submit" value="Crear cuenta">
+        
+
+        <!-- Registration Form -->
+        <form [formGroup]="form" (submit)="onRegisterSubmit()">
+        
+          <!-- Username Input -->
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div [ngClass]="{'has-error': (form.controls.username.errors && form.controls.username.dirty), 'has-success': !form.controls.username.errors}">
+              <input type="text" name="username" class="form-control" autocomplete="off" placeholder="*Username" formControlName="username" />
+              <!-- Validation -->
+              <ul class="help-block">
+                <li *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required</li>
+                <li *ngIf="form.controls.username.errors?.minlength && form.controls.username.dirty || form.controls.username.errors?.maxlength && form.controls.username.dirty ">Minimum characters: 3, Maximum characters: 15</li>
+                <li *ngIf="form.controls.username.errors?.validateUsername && form.controls.username.dirty">Username must not have any special characters</li>
+              </ul>
             </div>
+          </div>
+        
+          <!-- Email Input -->
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div [ngClass]="{'has-error': (form.controls.email.errors && form.controls.email.dirty), 'has-success': !form.controls.email.errors}">
+              <input type="text" name="email" class="form-control" autocomplete="off" placeholder="*Email" formControlName="email" />
+              <!-- Validation -->
+              <ul class="help-block">
+                <li *ngIf="form.controls.email.errors?.required && form.controls.email.dirty">This field is required</li>
+                <li *ngIf="(form.controls.email.errors?.minlength && form.controls.email.dirty || form.controls.email.errors?.maxlength && form.controls.email.dirty ) && form.controls.email.dirty">Minimum characters: 5, Maximum characters: 30</li>
+                <li *ngIf="form.controls.email.errors?.validateEmail && form.controls.email.dirty">This must be a valid e-mail</li>
+              </ul>
+            </div>
+          </div>
+        
+          <!-- Password Input -->
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div [ngClass]="{'has-error': (form.controls.password.errors && form.controls.password.dirty), 'has-success': !form.controls.password.errors}">
+              <input type="password" name="password" class="form-control" autocomplete="off" placeholder="*Password" formControlName="password" />
+              <!-- Validation -->
+              <ul class="help-block">
+                  {{form.controls.password.errors?.validatePassword}}
+                <li *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required</li>
+                <li *ngIf="form.controls.password.errors?.minlength && form.controls.password.dirty || form.controls.password.errors?.maxlength && form.controls.password.dirty ">Minimum characters: 8, Maximum characters: 35</li>
+                <li *ngIf="form.controls.password.errors?.validatePassword && form.controls.password.dirty">Need to be a valid password</li>
+              </ul>
+            </div>
+          </div>
+        
+          <!-- Confirm Password Input -->
+          <div class="form-group">
+            <label for="confirm">Confirm Password</label>
+            <div [ngClass]="{'has-error': (form.controls.confirm.errors && form.controls.confirm.dirty) || (form.errors?.matchingPasswords && form.controls.confirm.dirty), 'has-success': !form.controls.confirm.errors && !form.errors?.matchingPasswords}">
+              <input type="password" name="confirm" class="form-control" autocomplete="off" placeholder="*Confirm Password" formControlName="confirm" />
+              <!-- Validation -->
+              <ul class="help-block">
+                <li *ngIf="form.controls.confirm.errors?.required && form.controls.confirm.dirty">This field is required</li>
+                <li *ngIf="form.errors?.matchingPasswords && form.controls.confirm.dirty">Password do not match</li>
+              </ul>
+            </div>
+          </div>
+        
+          <!-- Submit Input -->
+          <input [disabled]="!form.valid" type="submit" class="btn btn-primary" value="Submit" />
+        
         </form>
+        <!-- Registration Form /-->
         <a class="btn btn-primary" routerLink="/login" routerLinkActive="active" style="margin-top:10px;">Login</a>
     </div>
+
+    <p style="color:red" >Email: {{form.controls.email.value}} </p>
+    <p style="color:red" >Username: {{form.controls.username.value}} </p>
+    <p style="color:red" >password: {{form.controls.password.value}} </p>
 
 </div>

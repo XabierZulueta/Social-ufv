@@ -93,7 +93,7 @@
         <div *ngIf="error" class="alert alert-danger">
             <strong>{{error}}</strong>
         </div>
-        <form name= "form"(ngSubmit) = "f.form.valid && login()" #f = "ngForm" novalidate>
+        <!--<form name= "form"(ngSubmit) = "f.form.valid && login()" #f = "ngForm" novalidate>
             <div class="login-ic">
                 <i class="material-icons">person</i>
                 <input type="text" value='Usuario' name= "username"  [(ngModel)] = "model.username" #username = "ngModel"   required>
@@ -110,7 +110,7 @@
             <div class="log-bwn">
                 <input type="submit" value="Iniciar sesión">
             </div>
-        </form>
+        </form>-->
         <a class="btn btn-primary" routerLink="/register" routerLinkActive="active" style="margin-top:10px;">Registrarse</a>
     </div>
     

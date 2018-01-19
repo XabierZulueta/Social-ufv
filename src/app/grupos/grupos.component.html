@@ -1,5 +1,5 @@
 <h1 style="display: inline;">Grupos</h1>
-<form class="form-inline my-2 my-lg-0 " style="padding:10px;">
+ <!-- <form class="form-inline my-2 my-lg-0 " style="padding:10px;">
     <table>
         <tbody>
             <tr>
@@ -29,7 +29,7 @@
                             <img style="width:25px;" src="http://www.freetoursbyfoot.com/wp-content/uploads/2017/05/loading.gif"/>
                     </div>
                 </td>
-               <!-- <td>
+              <td>
                     <div   id="accordion" role="tablist">
                         <div  class="card">
                             <div  class="card-header" id="headingOne" role="tab">
@@ -50,15 +50,15 @@
                             </div>
                         </div>
                     </div>
-                </td>-->
+                </td>
             </tr>
         </tbody>
     </table>
 </form>
 <ul *ngIf="pager.pages && pager.pages.length && pager.totalPages>1" class="pagination justify-content-center">
-       <!-- <li [ngClass]="{disabled:pager.currentPage === 1}" class="page-item" role="button">
+       <li [ngClass]="{disabled:pager.currentPage === 1}" class="page-item" role="button">
             <a class="page-link"  (click)="setPage(1)"><i class="material-icons">first_page</i></a>
-        </li>-->
+        </li>
         <li [ngClass]="{disabled:pager.currentPage === 1}" class="page-item"  role="button">
             <a class="page-link" (click)="setPage(pager.currentPage - 1)">&laquo;</a>
         </li>
@@ -68,9 +68,9 @@
         <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}" class="page-item" role="button">
             <a class="page-link"  (click)="setPage(pager.currentPage + 1)">&raquo;</a>
         </li>
-       <!-- <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}" class="page-item" role="button">
+       <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}" class="page-item" role="button">
             <a class="page-link"  (click)="setPage(pager.totalPages)"><i class="material-icons">last_page</i></a>
-        </li>-->
+        </li>
     </ul>
 <div class="row" style=" text-align: center; ">
     <div class="col-md-4" *ngFor="let g of pagedItems">
@@ -83,4 +83,4 @@
             </a>
         </div>
     </div>
-</div>
+</div>-->
