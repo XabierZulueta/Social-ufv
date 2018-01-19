@@ -8,11 +8,11 @@ import { User } from '../usuarios/user';
 @Injectable()
 export class UserService {
 
-    domain = "localhost:8080";
+    domain = "http://localhost:8080";
 
     constructor(private http: Http) { }
 
-    registerUser(user){
+    registerUser(user) {
         return this.http.post(this.domain + '/authentication/register', user).map(res => res.json())
     }
 
