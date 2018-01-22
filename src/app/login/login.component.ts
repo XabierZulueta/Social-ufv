@@ -6,28 +6,84 @@ import { AlertService } from '../_services/alert.service';
 import { UserService } from '../_services/user.service';
 import { AppComponent} from '../app.component';
 import { fadeInAnimation } from '../_animations/index';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 @Component({
     moduleId: module.id,
     templateUrl: 'login.component.html',
     animations: [fadeInAnimation],
      // attach the fade in animation to the host (root) element of this component
-    host: { '[@fadeInAnimation]': '' }
+    host: { '[@fadeInAnimation]': ''}
 })
 
 export class LoginComponent implements OnInit {
-    model: any = {};
+    error;
+    loading = false;
+    form: FormGroup;
+
+    constructor(
+        private userService: UserService,
+        private router: Router,
+        private authenticationService: AuthenticationService,
+        private formBuilder: FormBuilder) {
+            this.createForm();
+            document.body.style.backgroundColor = '#003265';
+            document.getElementById('contenido').style.backgroundColor = 'rgba(0, 0, 0, 0.13)';
+    }
+
+    createForm() {
+        this.form = this.formBuilder.group({
+            username: ['', Validators.required ],
+            password:  ['', Validators.required ]
+        });
+    }
+
+    enableForm() {
+        this.form.controls['password'].enable();
+        this.form.controls['username'].enable();
+    }
+
+    disabledForm() {
+        this.form.controls['password'].disable();
+        this.form.controls['username'].disable();
+    }
+
+    onLoginSubmit() {
+        this.loading = true;
+        this.disabledForm();
+        const user = {
+            username: this.form.get('username').value,
+            password: this.form.get('password').value
+        };
+
+        this.userService.login(user).subscribe((data) => {
+           if (!data.success) {
+                this.error = data.message;
+                this.loading = false;
+                this.enableForm();
+           } else {
+                this.userService.storeData(data.user, data.token);
+                setTimeout(() => {
+                    this.router.navigate(['/']);
+                }, 2000);
+           }
+        });
+    }
+
+    ngOnInit() { }
+}
+/*    model: any = {};
     loading = false;
     returnUrl: string;
-    error:string;
+    error: string;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
         private alertService: AlertService,
-    private app : AppComponent) { 
-        document.body.style.backgroundColor ='#003265';
+    private app: AppComponent) {
+        document.body.style.backgroundColor = '#003265';
         document.getElementById('contenido').style.backgroundColor = 'rgba(0, 0, 0, 0.13)';
     }
 
@@ -36,7 +92,6 @@ export class LoginComponent implements OnInit {
         this.authenticationService.logout();
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        
     }
 
     login() {
@@ -49,7 +104,8 @@ export class LoginComponent implements OnInit {
                     this.app.reload();
                     document.body.style.backgroundColor = '#f0f0f0';
                     document.getElementById('contenido').style.backgroundColor = '#fff';
-                    document.getElementById('contenido').style.boxShadow='0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important'
+                    document.getElementById('contenido').style.boxShadow = '0 50px 100px rgba(50, 50, 93, 0.1), \
+                        0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important';
                     this.router.navigateByUrl('');
                 } else {
                     this.error = res.msg;
@@ -58,4 +114,4 @@ export class LoginComponent implements OnInit {
             }
             );
     }
-}
+}*/

@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertService} from '../_services/alert.service';
 import { UserService } from '../_services/user.service';
 import { Grupo } from '../grupos/grupo';
+import { EmailValidator } from '@angular/forms/src/directives/validators';
 
 @Component({
     moduleId: module.id,
@@ -12,47 +13,69 @@ import { Grupo } from '../grupos/grupo';
 })
 
 export class RegisterComponent {
+    usernameMessageClass: string;
+    emailMessageClass: string;
     model: any = {};
     loading = false;
     form: FormGroup;
+    message: String;
+    messageClass: String;
+    emailValid;
+    emailMessage;
+    usernameValid;
+    usernameMessage;
 
     constructor(
         private formBuilder: FormBuilder,
         private userService: UserService,
-        private router: Router) { 
+        private router: Router) {
         document.body.style.backgroundColor = '#003265';
         this.createForm();
     }
 
-    createForm(){
+    createForm() {
         this.form = this.formBuilder.group({
             email: ['', Validators.compose([
-                Validators.required, 
-                Validators.minLength(5), 
+                Validators.required,
+                Validators.minLength(5),
                 Validators.maxLength(30),
                 this.validateEmail]
             )],
             username: ['', Validators.compose([
-                Validators.required, 
-                Validators.minLength(5), 
+                Validators.required,
+                Validators.minLength(5),
                 Validators.maxLength(30),
                 this.validateUsername]
             )],
             password: ['', Validators.compose([
-                Validators.required, 
-                Validators.minLength(3), 
+                Validators.required,
+                Validators.minLength(3),
                 Validators.maxLength(30),
                 this.validatePassword]
             )],
             confirm: ['', Validators.compose([
                 Validators.required]
             )]
-        }, {validator:this.comparePasswords('password', 'confirm')});
+        }, {validator: this.comparePasswords('password', 'confirm')});
     }
 
-    comparePasswords(pass, confirm){
-        return (group:FormGroup) => {
-            if(group.controls[pass].value == group.controls[confirm].value){
+    enableForm() {
+        this.form.controls['password'].enable();
+        this.form.controls['username'].enable();
+        this.form.controls['confirm'].enable();
+        this.form.controls['email'].enable();
+    }
+
+    disabledForm() {
+        this.form.controls['password'].disable();
+        this.form.controls['username'].disable();
+        this.form.controls['confirm'].disable();
+        this.form.controls['email'].disable();
+    }
+
+    comparePasswords(pass, confirm) {
+        return (group: FormGroup) => {
+            if (group.controls[pass].value === group.controls[confirm].value) {
                 return null;
             } else {
                 return {'matchingPasswords': true}
@@ -62,19 +85,19 @@ export class RegisterComponent {
 
     validateUsername(controls){
         const regEx = new RegExp(/^[a-zA-Z0-9]+$/);
-        if(regEx.test(controls.value)){
+        if (regEx.test(controls.value)) {
             return null;
         } else {
-            return {'validateUsername': true}
+            return {'validateUsername': true};
         }
     }
 
     validatePassword(controls) {
         const regExp = new RegExp(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[\d])(?=.*?[\W]).{8,35}$/);
         if (regExp.test(controls.value)) {
-          return null; 
+          return null;
         } else {
-          return { 'validatePassword': true } 
+          return { 'validatePassword': true };
         }
       }
 
@@ -83,19 +106,60 @@ export class RegisterComponent {
         if(regEx.test(controls.value)){
             return null;
         } else {
-            return {'validateEmail': true}
+            return {'validateEmail': true };
         }
     }
 
-    onRegisterSubmit(){
-        console.log("Event fired");
+    onRegisterSubmit() {
+        this.loading = true;
+        this.disabledForm();
+        console.log('Event fired');
         this.userService.registerUser({
             email: this.form.get('email').value,
             username: this.form.get('username').value,
-            password: this.form.get('password').value 
+            password: this.form.get('password').value
         }).subscribe((data) => {
+            if (!data.success) {
+                this.messageClass = 'alert alert-danger';
+                this.message = data.message;
+                this.loading = false;
+                this.enableForm();
+            } else {
+                this.messageClass = 'alert alert-success';
+                this.message = data.message;
+            }
             console.log(data);
         });
+    }
+
+    checkEmail() {
+        const email = this.form.get('email').value;
+        if ( email !== '' ) {
+            this.userService.checkEmail(email).subscribe((data) => {
+                this.emailValid = data.success;
+                this.emailMessage = data.message;
+                if (this.emailValid) {
+                    this.emailMessageClass = 'alert-success';
+                } else {
+                    this.emailMessageClass = 'alert-danget';
+                }
+            });
+        }
+    }
+
+    checkUsername() {
+        const username = this.form.get('username').value;
+        if (username !== '' ) {
+            this.userService.checkUsername(username).subscribe((data) => {
+                this.usernameValid = data.success;
+                this.usernameMessage = data.message;
+                if (this.usernameValid) {
+                    this.usernameMessageClass = 'alert-success';
+                } else {
+                    this.usernameMessageClass = 'alert-danger';
+                }
+            });
+        }
     }
 
     register() {

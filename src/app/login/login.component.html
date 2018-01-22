@@ -93,24 +93,35 @@
         <div *ngIf="error" class="alert alert-danger">
             <strong>{{error}}</strong>
         </div>
-        <!--<form name= "form"(ngSubmit) = "f.form.valid && login()" #f = "ngForm" novalidate>
-            <div class="login-ic">
-                <i class="material-icons">person</i>
-                <input type="text" value='Usuario' name= "username"  [(ngModel)] = "model.username" #username = "ngModel"   required>
-                <div class="clear"> </div>
+        <!-- Login Form -->
+        <form [formGroup]="form" (submit)="onLoginSubmit()">
+
+            <!-- Username Field -->
+            <div class="form-group">
+            <label for="username">Username</label>
+            <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }">
+                <input class="form-control" type="text" name="username" formControlName="username" />
+                <!-- Validation -->
+                <ul class="help-block">
+                <li *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required.</li>
+                </ul>
             </div>
-            <div *ngIf="f.submitted && !username.valid" class="text text-danger" style="margin-top: -1.5em;"> El username es obligatorio<br/><br/></div>
-            <div class="login-ic">
-                <i class="material-icons">https</i>
-                <input type="password" value='Contraseña' name= "password"[(ngModel)] = "model.password" #password = "ngModel"  required>
-                
-                <div class="clear"> </div>
             </div>
-            <div *ngIf="f.submitted && !password.valid" class="text text-danger" style="margin-top: -1.5em;"> La contraseña es obligatoria<br/><br/></div>
-            <div class="log-bwn">
-                <input type="submit" value="Iniciar sesión">
+        
+            <!-- Password Field  -->
+            <div class="form-group">
+            <label for="password">Password</label>
+            <div [ngClass]="{'has-error': form.controls.password.errors && form.controls.password.dirty, 'has-success': form.controls.password.valid && form.controls.password.dirty }">
+                <input class="form-control" type="password" name="password" formControlName="password" />
+                <!-- Validation -->
+                <ul class="help-block">
+                <li *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required.</li>
+                </ul>
             </div>
-        </form>-->
+            </div>
+            <!-- Submit Button -->
+            <input [disabled]="!form.valid || loading " class="btn btn-primary" type="submit" value="Login" />
+        </form>
         <a class="btn btn-primary" routerLink="/register" routerLinkActive="active" style="margin-top:10px;">Registrarse</a>
     </div>
     

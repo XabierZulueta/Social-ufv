@@ -57,30 +57,31 @@ interface Film {
 
 export class CalendarioComponent implements OnInit{
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
-    
-    isLoading:boolean;
-    view: string = 'month';
-    events : any[];
+
+    isLoading: boolean;
+    view = 'month';
+    events: any[];
     viewDate: Date = new Date();
     modalData: {
         action: string;
         event: CalendarEvent;
     };
-    organizador:any;
+    organizador: any;
     token: string;
     tokenDecoded: Object;
     userId: string;
-    activeDayIsOpen: boolean = false;
+    activeDayIsOpen = false;
     jwtHelper: JwtHelper = new JwtHelper();
-    isLogged:any;
-    locale:string='sp';
-    constructor(private modal: NgbModal, private _dataService: DataService, private route: ActivatedRoute,private router: Router,
-    private authService: AuthenticationService) { 
-        if (this.authService.isAuthenticate() == false) {
+    isLogged: any;
+    locale = 'sp';
+    constructor(private modal: NgbModal, private _dataService: DataService, private route: ActivatedRoute, private router: Router,
+    private authService: AuthenticationService) {
+        if (this.authService.isAuthenticate() === false) {
             this.router.navigateByUrl('/login');
         }
         this.refresh.next();
-        document.getElementById('contenido').style.boxShadow='0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;'
+        document.getElementById('contenido').style.boxShadow = '0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), \
+                                0 5px 15px rgba(0, 0, 0, 0.1) !important;';
     }
 
     refresh: Subject<any> = new Subject();
@@ -94,13 +95,14 @@ export class CalendarioComponent implements OnInit{
                     this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
                     this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
                     this.events[i].color = colors.blue;
-                    //Si está en la lista de apuntados, ponemos el color del evento en rojo y el boolean apuntado a true, si no, lo pongo a false.
-                    if (this.isMember(this.events[i].apuntados)){
+                    // Si está en la lista de apuntados, ponemos el color del evento en rojo
+                    // y el boolean apuntado a true, si no, lo pongo a false.
+                    if (this.isMember(this.events[i].apuntados)) {
                         this.events[i].apuntado = true;
                         this.events[i].color = colors.red;
+                    } else {
+                        this.events[i].apuntado = false;
                     }
-                    else
-                        this.events[i].apuntado = false;                    
                 }
                 this.refresh.next();
             });
@@ -109,7 +111,8 @@ export class CalendarioComponent implements OnInit{
         this.token = localStorage.getItem('token');
         this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
         this.userId = this.tokenDecoded['id'];
-        document.getElementById('contenido').style.boxShadow='0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;'
+        document.getElementById('contenido').style.boxShadow = '0 50px 100px rgba(50, 50, 93, 0.1), \
+                            0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;';
         this.refresh.next();
     }
 

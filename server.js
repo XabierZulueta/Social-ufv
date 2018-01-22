@@ -41,7 +41,7 @@ app.use('/api', api);
 
 // Send all other requests to the Angular app
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/index.html'));
+    res.json({success:false, message:'Ruta desconocida'});
 });
 
 // catch 404 and forward to error handler
@@ -68,6 +68,6 @@ app.use(function(req, res, next) {
 
 // const server = http.createServer(app);
 app.use(cors());
-app.listen(8080, () => console.log(`Running on 127.0.0.1:8080`));
+app.listen(8080, () => console.log('Running on 127.0.0.1:8080'));
 
 module.exports = app;

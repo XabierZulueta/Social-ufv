@@ -82,7 +82,7 @@ export class EventoComponent {
                 this.event.id = this.maxId[0].id+1;
             });
 
-            var sub = this.route.params.subscribe(params => {
+            const sub = this.route.params.subscribe(params => {
                 this.event.organizador.id = +params['id']; // (+) converts string 'id' to a number
                 // In a real app: dispatch action to load the details here.
                 this._dataService.getById(params['id'],'groups').subscribe(res => {

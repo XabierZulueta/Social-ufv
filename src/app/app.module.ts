@@ -36,7 +36,7 @@ import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 import { AuthenticationService } from './_services/authentication.service';
 import { AlertService } from './_services/alert.service';
 import { UserService } from './_services/user.service';
-import { AuthGuard } from './_guards/auth.guard'
+import { AuthGuard } from './_guards/auth.guard';
 import { PeticionesComponent } from './peticiones/peticiones.component';
 import { PagerService } from './_services/index';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -61,7 +61,6 @@ import {MatExpansionModule} from '@angular/material/expansion';
     LoginComponent,
     RegisterComponent,
     PeticionesComponent,
-   
   ],
   imports: [
     BrowserModule,
@@ -74,7 +73,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     HttpModule,
     NgbModule,
     AppRoutingModule,
-    DemoUtilsModule,   
+    DemoUtilsModule,
     Ng2FileInputModule,
     FancyImageUploaderModule,
     MatCheckboxModule,

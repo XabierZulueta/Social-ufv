@@ -8,14 +8,51 @@ import { User } from '../usuarios/user';
 @Injectable()
 export class UserService {
 
-    domain = "http://localhost:8080";
+    domain = 'http://localhost:8080';
+    authToken;
+    user;
+    options;
 
     constructor(private http: Http) { }
 
-    registerUser(user) {
-        return this.http.post(this.domain + '/authentication/register', user).map(res => res.json())
+    createAuthenticationHeaders() {
+        this.loadToken();
+        this.options = new RequestOptions({
+            headers: new Headers({
+                'content-type': 'application/json',
+                'authorization': this.authToken
+            })
+        });
     }
 
+    loadToken() {
+        this.authToken = localStorage.getItem('token');
+    }
+
+    registerUser(user) {
+        return this.http.post(this.domain + '/authentication/register', user).map(res => res.json());
+    }
+
+    checkEmail(email) {
+        return this.http.get(this.domain + '/authentication/checkEmail/' + email).map(res => res.json());
+    }
+
+    checkUsername(username) {
+        return this.http.get(this.domain + '/authentication/checkUsername/' + username).map(res => res.json());
+    }
+
+    login(user) {
+        return this.http.post(this.domain + '/authentication/login', user).map(res => res.json());
+    }
+
+    storeData(token, user) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        this.authToken = token;
+        this.user = user;
+    }
+
+    ///ALL XABIS FUNCTIONS
     getAll() {
         return this.http.get('/api/users', this.jwt()).map((response: Response) => response.json());
     }
@@ -40,9 +77,9 @@ export class UserService {
 
     private jwt() {
         // create authorization header with jwt token
-        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (currentUser && currentUser.token) {
-            let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
+            const headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
             return new RequestOptions({ headers: headers });
         }
     }
