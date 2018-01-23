@@ -3,7 +3,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
-const config = require('./config/config'); 
+const config = require('./config/config.dev'); 
 const authentication = require('./routes/authentication')(router);
 const cors = require('cors');
 
