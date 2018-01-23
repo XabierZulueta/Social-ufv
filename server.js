@@ -67,7 +67,7 @@ app.use(function(req, res, next) {
 // app.set('port', port);
 
 // const server = http.createServer(app);
-app.use(cors());
+
 app.listen(8080, () => console.log('Running on 127.0.0.1:8080'));
 
 module.exports = app;
