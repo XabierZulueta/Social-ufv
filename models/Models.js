@@ -1,22 +1,32 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-var GrupoSchema = new mongoose.Schema({
-  _id: Schema.Types.ObjectId,
-  nombre: String,
-  organizador: String,
-  eventos: [{type: Schema.Types.ObjectId, ref: 'Event'}],
-});
-
 var EventSchema = new mongoose.Schema({
-  _id: Schema.Types.ObjectId,
-  title: String,
+  title: {type:String, required: true},
   organizador: String,
   description: String,
   creditos: Number,
-  grupo: { type: Schema.Types.ObjectId, ref: 'Grupo' },
+  maxPersonas: Number,
+  go:[String],
+  checked: [String],
+  status: {
+    type: String,
+    enum: ['open', 'full', 'close', 'pending'],
+    required: true,
+    default: 'open',
+    lowercase: true,
+  },
   updated_at: { type: Date, default: Date.now },
+});
+
+var GrupoSchema = new mongoose.Schema({
+  nombre: {type:String, unique:true},
+  imagen: String,
+  administrador: String,
+  equipo: [String],
+  eventos: [{type: EventSchema, unique:true}],
 });
 
 module.exports = {Evento: mongoose.model('Event', EventSchema),
                   Grupo:  mongoose.model('Grupo', GrupoSchema)};
+
