@@ -7,6 +7,8 @@ import { UserService } from '../_services/user.service';
 import { AppComponent} from '../app.component';
 import { fadeInAnimation } from '../_animations/index';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { AuthGuard } from '../_guards/auth.guard';
+
 
 @Component({
     moduleId: module.id,
@@ -17,12 +19,14 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 })
 
 export class LoginComponent implements OnInit {
+    previousUrl: any;
     error;
     loading = false;
     form: FormGroup;
 
     constructor(
         private userService: UserService,
+        private authGuard: AuthGuard,
         private router: Router,
         private authenticationService: AuthenticationService,
         private formBuilder: FormBuilder) {
@@ -62,15 +66,25 @@ export class LoginComponent implements OnInit {
                 this.loading = false;
                 this.enableForm();
            } else {
-                this.userService.storeData(data.user, data.token);
+                this.userService.storeData(data.token, data.user);
                 setTimeout(() => {
-                    this.router.navigate(['/']);
+                    if (this.previousUrl) {
+                        this.router.navigate([this.previousUrl ]);
+                    } else {
+                        this.router.navigate(['/']);
+                    }
                 }, 2000);
            }
         });
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        if (this.authGuard.redirectUrl) {
+            this.error = 'You must be logged in to see the page' ;
+            this.previousUrl = this.authGuard.redirectUrl;
+            this.authGuard.clear();
+        }
+    }
 }
 /*    model: any = {};
     loading = false;

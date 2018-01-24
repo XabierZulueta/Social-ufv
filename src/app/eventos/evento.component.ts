@@ -50,12 +50,12 @@ import { fadeInAnimation } from '../_animations/index';
 export class EventoComponent {
     view: string = 'month';
     viewDate: Date = new Date();
-    organizador:Grupo={id:0,
-        nombre:'',
-        imagen:'',
-        informacion:''};
-    maxId : Array<any>;
-    isLogged:any;
+    organizador: {id: 0,
+        nombre: '',
+        imagen: '',
+        informacion: ''};
+    maxId: Array<any>;
+    isLogged: any;
     event: Evento =
     {
         id:0,

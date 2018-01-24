@@ -508,6 +508,7 @@ router.get('/events/:id', (req, res) => {
 
 //Post events
 router.post('/events', (req, res) => {
+    res.send('success');
     req.body.start = new Date(req.body.start);
     req.body.id = parseInt(req.body.id);
     connection((db) => {

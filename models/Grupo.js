@@ -1,5 +1,9 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+/* ===================
+   Import Node Modules
+=================== */
+const mongoose = require('mongoose'); // Node Tool for MongoDB
+mongoose.Promise = global.Promise; // Configure Mongoose Promises
+const Schema = mongoose.Schema; // Import Schema from Mongoose
 
 var EventSchema = new mongoose.Schema({
   title: {type:String, required: true},
@@ -7,7 +11,7 @@ var EventSchema = new mongoose.Schema({
   description: String,
   creditos: Number,
   maxPersonas: Number,
-  go:[String],
+  apuntados:[String],
   checked: [String],
   status: {
     type: String,
@@ -17,6 +21,9 @@ var EventSchema = new mongoose.Schema({
     lowercase: true,
   },
   updated_at: { type: Date, default: Date.now },
+  start: Date,
+  end: Date,
+  color: String,
 });
 
 var GrupoSchema = new mongoose.Schema({
@@ -27,5 +34,6 @@ var GrupoSchema = new mongoose.Schema({
   eventos: [{type: EventSchema, unique:true}],
 });
 
-// module.exports = mongoose.model('Grupo', GrupoSchema);
-
+ 
+// Export Module/Schema
+module.exports = mongoose.model('Grupo', GrupoSchema);

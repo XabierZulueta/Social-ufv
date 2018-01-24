@@ -17,12 +17,12 @@ import { JwtHelper } from 'angular2-jwt';
 
 export class UserComponent implements OnInit{
     user: any;
-    grupos : boolean;
-    gruposid : Array<any>;
-    id:number;
-    isLogged:any;
-    ultimoEvento:Array<Evento>;
-    organizador:Grupo;
+    grupos: boolean;
+    gruposid: Array<any>;
+    id: number;
+    isLogged: any;
+    ultimoEvento: Array<Evento>;
+    organizador;
     tags;
     step = 0;
 
@@ -41,16 +41,16 @@ export class UserComponent implements OnInit{
         private route: ActivatedRoute, private authService: AuthenticationService,
     private router: Router) {
         this.ultimoEvento = [];
-        this.organizador = {id:0, nombre:'',imagen:'',informacion:''};
-        this.tags=[];
+        this.organizador = {id: 0, nombre: '', imagen: '', informacion: ''};
+        this.tags = [];
     }
 
-    ngOnInit(){
+    ngOnInit() {
         this.isLogged = this.authService.isAuthenticate();
         if (this.isLogged == false) {
             this.router.navigateByUrl('/login');
         }
-        var sub = this.route.params.subscribe(params => {
+        const sub = this.route.params.subscribe(params => {
             this.id = +params['id']; // (+) converts string 'id' to a number
             // In a real app: dispatch action to load the details here.
         });
@@ -63,13 +63,12 @@ export class UserComponent implements OnInit{
             this.getHobbies(this.user);
             });
         this._dataService.getUltimoEvento(this.id)
-            .subscribe(res=>{
+            .subscribe(res => {
                 this.ultimoEvento = res;
                 this.getOrganizador(this.ultimoEvento[0].organizador.id);
             });
         this.grupos = false;
         this.gruposid = new Array<any>();
-        
     }
 
     getOrganizador(idGrupo){

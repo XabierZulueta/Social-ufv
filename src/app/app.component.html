@@ -1,5 +1,4 @@
-
-<nav *ngIf="isLogged" class="navbar navbar-toggleable-md  navbar-inverse " style="background-color: #013660;">
+<nav *ngIf="userService.loggedIn()" class="navbar navbar-toggleable-md  navbar-inverse " style="background-color: #013660;">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
         aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -37,14 +36,14 @@
                     Login</a>
             </li>-->
             <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"  id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" role="button">
-                    {{userName}}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" [routerLink]="['/user', userId]" routerLinkActive="active">Ver perfil</a>
-                            <a class="dropdown-item" role="button" (click)="logout()">Logout</a>
-                    </div>
+                <a class="nav-link dropdown-toggle"  id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false" role="button">
+                {{userName}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" [routerLink]="['/user', userId]" routerLinkActive="active">Ver perfil</a>
+                    <a class="dropdown-item" role="button" (click)="logout()">Logout</a>
+                </div>
             </li>
         </ul>
     </div>

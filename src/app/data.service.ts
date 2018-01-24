@@ -8,25 +8,25 @@ import { Grupo } from './grupos/grupo';
 
 @Injectable()
 export class DataService {
-    
+
     result: any;
-    events : any[];
+    events: any[];
     private headers = new Headers({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
     private options = new RequestOptions({ headers: this.headers });
     constructor(private _http: Http) {
      }
 
-    getMaxId(db){
+    getMaxId(db) {
             return this._http.get("/api/" + db + "/max")
                 .map(result => this.result = result.json().data);
     }
-     
-    getGeneral(db){
-        return this._http.get("/api/"+db)
+
+    getGeneral(db) {
+        return this._http.get('/api/' + db)
             .map(result => this.result = result.json().data);
     }
 
-    getById(id, db){
+    getById(id, db) {
         return this._http.get("/api/"+db+"/" + id)
             .map(result => this.result = result.json().data);
     }
@@ -43,24 +43,24 @@ export class DataService {
         // return this.http.get("/api/events?from=" + from.toString() + "&to=" + to.toString()).map((response:Response) => response.json());
     }
 
-    addUser(nombre:string, id:number) : Promise<any>{
+    addUser(nombre: string, id: number): Promise<any>{
         return this._http.post("/api/users", JSON.stringify({ id: id, name: nombre, grupos:[] }), { headers: this.headers })
         .toPromise()
         .catch(this.handleError);
     }
 
-    updateUser(u:any){
+    updateUser(u: any){
         return this._http.post("/api/users", JSON.stringify(u), { headers: this.headers })
             .toPromise()
             .catch(this.handleError);
     }
 
-    deleteUser(id:number){
+    deleteUser(id: number){
         return this._http.delete("/api/users/"+id,{ headers: this.headers }).toPromise()
             .catch(this.handleError);
     }
 
-    addEvent(event:Evento){
+    addEvent(event: Evento){
         return this._http.post("/api/events", JSON.stringify(event), { headers: this.headers })
             .toPromise()
             .catch(this.handleError);

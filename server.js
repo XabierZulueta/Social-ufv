@@ -5,6 +5,7 @@ const path = require('path');
 const http = require('http');
 const config = require('./config/config.dev'); 
 const authentication = require('./routes/authentication')(router);
+const grupos = require('./routes/grupos')(router);
 const cors = require('cors');
 
 var mongoose = require('mongoose');
@@ -35,6 +36,7 @@ app.use('/evento', evento);
 // Angular DIST output folder
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/authentication', authentication);
+app.use('/grupos', grupos);
 
 // API location
 app.use('/api', api);

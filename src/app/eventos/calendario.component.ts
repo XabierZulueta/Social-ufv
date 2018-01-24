@@ -24,6 +24,7 @@ import { JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { fadeInAnimation } from '../_animations/index';
+import { UserService } from '../_services/user.service';
 
 const colors: any = {
     red: {
@@ -47,15 +48,14 @@ interface Film {
 
 @Component({
     selector: 'mwl-demo-component',
-    //changeDetection: ChangeDetectionStrategy.OnPush,
+    // changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['../styles.css'],
-    templateUrl: 'calendario.template.html',animations: [fadeInAnimation],
- 
+    templateUrl: 'calendario.template.html', animations: [fadeInAnimation],
     // attach the fade in animation to the host (root) element of this component
     host: { '[@fadeInAnimation]': '' }
 })
 
-export class CalendarioComponent implements OnInit{
+export class CalendarioComponent implements OnInit {
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
     isLoading: boolean;
@@ -66,6 +66,7 @@ export class CalendarioComponent implements OnInit{
         action: string;
         event: CalendarEvent;
     };
+    user;
     organizador: any;
     token: string;
     tokenDecoded: Object;
@@ -74,8 +75,13 @@ export class CalendarioComponent implements OnInit{
     jwtHelper: JwtHelper = new JwtHelper();
     isLogged: any;
     locale = 'sp';
-    constructor(private modal: NgbModal, private _dataService: DataService, private route: ActivatedRoute, private router: Router,
-    private authService: AuthenticationService) {
+    constructor(
+        private modal: NgbModal,
+        private _dataService: DataService,
+        private route: ActivatedRoute,
+        private router: Router,
+        private userService: UserService,
+        private authService: AuthenticationService) {
         if (this.authService.isAuthenticate() === false) {
             this.router.navigateByUrl('/login');
         }
@@ -85,35 +91,42 @@ export class CalendarioComponent implements OnInit{
     }
 
     refresh: Subject<any> = new Subject();
-    ngOnInit() { 
-        this.isLoading=true; 
-        this._dataService.getGeneral('events')
-            .subscribe(res => {
-                this.isLoading=false;
-                this.events = res;
-                for (var i = 0; i < this.events.length; i++) {
-                    this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
-                    this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
-                    this.events[i].color = colors.blue;
-                    // Si está en la lista de apuntados, ponemos el color del evento en rojo
-                    // y el boolean apuntado a true, si no, lo pongo a false.
-                    if (this.isMember(this.events[i].apuntados)) {
-                        this.events[i].apuntado = true;
-                        this.events[i].color = colors.red;
-                    } else {
-                        this.events[i].apuntado = false;
-                    }
-                }
-                this.refresh.next();
-            });
+    ngOnInit() {
+        this.isLoading = true;
+        // this._dataService.getGeneral('events').subscribe(res => {
+        //     // this.isLoading = false;
+        //     this.events = res;
+        //     for (let i = 0; i < this.events.length; i++) {
+        //         this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
+        //         this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
+        //         this.events[i].color = colors.blue;
+        //         // Si está en la lista de apuntados, ponemos el color del evento en rojo
+        //         // y el boolean apuntado a true, si no, lo pongo a false.
+        //         if (this.isMember(this.events[i].apuntados)) {
+        //             this.events[i].apuntado = true;
+        //             this.events[i].color = colors.red;
+        //         } else {
+        //             this.events[i].apuntado = false;
+        //         }
+        //     }
+        //     this.refresh.next();
+        // });
+        this.events = [];
+        // this._dataService.events;
+        this.userService.getProfile().subscribe((profile) => {
+            this.user = profile.user;
+        });
 
-        this.events = this._dataService.events;
-        this.token = localStorage.getItem('token');
-        this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
-        this.userId = this.tokenDecoded['id'];
+        // this.events = this._dataService.events;
+        // this.token = localStorage.getItem('token');
+        // this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
+        // this.userId = this.tokenDecoded['id'];
+
+
         document.getElementById('contenido').style.boxShadow = '0 50px 100px rgba(50, 50, 93, 0.1), \
                             0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;';
         this.refresh.next();
+        this.isLoading = false;
     }
 
     handleEvent(action: string, event: Evento): void {
@@ -125,7 +138,7 @@ export class CalendarioComponent implements OnInit{
             });
     }
 
-    dayClicked({date, events}: {date: Date;events: Array<Evento>;}): void {
+    dayClicked({date, events}: {date: Date; events: Array<Evento>; } ): void {
         if (isSameMonth(date, this.viewDate)) {
             if (
                 (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -137,7 +150,6 @@ export class CalendarioComponent implements OnInit{
                 this.viewDate = date;
             }
         }
-        
     }
 
     desapuntarEvento(idUsuario, idEvento) {
@@ -150,11 +162,8 @@ export class CalendarioComponent implements OnInit{
         this.ngOnInit();
     }
 
-    //Método que comprueba si el usuario está apuntado al evento.
+    // Método que comprueba si el usuario está apuntado al evento.
     isMember(array: any[]) {
-        if (array.indexOf(this.userId) != -1)
-            return true;
-        else
-            return false;
+        return (array.indexOf(this.userId) !== -1);
     }
 }

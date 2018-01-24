@@ -7,22 +7,23 @@ import { UserComponent } from './usuarios/user.component';
 import { CalendarioComponent } from './eventos/calendario.component';
 import { EventoComponent } from './eventos/evento.component';
 import { NuevoGrupoComponent } from './grupos/nuevoGrupo.component';
-import { LoginComponent } from './login/login.component'
-import { RegisterComponent } from './register/register.component'
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 import { PeticionesComponent } from './peticiones/peticiones.component';
+import { AuthGuard } from './_guards/auth.guard';
 
 const routes: Routes = [
-    { path: '', redirectTo: '', pathMatch: 'full', component: CalendarioComponent },
-    { path: 'grupos', component: GruposComponent },
-    { path: 'usuarios', component: UsersComponent },
-    { path: 'grupo/:id', component: GrupoComponent },
-    { path: 'user/:id', component: UserComponent },
-    { path: 'calendario', component: CalendarioComponent},
-    { path: 'nuevoEvento/:id', component: EventoComponent },
-    { path: 'nuevo/grupo', component: NuevoGrupoComponent },
+    { path: '', redirectTo: '', pathMatch: 'full', component: CalendarioComponent, canActivate: [AuthGuard] },
+    { path: 'grupos', component: GruposComponent, canActivate: [AuthGuard] },
+    { path: 'usuarios', component: UsersComponent, canActivate: [AuthGuard] },
+    { path: 'grupo/:id', component: GrupoComponent, canActivate: [AuthGuard] },
+    { path: 'user/:id', component: UserComponent, canActivate: [AuthGuard] },
+    { path: 'calendario', component: CalendarioComponent, canActivate: [AuthGuard] },
+    { path: 'nuevoEvento/:id', component: EventoComponent, canActivate: [AuthGuard] },
+    { path: 'nuevo/grupo', component: NuevoGrupoComponent, canActivate: [AuthGuard]},
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'peticiones/:id', component: PeticionesComponent },
+    { path: 'peticiones/:id', component: PeticionesComponent, canActivate: [AuthGuard] },
 
 ];
 @NgModule({

@@ -12,9 +12,8 @@ import { DataService } from './data.service';
 import { CalendarioComponent } from './eventos/calendario.component';
 import { EventoComponent } from './eventos/evento.component';
 import { NuevoGrupoComponent } from './grupos/nuevoGrupo.component';
-import { LoginComponent } from './login/login.component'
-import { RegisterComponent } from './register/register.component'
-
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
@@ -24,28 +23,29 @@ import { CalendarModule } from 'angular-calendar';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { DayPilotModule } from "daypilot-pro-angular";
+import { DayPilotModule } from 'daypilot-pro-angular';
 //import { DatePickerModule } from 'ng2-datepicker-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 import { Ng2FileInputModule } from 'ng2-file-input';
 import { AppRoutingModule } from './app-routing.module';
-import { ImageUploadModule } from "angular2-image-upload";
+import { ImageUploadModule } from 'angular2-image-upload';
 import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 
 
 import { AuthenticationService } from './_services/authentication.service';
 import { AlertService } from './_services/alert.service';
 import { UserService } from './_services/user.service';
-import { AuthGuard } from './_guards/auth.guard';
+import { AuthGuard } from './_guards/auth.guard'; 
 import { PeticionesComponent } from './peticiones/peticiones.component';
 import { PagerService } from './_services/index';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { GruposService } from './_services/grupos.service';
 
 
 @NgModule({
@@ -92,6 +92,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     AuthenticationService,
     AlertService,
     UserService,
+    GruposService,
     AuthGuard,
     PagerService
   ],

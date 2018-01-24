@@ -24,14 +24,14 @@ import {FormControl} from '@angular/forms';
 export class GruposComponent implements OnInit {
     grupos: Array<any>;
     tags: Array<Tags>;
-    gruposTotal:Array<any>;
-    gruposTag : Array<any>;
-    grupo:any;
-    nombre : String;
-    isLogged:any;
-    isLoading:boolean;
+    gruposTotal: Array<any>;
+    gruposTag: Array<any>;
+    grupo: any;
+    nombre: String;
+    isLogged: any;
+    isLoading: boolean;
     pager: any = {};
-    tagschecked:Array<any>;
+    tagschecked: Array<any>;
 
     // paged items
     pagedItems: any[];
@@ -44,18 +44,18 @@ export class GruposComponent implements OnInit {
     }
     
 
-    ngOnInit(){
-        this.isLoading=true;
-        this.isLogged = this.authService.isAuthenticate();
-        if (this.isLogged == false) {
-            this.router.navigateByUrl('/login');
-        }
+    ngOnInit() {
+        // this.isLoading=true;
+        // this.isLogged = this.authService.isAuthenticate();
+        // if (this.isLogged == false) {
+        //     this.router.navigateByUrl('/login');
+        // }
 
-        this._dataService.getGeneral('groups')
-            .subscribe(res => {this.isLoading=false;
-                this.grupos = res;
-                this.setPage(1);});
-        this._dataService.getGeneral('tags').subscribe(res => {this.tags = res;})
+        // this._dataService.getGeneral('groups')
+        //     .subscribe(res => {this.isLoading=false;
+        //         this.grupos = res;
+        //         this.setPage(1);});
+        // this._dataService.getGeneral('tags').subscribe(res => {this.tags = res;})
     }
 
     search(nombre){

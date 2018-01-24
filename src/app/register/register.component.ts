@@ -29,7 +29,6 @@ export class RegisterComponent {
         private formBuilder: FormBuilder,
         private userService: UserService,
         private router: Router) {
-        document.body.style.backgroundColor = '#003265';
         this.createForm();
     }
 

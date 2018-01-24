@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 
 import { DataService } from '../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,56 +9,115 @@ import { Grupo } from './grupo';
 import { FancyImageUploaderOptions, UploadedFile } from 'ng2-fancy-image-uploader';
 import { AuthenticationService } from '../_services/authentication.service';
 import { fadeInAnimation } from '../_animations/index';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { UserService } from '../_services/user.service';
+import { GruposService } from '../_services/grupos.service';
 
 @Component({
     selector: 'nuevoGrupo',
     templateUrl: './nuevoGrupo.component.html',
-    styleUrls: ['./grupo.component.css'],animations: [fadeInAnimation],
- 
+    styleUrls: ['./grupo.component.css'],
+    animations: [fadeInAnimation],
     // attach the fade in animation to the host (root) element of this component
     host: { '[@fadeInAnimation]': '' }
 })
 
-export class NuevoGrupoComponent {
+export class NuevoGrupoComponent implements OnInit {
+    message: any;
+    messageClass: string;
+    username: any;
     @ViewChild('fileInput') fileInput;
     filesToUpload: Array<File> = [];
-    maxId:Array<any>;
-    grupo: Grupo = {
-        id:0,
-        nombre:'',
-        imagen:'',
-        informacion:'',
-    };
-    id: any;//the file input's id that emits the action (useful if you use the service and handle multiple file inputs, see below)
-    currentFiles: any;//list of the current files
-    action: any;//see Enum below
-    file: any;//the file that caused the action
+    maxId: Array<any>;
+    grupo: any;
+    id: any; // the file input's id that emits the action (useful if you use the service and handle multiple file inputs, see below)
+    currentFiles: any; // list of the current files
+    action: any; // see Enum below
+    file: any; // the file that caused the action
+    form;
+    procesing = false;
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
-        private route: ActivatedRoute, private http:Http,
-        private router: Router, private authService: AuthenticationService) {
-            
-        if (this.authService.isAuthenticate() == false) {
-            this.router.navigateByUrl('/login');
-        }
-        this._dataService.getMaxId('groups').subscribe(res => {
-            this.maxId = res;
-            if(this.maxId[0]== null){
-                this.maxId[0] ={} ;
-                this.maxId[0].id=1;
+        private route: ActivatedRoute,
+        private userService: UserService,
+        private grupoService: GruposService,
+        private http: Http,
+        private formBuilder: FormBuilder,
+        private router: Router,
+        private authService: AuthenticationService) {
+            this.createGrupoForm();
+            if (this.authService.isAuthenticate() === false) {
+                this.router.navigateByUrl('/login');
             }
-            else
-            this.grupo.id = this.maxId[0].id + 1;
+            this._dataService.getMaxId('groups').subscribe(res => {
+                this.maxId = res;
+                if (this.maxId[0] == null) {
+                    this.maxId[0] = {};
+                    this.maxId[0].id = 1;
+                } else {
+                    this.grupo.id = this.maxId[0].id + 1;
+                }
+            });
+    }
+
+    createGrupoForm() {
+        this.form = this.formBuilder.group({
+            nombre: ['', Validators.compose([
+                Validators.required,
+                Validators.maxLength(50),
+                Validators.minLength(5)
+            ]) ],
+            informacion: ['', Validators.compose([
+                Validators.required,
+                Validators.minLength(5),
+                Validators.maxLength(500),
+            ])]
         });
     }
 
+    enableForm() {
+        this.form.get('informacion').enable();
+        this.form.get('nombre').enable();
+    }
+
+    disableForm() {
+        this.form.get('informacion').disable();
+        this.form.get('nombre').disable();
+    }
+
     onSubmit() {
+        console.log('Submited');
+        this.procesing = true;
+        this.disableForm();
         this.upload();
         const files: Array<File> = this.filesToUpload;
-        this.grupo.imagen='assets/uploads/'+files[0].name;        
-        //insertar en base de datos
-       this._dataService.addGroup(this.grupo);
-       this.router.navigateByUrl('/grupos');
+        let imagePath;
+        if (files.length !== 0) {
+            imagePath = 'assets/uploads/' + files[0].name;
+        }
+        const grupo = {
+            informacion: this.form.get('informacion').value,
+            nombre: this.form.get('nombre').value,
+            administrador: this.username,
+            imagen: imagePath
+        };
+        this.grupoService.newGrupo(grupo).subscribe(data => {
+            if (!data.success) {
+                this.messageClass = 'alert alert-danger';
+                this.message = data.message;
+                this.procesing = false;
+                this.enableForm();
+            } else {
+                setTimeout(() => {
+                    this.router.navigate(['/grupos']);
+                }, 2000);
+            }
+        });
+        // insertar en base de datos
+        // this._dataService.addGroup(this.grupo);
+
+        // this.router.navigate(['/grupos']);
+        this.enableForm();
     }
 
     upload() {
@@ -66,17 +125,23 @@ export class NuevoGrupoComponent {
         const files: Array<File> = this.filesToUpload;
 
         for (let i = 0; i < files.length; i++) {
-            formData.append("uploads[]", files[i], files[i]['name']);
+            formData.append('uploads[]', files[i], files[i]['name']);
         }
         // formData.append("uploads[]", files[0], files[0]['name']);
-        //this.address.documents = files.toString();
+        // this.address.documents = files.toString();
 
         this.http.post('http://localhost:3000/api/upload', formData)
             .map(files => files.json())
-            .subscribe()
+            .subscribe();
     }
 
     fileChangeEvent(fileInput: any) {
         this.filesToUpload = <Array<File>>fileInput.target.files;
+    }
+
+    ngOnInit()  {
+        this.userService.getProfile().subscribe(prof=>{
+            this.username = prof.user.username;
+        });
     }
 }

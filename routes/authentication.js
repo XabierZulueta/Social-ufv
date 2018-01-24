@@ -1,8 +1,6 @@
 const User = require('../models/User.js');
 const jwt = require('jsonwebtoken');
 const config = require('./../config/config.dev');
-const Grupo = require('../models/Models.js').Grupo;
-const Evento = require('../models/Models.js').Evento;
 
 module.exports = (router) =>{
 
@@ -105,32 +103,6 @@ module.exports = (router) =>{
             }
         );
         }
-    });
-
-    router.get('/test', (req, res) => {
-        let grupo = new Grupo({
-            nombre: 'Grupo 4',
-            administrador: 'Manza',
-            equipo: ['Xabier Zulueta', 'Jorge Manzanares'],
-            eventos:[],
-        });
-        grupo.eventos.push(new Evento({
-            title: 'Evento 4',
-            organizador: 'Otro admin distinto',
-            descripcion: 'desc',
-            creditos: 10,
-            status: 'CLOSE',
-            maxPersonas: 500,
-            go: grupo.equipo.concat('Xabier Zulueta'),
-            checked: [],
-        }));
-        grupo.save(err => {
-            if (err){
-                res.json({message: err, success: false}); 
-            } else {
-                res.json({message: "Grupo aniadido!", success: true}); 
-            }
-        });
     });
 
 
