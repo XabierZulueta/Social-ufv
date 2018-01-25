@@ -35,17 +35,18 @@ import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 import { AuthenticationService } from './_services/authentication.service';
 import { AlertService } from './_services/alert.service';
 import { UserService } from './_services/user.service';
-import { AuthGuard } from './_guards/auth.guard'; 
+import { NotificacionesService } from './_services/notificaciones.service';
+import { AuthGuard } from './_guards/auth.guard';
 import { PeticionesComponent } from './peticiones/peticiones.component';
 import { PagerService } from './_services/index';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { GruposService } from './_services/grupos.service';
+import { ConfirmacionAsistenciasComponent } from './_components/confirmacion-asistencias/confirmacion-asistencias.component';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { GruposService } from './_services/grupos.service';
     LoginComponent,
     RegisterComponent,
     PeticionesComponent,
+    ConfirmacionAsistenciasComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,12 +86,13 @@ import { GruposService } from './_services/grupos.service';
     MatIconModule,
     MatExpansionModule,
     ReactiveFormsModule
-   // DatePickerModule,
-   // InMemoryWebApiModule.forRoot(InMemoryDataService),
+    // DatePickerModule,
+    // InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],
   providers: [//UsuariosService,
     DataService,
     AuthenticationService,
+    NotificacionesService,
     AlertService,
     UserService,
     GruposService,
