@@ -11,8 +11,8 @@ function containsElementByName(array, object){
     return false;
 }
 
-module.exports = (router) =>{
-    router.get('/test', (req, res) => {
+module.exports = (router) => {
+    router.get('/eventos', (req, res) => {
         let grupo = new Grupo({
             nombre: 'Grupo 4',
             administrador: 'Manza',
@@ -24,7 +24,7 @@ module.exports = (router) =>{
             organizador: 'Otro admin distinto',
             descripcion: 'desc',
             creditos: 10,
-            status: 'CLOSE',
+            status: 'PeNdInG',
             maxPersonas: 500,
             go: grupo.equipo.concat('Xabier Zulueta'),
             checked: [],
@@ -38,30 +38,19 @@ module.exports = (router) =>{
         });
     });
 
-    router.get('/test/eventos/confirmarAsistencia', (req, res) => {
+    router.get('/test/eventos/confirmarAsistencia/:nombre', (req, res) => {
         let eventsArray= [];
-        Grupo.find({'eventos.status': 'pending'}).exec((err,data) => {
+        console.log(req.params.nombre);
+        Grupo.find({'eventos.status': 'pending', $or: [{'administrador': req.params.nombre}, {'eventos.equipo' : req.params.nombre }]}).exec((err,data) => {
             if(err){
                 res.json({success:false, message:err});
             } else {
-                console.log(data);
-                data.forEach(grupo => {
-                    grupo.eventos.forEach(evento =>{
-                        let arr = [];
-                        if(evento.start > new Date(2000, 10, 10) && evento.go.length !== evento.checked.length){
-                            arr.push(evento.toJSON());
-                            arr.forEach(e => { e.nombreGrupo = grupo.nombre });
-                        }
-                        eventsArray = eventsArray.concat(arr);
-                    });
-                    console.log("next" + grupo.eventos);
-                });
-                res.json({success:true , message:"eventos only", eventos:eventsArray});
+                res.json({success:true , message:"grupos", grupos:data});
             }
         })
     });
 
-    router.post('/test/eventos/confirmarAsistencia/', (req, res) => {
+    router.put('/test/eventos/confirmarAsistencia/', (req, res) => {
         if(!req.body.grupo || !req.body.evento || !req.body.usuario || !req.body.confirmacion){
             res.json({success: false, message: 'Parametros incorrectos.'})
         } else {

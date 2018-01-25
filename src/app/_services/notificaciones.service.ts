@@ -10,8 +10,8 @@ export class NotificacionesService {
 
   constructor(private http: Http) { }
 
-  getConfirmationEvents() {
-    return this.http.get(this.domain + 'authentication/test/eventos/confirmarAsistencia').map(res => res.json());
+  getConfirmationEvents(name) {
+    return this.http.get(this.domain + 'notificaciones/test/eventos/confirmarAsistencia/' + name).map(res => res.json());
   }
 
 }

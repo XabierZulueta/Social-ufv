@@ -36,4 +36,4 @@ var GrupoSchema = new mongoose.Schema({
 
  
 // Export Module/Schema
-module.exports = mongoose.model('Grupo', GrupoSchema);
+// module.exports = mongoose.model('Grupo', GrupoSchema);

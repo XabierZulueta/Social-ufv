@@ -21,7 +21,6 @@ var EventSchema = new mongoose.Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
-
 var GrupoSchema = new mongoose.Schema({
   nombre: {type:String, unique:true},
   imagen: String,
@@ -30,5 +29,5 @@ var GrupoSchema = new mongoose.Schema({
   eventos: [{type: EventSchema}],
 });
 
-// module.exports = mongoose.model('Grupo', GrupoSchema);
+ module.exports = {Grupo: mongoose.model('Grupo', GrupoSchema), Evento: mongoose.model('Evento', EventSchema)};
 

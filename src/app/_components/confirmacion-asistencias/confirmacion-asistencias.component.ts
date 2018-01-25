@@ -9,19 +9,20 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ConfirmacionAsistenciasComponent implements OnInit {
 
-  eventos: Array<any>;
+  grupos: Array<any>;
 
   constructor(
     private notificacionesService: NotificacionesService,
     private router: Router) {
-    notificacionesService.getConfirmationEvents().subscribe(data => {
+    notificacionesService.getConfirmationEvents('Manza').subscribe(data => {
       if (data.success) {
-        this.eventos = data.eventos;
-        if (this.eventos.length === 0) {
-          setTimeout(() => {
-            this.router.navigate(['/']);
-          }, 2000);
-        }
+        console.log(data);
+        this.grupos = data.grupos;
+        // if (this.grupos.length === 0) {
+        //   setTimeout(() => {
+        //     this.router.navigate(['/']);
+        //   }, 2000);
+        // }
       }
     });
   }

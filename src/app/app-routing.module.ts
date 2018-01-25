@@ -10,6 +10,7 @@ import { NuevoGrupoComponent } from './grupos/nuevoGrupo.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { PeticionesComponent } from './peticiones/peticiones.component';
+import { ConfirmacionAsistenciasComponent } from './_components/confirmacion-asistencias/confirmacion-asistencias.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full', component: CalendarioComponent },

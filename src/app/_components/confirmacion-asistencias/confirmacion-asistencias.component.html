@@ -2,3 +2,24 @@
   confirmacion-asistencias works!
   {{eventos}}
 </p>
+
+<table class="table table-hover" *ngFor='let grupo of grupos' >
+  <thead>
+    <tr>
+      <th>Evento</th>
+      <th>Name</th>
+      <th>Username</th>
+      <th>Confirmacion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-template ngFor let-evento [ngForOf]='grupo.eventos' >
+      <tr *ngFor='let person of evento.go; let i = index' >
+        <th scope="row" *ngIf='i === 0' rowspan="evento.go.length"  >{{evento.title}}</th>{{evento.go.length}}
+        <td>{{person}}</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+    </ng-template>
+  </tbody>
+</table>
