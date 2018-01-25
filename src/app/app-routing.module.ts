@@ -7,9 +7,10 @@ import { UserComponent } from './usuarios/user.component';
 import { CalendarioComponent } from './eventos/calendario.component';
 import { EventoComponent } from './eventos/evento.component';
 import { NuevoGrupoComponent } from './grupos/nuevoGrupo.component';
-import { LoginComponent } from './login/login.component'
-import { RegisterComponent } from './register/register.component'
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 import { PeticionesComponent } from './peticiones/peticiones.component';
+import { ConfirmacionAsistenciasComponent } from './_components/confirmacion-asistencias/confirmacion-asistencias.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full', component: CalendarioComponent },
@@ -17,13 +18,13 @@ const routes: Routes = [
     { path: 'usuarios', component: UsersComponent },
     { path: 'grupo/:id', component: GrupoComponent },
     { path: 'user/:id', component: UserComponent },
-    { path: 'calendario', component: CalendarioComponent},
+    { path: 'calendario', component: CalendarioComponent },
     { path: 'nuevoEvento/:id', component: EventoComponent },
     { path: 'nuevo/grupo', component: NuevoGrupoComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'peticiones/:id', component: PeticionesComponent },
-
+    { path: 'notificaciones', component: ConfirmacionAsistenciasComponent },
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

@@ -7,8 +7,8 @@ var EventSchema = new mongoose.Schema({
   description: String,
   creditos: Number,
   maxPersonas: Number,
-  go:[String],
-  checked: [String],
+  go: [ {type:String }],
+  checked: [{name:{type:String, required:true}, confirmed:{type:Boolean, required:true}}],
   status: {
     type: String,
     enum: ['open', 'full', 'close', 'pending'],
@@ -16,15 +16,18 @@ var EventSchema = new mongoose.Schema({
     default: 'open',
     lowercase: true,
   },
+  start: Date,
+  end: Date,
   updated_at: { type: Date, default: Date.now },
 });
+
 
 var GrupoSchema = new mongoose.Schema({
   nombre: {type:String, unique:true},
   imagen: String,
   administrador: String,
   equipo: [String],
-  eventos: [{type: EventSchema, unique:true}],
+  eventos: [{type: EventSchema}],
 });
 
 module.exports = {Evento: mongoose.model('Event', EventSchema),

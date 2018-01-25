@@ -11,16 +11,16 @@ export class AuthenticationService {
     authenticateState$ = this.authenticate.asObservable();
 
     constructor(private http: Http) { }
-    
-    register(username: string, password:string){
+
+    register(username: string, password: string) {
         return this.http.post("/api/register", { username: username, password: password })
             .toPromise()
             .catch(this.handleError);
     }
 
-    login(username: string, password: string):Observable<any> {
+    login(username: string, password: string): Observable<any> {
         return this.http.post("/api/authenticate", { username: username, password: password })
-            .map(res=>
+            .map(res =>
                 res.json());
     }
 
@@ -36,15 +36,15 @@ export class AuthenticationService {
         this.authenticate.next(false);
     }
 
-    saveToken(token: string){
+    saveToken(token: string) {
         localStorage.removeItem('token');
-        localStorage.setItem('token',token);
+        localStorage.setItem('token', token);
         this.authenticate.next(true);
     }
 
-    isAuthenticate():boolean{
-        let isAuth:boolean;
-        if(localStorage.getItem('token')){
+    isAuthenticate(): boolean {
+        let isAuth: boolean;
+        if (localStorage.getItem('token')) {
             isAuth = true;
         }
         else
