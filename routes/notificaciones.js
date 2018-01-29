@@ -41,7 +41,15 @@ module.exports = (router) => {
     router.get('/test/eventos/confirmarAsistencia/:nombre', (req, res) => {
         let eventsArray= [];
         console.log(req.params.nombre);
-        Grupo.find({'eventos.status': 'pending', $or: [{'administrador': req.params.nombre}, {'eventos.equipo' : req.params.nombre }]}).exec((err,data) => {
+        // Grupo.find({'eventos.status': 'pending', $or: [{'administrador': req.params.nombre}, {'eventos.equipo' : req.params.nombre }]}).exec((err,data) => {
+        //     if(err){
+        //         res.json({success:false, message:err});
+        //     } else {
+        //         res.json({success:true , message:"grupos", grupos:data});
+        //     }
+        // })
+
+        Grupo.find({}).exec((err,data) => {
             if(err){
                 res.json({success:false, message:err});
             } else {
@@ -51,81 +59,71 @@ module.exports = (router) => {
     });
 
     router.put('/test/eventos/confirmarAsistencia/', (req, res) => {
-        if(!req.body.grupo || !req.body.evento || !req.body.usuario || !req.body.confirmacion){
-            res.json({success: false, message: 'Parametros incorrectos.'})
+        console.log(req.body);
+        if(!req.body.grupo || !req.body.evento || !req.body.usuario || !("confirmacion" in req.body)){
+            if(!req.body.grupo){
+                res.json({success: false, message: 'Grupo Incorrecto.'})
+            }
+            if(!req.body.evento){
+                res.json({success: false, message: 'Evento incorrecto.'})
+            }
+            if(!req.body.usuario){
+                res.json({success: false, message: 'usuario Incorrecto.'})
+            }
+            if(req.body.confirmacion){
+                res.json({success: false, message: 'Confirmacion Incorrecto.'})
+            }
         } else {
             let creditosConseguidos = 0;
             let userRegister = false;
             Grupo.findOne({'nombre': req.body.grupo }, (err, grupo)=>{
                 if(err){ res.json({success:false, message: err})}
                 else if(grupo) {
-                    grupo.eventos.forEach(evento => {
-                        if(evento.checked.includes(req.body.usuario)){
-                            userRegister=true;
-                        }
-                        if(evento.title === req.body.evento && evento.go.includes(req.body.usuario) && !evento.checked.includes(req.body.usuario)){
-                            creditosConseguidos = evento.creditos;
-                            evento.checked.push({'name':req.body.usuario, 'confirmed':req.body.confirmacion});
-                        }
-                        if(evento.go.length === evento.checked.length) {
-                            evento.status = 'close';
-                        }
-                    });
-                    if(userRegister){
-                        res.json({success:false, message:'El usuario ya ha sido registrado en la base de datos.'});
-                    } else{
-                        User.findOne({name: req.body.usuario}, (err, user)=>{
-                            if(err){
-                                res.json({success:false, message:err});
-                            } else if (!user) {
-                                //Usuario no encontrado.
-                                creditosConseguidos = 0;
-                                console.log('');
-                            } else {
-                                creditosConseguidos += user.creditos;
-                                console.log('');
-                            }
-                        } );
-                        grupo.eventos.forEach(evento => {
-                            console.log(evento.checked);
-                        } )
-                        grupo.save( err => {
-                            if(err){
-                                res.json({success:false, message:err});
-                            } else if (creditosConseguidos !== 0) {
-                                User.findOneAndUpdate({name: req.body.usuario}, {
-                                    creditos: creditosConseguidos
-                                }, function(err, numberAffected, rawResponse) {
-                                    if(!err) {
-                                        res.json({success:true, message:'Grupo actualizado'});
+                    const eventIndex = grupo.eventos.findIndex(obj => obj.title === req.body.evento);
+                    if(eventIndex !== -1){
+                        console.log(grupo.eventos[eventIndex]);
+                        const personIndex = grupo.eventos[eventIndex].go.findIndex( obj => obj.name === req.body.usuario );
+                        if(personIndex !== -1){
+                            if(typeof grupo.eventos[eventIndex].go[personIndex].confirmed === 'undefined') {
+                                grupo.eventos[eventIndex].go[personIndex].confirmed = req.body.confirmacion;
+                                
+                                User.findOne({name: req.body.usuario}, (err, user)=>{
+                                    if(err){
+                                        res.json({success:false, message:err});
+                                    } else if (!user) {
+                                        creditosConseguidos = 0;
+                                        console.log();
+                                    } else {
+                                        creditosConseguidos += user.creditos;
+                                        console.log();
+                                    }
+                                } );
+                                grupo.save( err => {
+                                    if(err){
+                                        res.json({success:false, message:err});
+                                    } else if (creditosConseguidos !== 0) {
+                                        User.findOneAndUpdate({name: req.body.usuario}, {
+                                            creditos: creditosConseguidos
+                                        }, function(err, numberAffected, rawResponse) {
+                                            if(!err) {
+                                                res.json({success:true, message:'Grupo y usuario actualizados', grupo: grupo});
+                                            }
+                                        });
+                                    } else {
+                                        res.json({success:true, message:'No se ha actualizado el usuario.', grupo: grupo});
                                     }
                                 });
                             } else {
-                                res.json({success:true, message:'No se han actualizado los creditos'});
+                                res.json({success:false, message:'este usuario ya ha sido registrado'});
+                                return;
                             }
-                        });
+                            console.log(grupo.eventos[eventIndex].go);
+                        }
                     }
                 } else {
-                    res.json({success:false, message:'El nombre del grupo no existe en la base de datos.'});
+                    res.json({success:false, message:'Error: Grupo no existe. "notificaciones.js" '})
                 }
             });
-
-
-        // Grupo.find({'eventos.status': 'close'}).exec((err,data) => {
-        //     if(err){
-        //         res.json({success:false, message:err});
-        //     } else {
-        //         data.forEach(grupo => {
-        //             grupo.eventos.forEach(evento =>{
-        //                 if(evento.start > new Date(2000, 10, 10) && evento.go.length !== evento.checked.length){
-        //                     eventsArray = eventsArray.concat(evento);
-        //                 }
-        //             });
-        //             console.log("next");
-        //         });
-        //         res.json({success:true, message:"eventos only", eventos:eventsArray});
-        //     }
-        // })
         }
     });
 

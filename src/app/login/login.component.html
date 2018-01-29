@@ -1,4 +1,7 @@
 <style>
+    .background-blue {
+        background-color: rgb(0, 50, 101);
+    }
     .login-form {
         padding: 100px 0px 50px 0px;
     }
@@ -90,7 +93,7 @@
     </div>
     <!---728x90-->
     <div class="login-top">
-        <div *ngIf="error" class="alert alert-danger">
+        <div *ngIf="error" [class]="classError">
             <strong>{{error}}</strong>
         </div>
         <!-- Login Form -->
@@ -98,7 +101,7 @@
 
             <!-- Username Field -->
             <div class="form-group">
-            <label for="username">Username</label>
+            <label for="username" class='text-white' >Username</label>
             <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }">
                 <input class="form-control" type="text" name="username" formControlName="username" />
                 <!-- Validation -->
@@ -110,7 +113,7 @@
         
             <!-- Password Field  -->
             <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password" class='text-white' >Password</label>
             <div [ngClass]="{'has-error': form.controls.password.errors && form.controls.password.dirty, 'has-success': form.controls.password.valid && form.controls.password.dirty }">
                 <input class="form-control" type="password" name="password" formControlName="password" />
                 <!-- Validation -->

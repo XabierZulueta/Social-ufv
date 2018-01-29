@@ -1,25 +1,38 @@
-<p>
-  confirmacion-asistencias works!
-  {{eventos}}
-</p>
 
-<table class="table table-hover" *ngFor='let grupo of grupos' >
-  <thead>
-    <tr>
-      <th>Evento</th>
-      <th>Name</th>
-      <th>Username</th>
-      <th>Confirmacion</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-template ngFor let-evento [ngForOf]='grupo.eventos' >
-      <tr *ngFor='let person of evento.go; let i = index' >
-        <th scope="row" *ngIf='i === 0' rowspan="evento.go.length"  >{{evento.title}}</th>{{evento.go.length}}
-        <td>{{person}}</td>
-        <td>Otto</td>
-        <td>@mdo</td>
+<h1>Notificaciones</h1>
+
+<p *ngIf="grupos.length < 1"> Enhorabuena, no te quedan notificaciones por revisar!</p>
+
+<ng-template ngFor let-grupo [ngForOf]='grupos' >
+  <h1 *ngIf='grupo.eventos.length > 0' >{{grupo.nombre}}</h1>
+  <table class="table" *ngIf='grupo.eventos.length > 0' >
+    <thead class="thead-dark">
+      <tr>
+        <th>Evento</th>
+        <th>Name</th>
+        <th>Confirmado</th>
+        <th>Confirmacion</th>
       </tr>
-    </ng-template>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <ng-template ngFor let-evento [ngForOf]='grupo.eventos' >
+        <tr *ngFor='let person of evento.go; let i = index' >
+          <td scope="row" *ngIf='i === 0' [attr.rowspan]="evento.go.length"  >{{evento.title}}</td>
+          <td>{{person.name}}</td>
+          
+          <td>{{person.confirmed === true ? 'Asistencia Confirmada!' : person.confirmed === false ? 'No asistio' : 'Falta confirmacion'}}</td>
+          <td>
+            <div class="btn-group" role="group" >
+              <button type="button" [class]="person.confirmed === true ? 'btn btn-success' : person.confirmed === false ? 'btn btn-warning' : 'btn btn-primary'" 
+                      [disabled]="!(person.confirmed !== true && person.confirmed !== false) || procesingRequest" 
+                      (click)="sendConfirmToEvent(grupo.nombre, evento.title, person.name)">Si</button>
+              <button type="button" [class]="person.confirmed === true ? 'btn btn-success' : person.confirmed === false ? 'btn btn-warning' : 'btn btn-secondary'" 
+                      [disabled]="!(person.confirmed !== true && person.confirmed !== false) || procesingRequest" 
+                      (click)="sendDenyToEvent(grupo.nombre, evento.title, person.name)" >No</button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </table>
+</ng-template>

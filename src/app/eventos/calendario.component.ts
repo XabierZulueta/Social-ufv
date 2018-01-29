@@ -1,10 +1,12 @@
 import { ActivatedRoute } from '@angular/router';
 import {
     Component, ChangeDetectionStrategy, ViewChild,
-    TemplateRef, OnInit  } from '@angular/core';
+    TemplateRef, OnInit, Renderer2
+} from '@angular/core';
 import {
     CalendarEvent, CalendarEventAction,
-    DAYS_OF_WEEK } from 'angular-calendar';
+    DAYS_OF_WEEK
+} from 'angular-calendar';
 import { Subject } from 'rxjs/Subject';
 import {
     isSameMonth,
@@ -15,7 +17,8 @@ import {
     endOfWeek,
     startOfDay,
     endOfDay, setHours, setMinutes,
-    format } from 'date-fns';
+    format
+} from 'date-fns';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../data.service';
 import { Evento } from './evento';
@@ -81,13 +84,25 @@ export class CalendarioComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private userService: UserService,
+        private renderer: Renderer2,
         private authService: AuthenticationService) {
         if (this.authService.isAuthenticate() === false) {
             this.router.navigateByUrl('/login');
         }
-        this.refresh.next();
-        document.getElementById('contenido').style.boxShadow = '0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), \
-                                0 5px 15px rgba(0, 0, 0, 0.1) !important;';
+        // this.refresh.next();
+        this.renderer.removeStyle(
+            document.body,
+            'background-color'
+        );
+        this.renderer.setStyle(
+            document.getElementById('contenido'),
+            'box-shadow',
+            '0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;'
+        );
+        this.renderer.removeStyle(
+            document.getElementById('contenido'),
+            'background-color'
+        );
     }
 
     refresh: Subject<any> = new Subject();
@@ -134,11 +149,11 @@ export class CalendarioComponent implements OnInit {
         this.modal.open(this.modalContent, { size: 'lg' });
         this._dataService.getById(event.organizador.id, 'groups')
             .subscribe(res => {
-            event.organizador = res;
+                event.organizador = res;
             });
     }
 
-    dayClicked({date, events}: {date: Date; events: Array<Evento>; } ): void {
+    dayClicked({ date, events }: { date: Date; events: Array<Evento>; }): void {
         if (isSameMonth(date, this.viewDate)) {
             if (
                 (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||

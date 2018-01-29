@@ -11,8 +11,8 @@ import { UserService } from './_services/user.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],animations: [fadeInAnimation],
- 
+  styleUrls: ['./app.component.css'], animations: [fadeInAnimation],
+
   // attach the fade in animation to the host (root) element of this component
   host: { '[@fadeInAnimation]': '' }
 })
@@ -26,17 +26,17 @@ export class AppComponent implements OnInit {
   tokenDecoded: Object;
   userName: string;
   isLogged: boolean;
-  user : string;
+  user: string;
   userId: string;
 
   // Create an instance of the DataService through dependency injection
   constructor(private router: Router,
-      private userService: UserService,
-      private authService: AuthenticationService) {
-      this.authService.authenticateState$.subscribe(state => {
-        this.isLogged = state;
-      });
-      this.reload();
+    private userService: UserService,
+    private authService: AuthenticationService) {
+    this.authService.authenticateState$.subscribe(state => {
+      this.isLogged = state;
+    });
+    this.reload();
   }
 
   ngOnInit() {
@@ -64,7 +64,8 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-      this.authService.logout();
-      this.router.navigateByUrl('/login');
+    this.userService.logout();
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 }

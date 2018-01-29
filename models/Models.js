@@ -7,8 +7,7 @@ var EventSchema = new mongoose.Schema({
   description: String,
   creditos: Number,
   maxPersonas: Number,
-  go: [ {type:String }],
-  checked: [{name:{type:String, required:true}, confirmed:{type:Boolean, required:true}}],
+  go: [{name:{type:String, required:true}, confirmed:{type:Boolean}}],
   status: {
     type: String,
     enum: ['open', 'full', 'close', 'pending'],

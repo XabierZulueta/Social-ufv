@@ -1,26 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthenticationService } from '../_services/authentication.service';
 import { AlertService } from '../_services/alert.service';
 import { UserService } from '../_services/user.service';
-import { AppComponent} from '../app.component';
+import { AppComponent } from '../app.component';
 import { fadeInAnimation } from '../_animations/index';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { AuthGuard } from '../_guards/auth.guard';
+import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({
     moduleId: module.id,
     templateUrl: 'login.component.html',
     animations: [fadeInAnimation],
-     // attach the fade in animation to the host (root) element of this component
-    host: { '[@fadeInAnimation]': ''}
+    // attach the fade in animation to the host (root) element of this component
+    host: { '[@fadeInAnimation]': '' }
 })
 
 export class LoginComponent implements OnInit {
     previousUrl: any;
     error;
+    classError: string;
     loading = false;
     form: FormGroup;
 
@@ -28,17 +30,32 @@ export class LoginComponent implements OnInit {
         private userService: UserService,
         private authGuard: AuthGuard,
         private router: Router,
+        private renderer: Renderer2,
         private authenticationService: AuthenticationService,
         private formBuilder: FormBuilder) {
-            this.createForm();
-            document.body.style.backgroundColor = '#003265';
-            document.getElementById('contenido').style.backgroundColor = 'rgba(0, 0, 0, 0.13)';
+        this.createForm();
+        // document.body.style.backgroundColor = '#003265';
+        this.renderer.setStyle(
+            document.body,
+            'background-color',
+            '#003265'
+        );
+        this.renderer.setStyle(
+            document.getElementById('contenido'),
+            'background-color',
+            'rgba(0, 0, 0, 0.13)'
+        );
+        // document.getElementById('contenido').style.backgroundColor = 'rgba(0, 0, 0, 0.13)';
+        // renderer.addClass(document.body, 'background-blue');
+        // renderer.addClass
+        // document.body.style.backgroundColor = '#003265';
+        // document.getElementById('contenido').style.backgroundColor = 'rgba(0, 0, 0, 0.13)';
     }
 
     createForm() {
         this.form = this.formBuilder.group({
-            username: ['', Validators.required ],
-            password:  ['', Validators.required ]
+            username: ['', Validators.required],
+            password: ['', Validators.required]
         });
     }
 
@@ -61,26 +78,28 @@ export class LoginComponent implements OnInit {
         };
 
         this.userService.login(user).subscribe((data) => {
-           if (!data.success) {
-                this.error = data.message;
+            this.error = data.message;
+            if (!data.success) {
+                this.classError = 'alert alert-danger';
                 this.loading = false;
                 this.enableForm();
-           } else {
+            } else {
                 this.userService.storeData(data.token, data.user);
+                this.classError = 'alert alert-success';
                 setTimeout(() => {
                     if (this.previousUrl) {
-                        this.router.navigate([this.previousUrl ]);
+                        this.router.navigate([this.previousUrl]);
                     } else {
                         this.router.navigate(['/']);
                     }
                 }, 2000);
-           }
+            }
         });
     }
 
     ngOnInit() {
         if (this.authGuard.redirectUrl) {
-            this.error = 'You must be logged in to see the page' ;
+            this.error = 'You must be logged in to see the page';
             this.previousUrl = this.authGuard.redirectUrl;
             this.authGuard.clear();
         }
