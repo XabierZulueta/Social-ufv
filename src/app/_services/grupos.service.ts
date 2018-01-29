@@ -13,9 +13,9 @@ export class GruposService {
     domain = this.userService.domain;
     options;
 
-    constructor(private userService:  UserService,
+    constructor(private userService: UserService,
         private http: Http) { }
- 
+
     private createAuthenticationHeaders() {
         this.userService.loadToken();
         this.options = new RequestOptions({
@@ -24,6 +24,10 @@ export class GruposService {
                 'authorization': this.userService.authToken
             })
         });
+    }
+
+    getAll() {
+        return this.http.get(this.domain + 'grupos/', this.options).map(res => res.json());
     }
 
     newGrupo(newGrupo) {

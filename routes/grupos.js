@@ -1,7 +1,7 @@
 const User = require('../models/User.js');
-const Grupo = require('../models/Grupo.js');
+const Grupo = require('../models/Models.js').Grupo;
 const jwt = require('jsonwebtoken');
-const config = require('./../config/config.dev');
+const config = require('./../config/config.local');
 
 module.exports = (router) =>{
     router.get('/', (req, res)=>{
@@ -26,7 +26,7 @@ module.exports = (router) =>{
         if (!req.body.nombre) {
             res.json({success:false, message: 'No se ha introducido un nombre'});
         } else {
-            const grupo = new Grupo({
+            let grupo = new Grupo({
                 nombre: req.body.nombre,
                 imagen: req.body.imagen,
                 informacion: req.body.informacion,

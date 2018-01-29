@@ -23,6 +23,8 @@ import { GruposService } from '../_services/grupos.service';
 })
 
 export class NuevoGrupoComponent implements OnInit {
+
+    domain = this.userService.domain;
     message: any;
     messageClass: string;
     username: any;
@@ -45,19 +47,19 @@ export class NuevoGrupoComponent implements OnInit {
         private formBuilder: FormBuilder,
         private router: Router,
         private authService: AuthenticationService) {
-            this.createGrupoForm();
-            if (this.authService.isAuthenticate() === false) {
-                this.router.navigateByUrl('/login');
+        this.createGrupoForm();
+        if (this.authService.isAuthenticate() === false) {
+            this.router.navigateByUrl('/login');
+        }
+        this._dataService.getMaxId('groups').subscribe(res => {
+            this.maxId = res;
+            if (this.maxId[0] == null) {
+                this.maxId[0] = {};
+                this.maxId[0].id = 1;
+            } else {
+                this.grupo.id = this.maxId[0].id + 1;
             }
-            this._dataService.getMaxId('groups').subscribe(res => {
-                this.maxId = res;
-                if (this.maxId[0] == null) {
-                    this.maxId[0] = {};
-                    this.maxId[0].id = 1;
-                } else {
-                    this.grupo.id = this.maxId[0].id + 1;
-                }
-            });
+        });
     }
 
     createGrupoForm() {
@@ -66,7 +68,7 @@ export class NuevoGrupoComponent implements OnInit {
                 Validators.required,
                 Validators.maxLength(50),
                 Validators.minLength(5)
-            ]) ],
+            ])],
             informacion: ['', Validators.compose([
                 Validators.required,
                 Validators.minLength(5),
@@ -130,7 +132,7 @@ export class NuevoGrupoComponent implements OnInit {
         // formData.append("uploads[]", files[0], files[0]['name']);
         // this.address.documents = files.toString();
 
-        this.http.post('http://localhost:3000/api/upload', formData)
+        this.http.post(this.domain + 'api/upload', formData)
             .map(files => files.json())
             .subscribe();
     }
@@ -139,8 +141,8 @@ export class NuevoGrupoComponent implements OnInit {
         this.filesToUpload = <Array<File>>fileInput.target.files;
     }
 
-    ngOnInit()  {
-        this.userService.getProfile().subscribe(prof=>{
+    ngOnInit() {
+        this.userService.getProfile().subscribe(prof => {
             this.username = prof.user.username;
         });
     }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { Subject } from "rxjs/Subject";
-import 'rxjs/add/operator/map'
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/map';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -10,16 +11,17 @@ export class AuthenticationService {
     private authenticate = new Subject<boolean>();
     authenticateState$ = this.authenticate.asObservable();
 
-    constructor(private http: Http) { }
-    
-    register(username: string, password:string){
-        return this.http.post("/api/register", { username: username, password: password })
+    constructor(private http: Http,
+        private userService: UserService) { }
+
+    register(username: string, password: string) {
+        return this.http.post('/api/register', { username: username, password: password })
             .toPromise()
             .catch(this.handleError);
     }
 
     login(username: string, password: string): Observable<any> {
-        return this.http.post("/api/authenticate", { username: username, password: password })
+        return this.http.post('/api/authenticate', { username: username, password: password })
             .map(res =>
                 res.json());
     }
@@ -36,19 +38,13 @@ export class AuthenticationService {
         this.authenticate.next(false);
     }
 
-    saveToken(token: string){
+    saveToken(token: string) {
         localStorage.removeItem('token');
-        localStorage.setItem('token',token);
+        localStorage.setItem('token', token);
         this.authenticate.next(true);
     }
 
-    isAuthenticate():boolean{
-        let isAuth:boolean;
-        if(localStorage.getItem('token')){
-            isAuth = true;
-        }
-        else
-            isAuth = false;
-        return isAuth;
+    isAuthenticate(): boolean {
+        return this.userService.loggedIn();
     }
 }

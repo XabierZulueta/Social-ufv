@@ -24,7 +24,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DayPilotModule } from 'daypilot-pro-angular';
-//import { DatePickerModule } from 'ng2-datepicker-bootstrap';
+// import { DatePickerModule } from 'ng2-datepicker-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 import { Ng2FileInputModule } from 'ng2-file-input';
 import { AppRoutingModule } from './app-routing.module';
@@ -48,6 +48,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ConfirmacionAsistenciasComponent } from './_components/confirmacion-asistencias/confirmacion-asistencias.component';
 import { GruposService } from './_services/grupos.service';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -86,11 +88,12 @@ import { GruposService } from './_services/grupos.service';
     MatButtonModule,
     MatIconModule,
     MatExpansionModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
     // DatePickerModule,
     // InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],
-  providers: [//UsuariosService,
+  providers: [// UsuariosService,
     DataService,
     AuthenticationService,
     NotificacionesService,
