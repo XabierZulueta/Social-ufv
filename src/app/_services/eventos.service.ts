@@ -27,31 +27,31 @@ export class EventosService {
     }
 
     apuntarse(idGrupo, evento) {
-        const user = JSON.parse(localStorage.getItem('user'));
+        const username = localStorage.getItem('user');
         const body = {
             idGrupo: idGrupo,
             evento: evento,
-            username: user.username
+            username: username
         };
         this.createAuthenticationHeaders();
         return this.http.post(this.domain + 'apuntarse', body, this.options).map(res => res.json());
     }
 
     desapuntarse(idGrupo, evento) {
-        const user = JSON.parse(localStorage.getItem('user'));
+        const username = localStorage.getItem('user');
         const body = {
             idGrupo: idGrupo,
             evento: evento,
-            username: user.username
+            username: username
         };
         this.createAuthenticationHeaders();
         return this.http.post(this.domain + 'desapuntarse', body, this.options).map(res => res.json());
     }
 
-    // getAll() {
-    //     this.createAuthenticationHeaders();
-    //     return this.http.get(this.domain + '', this.options).map(res => res.json());
-    // }
+    getAll() {
+        this.createAuthenticationHeaders();
+        return this.http.get(this.domain + '', this.options).map(res => res.json());
+    }
 
     // newGrupo(newGrupo) {
     //     this.createAuthenticationHeaders();

@@ -1,6 +1,6 @@
 const User = require('../models/User.js');
 const jwt = require('jsonwebtoken');
-const config = require('./../config/config.dev');
+const config = require('./../config/config.local');
 
 module.exports = (router) =>{
 
@@ -33,7 +33,7 @@ module.exports = (router) =>{
                                 }
                             }
                         } else {
-                            res.json({message: "Voila!", success: true}); 
+                            res.json({message: "Usuario creado!", success: true}); 
                         }
                     });
                 }
@@ -97,7 +97,7 @@ module.exports = (router) =>{
                         res.json({success:false, message: "Usuario o contraseña incorrectos."});
                     } else {
                         const token = jwt.sign({userid: user._id}, config.secret, {expiresIn: '24h'});
-                        res.json({success:true, message: "Bienvenido "+user.username, token:token, user: {username: user.username}});
+                        res.json({success:true, message: "Bienvenido "+user.username, token:token, user: user});
                     }
                 }
             }

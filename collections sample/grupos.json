@@ -1,0 +1,155 @@
+[
+    {
+        "_id" : ObjectId("5a703d13379175396cc41279"),
+        "equipo" : [],
+        "eventos" : [],
+        "followers" : [],
+        "nombre" : "Grupo numero tropecientos mill",
+        "administrador" : "username2",
+        "__v" : 0
+    },
+    {
+        "_id" : ObjectId("5a69be8798f15a33a8db8664"),
+        "equipo" : [ 
+            "Xabier Zulueta", 
+            "Jorge Manzanares"
+        ],
+        "eventos" : [ 
+            {
+                "go" : [ 
+                    {
+                        "name" : "Maria",
+                        "confirmed" : true
+                    }, 
+                    {
+                        "name" : "Jorge Manzanares",
+                        "confirmed" : true
+                    }, 
+                    {
+                        "name" : "Xabier Zulueta",
+                        "confirmed" : false
+                    }
+                ],
+                "status" : "close",
+                "start" : ISODate("2018-01-25T11:24:55.791Z"),
+                "updated_at" : ISODate("2018-01-25T11:24:55.791Z"),
+                "_id" : ObjectId("5a69be8798f15a33a8db8665"),
+                "title" : "Evento 4",
+                "organizador" : "Otro admin distinto",
+                "creditos" : 10,
+                "maxPersonas" : 500
+            }
+        ],
+        "nombre" : "Grupo 4",
+        "administrador" : "Manza",
+        "__v" : 0
+    },
+    {
+        "_id" : ObjectId("5a687588eb8bca378f1d4ff0"),
+        "equipo" : [ 
+            "Xabier Zulueta", 
+            "Jorge Manzanares"
+        ],
+        "eventos" : [ 
+            {
+                "go" : [ 
+                    {
+                        "name" : "Maria",
+                        "confirmed" : false
+                    }, 
+                    {
+                        "name" : "Jorge Manzanares",
+                        "confirmed" : true
+                    }, 
+                    {
+                        "name" : "Xabier Zulueta",
+                        "confirmed" : false
+                    }
+                ],
+                "start" : ISODate("2002-01-24T12:01:12.108Z"),
+                "status" : "close",
+                "updated_at" : ISODate("2018-01-24T12:01:12.108Z"),
+                "_id" : ObjectId("5a687588eb8bca378f1d4ff1"),
+                "title" : "Evento 3",
+                "organizador" : "juanjo",
+                "creditos" : 1,
+                "maxPersonas" : 50
+            }, 
+            {
+                "go" : [ 
+                    {
+                        "name" : "Maria",
+                        "confirmed" : true
+                    }, 
+                    {
+                        "name" : "Jorge Manzanares",
+                        "confirmed" : false
+                    }, 
+                    {
+                        "name" : "Xabier Zulueta",
+                        "confirmed" : false
+                    }
+                ],
+                "status" : "close",
+                "start" : ISODate("2018-01-24T12:01:12.111Z"),
+                "updated_at" : ISODate("2018-01-24T12:01:12.111Z"),
+                "_id" : ObjectId("5a687588eb8bca378f1d4ff2"),
+                "title" : "Evento 2",
+                "organizador" : "Otro admin distinto",
+                "creditos" : 10,
+                "maxPersonas" : 500
+            }
+        ],
+        "nombre" : "Grupo 3 con 2 eventos",
+        "administrador" : "juanjo",
+        "__v" : 0
+    },
+    {
+        "_id" : ObjectId("5a6874058642f3254535327f"),
+        "equipo" : [ 
+            "Xabier Zulueta", 
+            "Jorge Manzanares", 
+            "username2"
+        ],
+        "eventos" : [ 
+            {
+                "go" : [ 
+                    {
+                        "name" : "Xabier Zulueta",
+                        "confirmed" : false
+                    }, 
+                    {
+                        "name" : "Jorge Manzanares",
+                        "confirmed" : false
+                    }
+                ],
+                "start" : ISODate("2018-01-24T11:54:45.909Z"),
+                "status" : "pending",
+                "updated_at" : ISODate("2018-01-24T11:54:45.909Z"),
+                "_id" : ObjectId("5a6874058642f32545353280"),
+                "title" : "Evento 1",
+                "organizador" : "juanjo",
+                "creditos" : 0,
+                "maxPersonas" : 50
+            }
+        ],
+        "nombre" : "Grupo 2 con 1 evento",
+        "administrador" : "username2",
+        "__v" : 0
+    },
+    {
+        "_id" : ObjectId("5a6872f4779b492170b4d415"),
+        "equipo" : [ 
+            "Xabier Zulueta", 
+            "Jorge Manzanares"
+        ],
+        "eventos" : [ 
+            {
+                "title" : "Evento de prueba"
+            }
+        ],
+        "nombre" : "Grupo 1",
+        "administrador" : "juanjo",
+        "__v" : 0
+    }
+]

@@ -3,10 +3,10 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
-const config = require('./config/config.dev');
+const config = require('./config/config.local');
 const authentication = require('./routes/authentication')(router);
 const notifications = require('./routes/notificaciones')(router);
-const eventos = require('./routes/events')(router);
+const eventos = require('./routes/eventos')(router);
 const grupos = require('./routes/grupos')(router);
 const cors = require('cors');
 
@@ -19,7 +19,7 @@ mongoose.connect(config.uri)
     .catch((err) => console.error(err));
 
 // EVENTOS
-// var evento = require('./routes/eventos');
+// var evento = require('./routes/eventos2');
 
 const app = express();
 

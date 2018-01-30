@@ -1,5 +1,5 @@
 <div *ngIf="isLoading" style="position: absolute;top: 50%;left: 50%;margin-left: -50px;" >
-        <img style="width:100px;" src="http://www.freetoursbyfoot.com/wp-content/uploads/2017/05/loading.gif"/>
+    <img style="width:100px;" src="http://www.freetoursbyfoot.com/wp-content/uploads/2017/05/loading.gif"/>
 </div>
 <ng-template #modalContent let-close="close">
     <div class="modal-header" style="background-color: #292b2c;color:white;">
@@ -16,7 +16,7 @@
             </div>
         </div>
         <div>
-            Grupo organizador: <a [routerLink]="['/grupo', modalData?.event.organizador.id]" (click)="close()"><b> {{ modalData?.event.organizador.nombre }}</b></a>
+            Grupo organizador: <a [routerLink]="['/grupo', modalData?.event.grupo._id]" (click)="close()"><b> {{ modalData?.event.grupo.nombre }}</b></a>
         <div style="float:right;">
             <tr >
             <td><div >
@@ -30,16 +30,16 @@
         </div>
         <br/>
         <div style="margin-top:20px;">
-            <pre><b>{{ modalData?.event.descripcion }}</b></pre>
+            <pre><b>{{ modalData?.event.description }}</b></pre>
         </div>
     </div>
     <div class="modal-footer">  
         <button type="button" class="btn btn-secondary " (click)="close()">Volver</button>
         <div *ngIf="modalData?.event.apuntado==false">
-        <button type="button" class="btn btn-info " (click)=" apuntarEvento(userId, modalData?.event.id);close();">Apuntarse</button>
+            <button [disabled]='procesingRequest' type="button" class="btn btn-primary " (click)="apuntarEvento(modalData?.event.grupo._id, modalData?.event.title);close();">Apuntarse</button>
         </div>
         <div *ngIf="modalData?.event.apuntado==true">
-        <button type="button" class="btn btn-danger " (click)=" desapuntarEvento(userId, modalData?.event.id); close();">Desapuntarse</button>
+            <button [disabled]='procesingRequest' type="button" class="btn btn-danger " (click)="desapuntarEvento(modalData?.event.grupo._id, modalData?.event.title); close();">Desapuntarse</button>
         </div>
     </div>
 </ng-template>
@@ -50,7 +50,6 @@
 
 
 <div [ngSwitch]="view">
-
     <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" (dayClicked)="dayClicked($event.day)" 
     (eventClicked)="handleEvent('Clicked', $event.event)" [events]="events" [cellTemplate]="customCellTemplate"
      [activeDayIsOpen]="activeDayIsOpen" [weekStartsOn]="1">
@@ -61,9 +60,3 @@
     <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" (eventClicked)="handleEvent('Clicked', $event.event)" >
     </mwl-calendar-day-view>
 </div>
-
-<script>
-    window.onload = function() {
-        document.body.style.backgroundColor = "red";
-    };
-</script>

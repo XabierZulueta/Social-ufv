@@ -28,6 +28,8 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { fadeInAnimation } from '../_animations/index';
 import { UserService } from '../_services/user.service';
+import { GruposService } from '../_services/grupos.service';
+import { EventosService } from '../_services/eventos.service';
 
 const colors: any = {
     red: {
@@ -59,6 +61,7 @@ interface Film {
 })
 
 export class CalendarioComponent implements OnInit {
+    procesingRequest = false;
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
     isLoading: boolean;
@@ -74,16 +77,18 @@ export class CalendarioComponent implements OnInit {
     token: string;
     tokenDecoded: Object;
     userId: string;
-    activeDayIsOpen = false;
+    activeDayIsOpen = true;
     jwtHelper: JwtHelper = new JwtHelper();
     isLogged: any;
     locale = 'sp';
+    refresh: Subject<any> = new Subject();
     constructor(
         private modal: NgbModal,
         private _dataService: DataService,
         private route: ActivatedRoute,
         private router: Router,
         private userService: UserService,
+        private eventosService: EventosService,
         private renderer: Renderer2,
         private authService: AuthenticationService) {
         if (this.authService.isAuthenticate() === false) {
@@ -105,52 +110,40 @@ export class CalendarioComponent implements OnInit {
         );
     }
 
-    refresh: Subject<any> = new Subject();
     ngOnInit() {
         this.isLoading = true;
-        // this._dataService.getGeneral('events').subscribe(res => {
-        //     // this.isLoading = false;
-        //     this.events = res;
-        //     for (let i = 0; i < this.events.length; i++) {
-        //         this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
-        //         this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
-        //         this.events[i].color = colors.blue;
-        //         // Si está en la lista de apuntados, ponemos el color del evento en rojo
-        //         // y el boolean apuntado a true, si no, lo pongo a false.
-        //         if (this.isMember(this.events[i].apuntados)) {
-        //             this.events[i].apuntado = true;
-        //             this.events[i].color = colors.red;
-        //         } else {
-        //             this.events[i].apuntado = false;
-        //         }
-        //     }
-        //     this.refresh.next();
-        // });
         this.events = [];
-        // this._dataService.events;
-        this.userService.getProfile().subscribe((profile) => {
-            this.user = profile.user;
+        this.eventosService.getAll().subscribe(data => {
+            this.events = data.eventos;
+            this.userService.getProfile().subscribe((profile) => {
+                this.user = profile.user;
+                this.refresh.next();
+                setTimeout(() => {
+                    this.isLoading = false;
+                }, 500);
+            });
+            for (let i = 0; i < this.events.length; i++) {
+                this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
+                this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
+                this.events[i].color = colors.blue;
+                // Si está en la lista de apuntados, ponemos el color del evento en rojo
+                // y el boolean apuntado a true, si no, lo pongo a false.
+                if (this.isMember(this.events[i].go)) {
+                    this.events[i].apuntado = true;
+                    this.events[i].color = colors.red;
+                } else {
+                    this.events[i].apuntado = false;
+                }
+            }
+            this.refresh.next();
+            this.procesingRequest = false;
+            console.log(this.events);
         });
-
-        // this.events = this._dataService.events;
-        // this.token = localStorage.getItem('token');
-        // this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
-        // this.userId = this.tokenDecoded['id'];
-
-
-        document.getElementById('contenido').style.boxShadow = '0 50px 100px rgba(50, 50, 93, 0.1), \
-                            0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;';
-        this.refresh.next();
-        this.isLoading = false;
     }
 
     handleEvent(action: string, event: Evento): void {
         this.modalData = { event, action };
         this.modal.open(this.modalContent, { size: 'lg' });
-        this._dataService.getById(event.organizador.id, 'groups')
-            .subscribe(res => {
-                event.organizador = res;
-            });
     }
 
     dayClicked({ date, events }: { date: Date; events: Array<Evento>; }): void {
@@ -167,18 +160,70 @@ export class CalendarioComponent implements OnInit {
         }
     }
 
-    desapuntarEvento(idUsuario, idEvento) {
-        this._dataService.desapuntarEvento(idUsuario, idEvento);
-        this.ngOnInit();
+    desapuntarEvento(idGrupo, evento) {
+        this.procesingRequest = true;
+        this.eventosService.desapuntarse(idGrupo, evento).subscribe(data => {
+            if (!data.success) {
+                console.log(data);
+                this.procesingRequest = false;
+            } else {
+                const eventsIndex = this.events.findIndex(obj => obj.grupo._id === idGrupo);
+                const eventoActualizado = data.grupo.eventos.find(obj => obj.title === evento);
+                eventoActualizado.grupo = {
+                    _id: data.grupo._id,
+                    nombre: data.grupo.nombre
+                };
+                this.events[eventsIndex] = eventoActualizado;
+            }
+            this.ngOnInit();
+        });
     }
 
-    apuntarEvento(idUsuario, idEvento) {
-        this._dataService.apuntarEvento(idUsuario, idEvento);
-        this.ngOnInit();
+    apuntarEvento(idGrupo, evento) {
+        this.procesingRequest = true;
+        this.eventosService.apuntarse(idGrupo, evento).subscribe(data => {
+            if (!data.success) {
+                console.log(data);
+                this.procesingRequest = false;
+            } else {
+                const eventsIndex = this.events.findIndex(obj => obj.grupo._id === idGrupo);
+                const eventoActualizado = data.grupo.eventos.find(obj => obj.title === evento);
+                eventoActualizado.grupo = {
+                    _id: data.grupo._id,
+                    nombre: data.grupo.nombre
+                };
+                this.events[eventsIndex] = eventoActualizado;
+            }
+            this.ngOnInit();
+        });
     }
 
     // Método que comprueba si el usuario está apuntado al evento.
     isMember(array: any[]) {
-        return (array.indexOf(this.userId) !== -1);
+        const user = localStorage.getItem('user');
+        if (array) {
+            return (array.findIndex(obj => obj.name === user) !== -1);
+        } else {
+            return false;
+        }
     }
+
+    private initEventos() {
+        for (let i = 0; i < this.events.length; i++) {
+            this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
+            this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
+            this.events[i].color = colors.blue;
+            // Si está en la lista de apuntados, ponemos el color del evento en rojo
+            // y el boolean apuntado a true, si no, lo pongo a false.
+            if (this.isMember(this.events[i].go)) {
+                this.events[i].apuntado = true;
+                this.events[i].color = colors.red;
+            } else {
+                this.events[i].apuntado = false;
+            }
+        }
+        this.procesingRequest = false;
+        this.refresh.next();
+    }
+
 }

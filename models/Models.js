@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User = require('./User');
 const Schema = mongoose.Schema;
 
 var EventSchema = new mongoose.Schema({
@@ -27,6 +28,19 @@ var GrupoSchema = new mongoose.Schema({
   equipo: [String],
   eventos: [{ type: EventSchema }],
   followers: [String]
+});
+
+
+GrupoSchema.pre('save', function(next) {
+  User.findOne({username: this.administrador}, (err, user) => {
+    if (err) {
+      next(new Error(err));
+    } else if(!user){
+      next(new Error('No se ha encontrado el usuario'));
+    } else {
+      next();
+    }
+  })
 });
 
 module.exports = { Grupo: mongoose.model('Grupo', GrupoSchema), Evento: mongoose.model('Evento', EventSchema) };

@@ -1,55 +1,104 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-var Evento = require('../models/Models.js').Evento;
-var Grupo = require('../models/Models.js').Grupo;
+const User = require('../models/User.js');
+const Grupo = require('../models/Models.js').Grupo;
+const Evento = require('../models/Models.js').Evento;
 
-/* GET ALL Eventos */
-// router.get('/', function (req, res, next) {
+module.exports = (router) => {
 
-//     Grupo.find({"eventos.description": "Descripcion del evento"}).populate('eventos').exec(function (err, grupo) {
-//         if (err) return next(err);
-//         res.json(grupo);
-//         console.log(grupo);
-//     });
+    router.post('/apuntarse', (req, res) => {
+        if (!req.body.username || !req.body.idGrupo || !req.body.evento) {
+            res.json({ success: false, message: 'Parametros invalidos.' });
+        } else {
+            Grupo.findById(req.body.idGrupo, (err, grupo) => {
+                if (err) {
+                    console.log('El error esta en findById de grupo');
+                    res.json({ success: false, message: err });
+                } else {
+                    User.findOne({ username: req.body.username }).select('username').exec((err, user) => {
+                        if (err) {
+                            console.log('El error esta en findOne de usuarios')
+                            res.json({ success: false, message: err });
+                        } else if (!user) {
+                            res.json({ success: false, message: 'No existe el usuario en base de datos' });
+                        } else {
+                            let eventoIndex = grupo.eventos.findIndex(obj => obj.title == req.body.evento);
+                            console.log(grupo.eventos[eventoIndex]);
+                            if (!grupo.eventos[eventoIndex].go.find(obj => obj.name == req.body.username)) {
+                                grupo.eventos[eventoIndex].go.push({ name: user.username });
+                                grupo.save(err => {
+                                    if (err) {
+                                        console.log('El error esta al guardar el grupo.');
+                                        res.json({ success: false, message: err });
+                                    } else {
+                                        res.json({ success: true, message: 'grupo actualizado correctamente', grupo: grupo });
+                                    }
+                                })
+                            } else {
+                                res.json({ success: false, message: 'El usuario ya esta apuntado al evento.' });
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    });
 
-//     // Evento.find({title:"String"}).populate('grupo').exec(function (err, evento) {
-//     //     if (err) return next(err);
-//     //     res.json(evento);
-//     //     console.log(evento);
-//     // });
-// });
+    router.post('/desapuntarse', (req, res) => {
+        if (!req.body.username || !req.body.idGrupo || !req.body.evento) {
+            res.json({ success: false, message: 'Parametros invalidos.' });
+        } else {
+            Grupo.findById(req.body.idGrupo, (err, grupo) => {
+                if (err) {
+                    res.json({ success: false, message: err });
+                } else {
+                    User.findOne({ username: req.body.username }).select('username').exec((err, user) => {
+                        if (err) {
+                            res.json({ success: false, message: err });
+                        } else if (!user) {
+                            res.json({ success: false, message: 'No existe el usuario en base de datos' });
+                        } else {
+                            let eventoIndex = grupo.eventos.findIndex(obj => obj.title == req.body.evento);
+                            let personaIndex = grupo.eventos[eventoIndex].go.findIndex(obj => obj.name == user.username);
+                            console.log(grupo.eventos[eventoIndex]);
+                            if (personaIndex >= 0) {
+                                grupo.eventos[eventoIndex].go.splice(personaIndex, 1);
+                                grupo.save(err => {
+                                    if (err) {
+                                        res.json({ success: false, message: err });
+                                    } else {
+                                        res.json({ success: true, message: 'grupo actualizado correctamente', grupo: grupo });
+                                    }
+                                })
+                            } else {
+                                res.json({ success: false, message: 'El usuario no estaba apuntado al evento.' });
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    });
 
-// /* GET SINGLE Evento BY ID */
-// router.get('/:id', function (req, res, next) {
-//     Evento.findById(req.params.id).populate('grupo').exec(function (err, post) {
-//         if (err) return next(err);
-//         res.json(post);
-//     });
-// });
+    router.get('/', (req, res) => {
+        Grupo.find({}, (err, grupos) => {
+            if (err) {
+                res.json({ success: false, message: err });
+            } else {
+                let eventos = [];
+                grupos.forEach(grupo => {
+                    grupo.eventos.forEach(evento => {
+                        let e = evento.toObject();
+                        e.grupo = {
+                            _id: grupo._id,
+                            nombre: grupo.nombre
+                        }
+                        eventos.push(e);
+                    });
+                });
+                console.log(eventos);
+                res.json({ success: true, message: 'Grupos', eventos: eventos });
+            }
+        });
+    });
 
-// /* SAVE Evento */
-// router.post('/', function (req, res, next) {
-//     Evento.create(req.body, function (err, post) {
-//         if (err) return next(err);
-//         res.json(post);
-//     });
-// });
-
-// /* UPDATE Evento */
-// router.put('/:id', function (req, res, next) {
-//     Evento.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
-//         if (err) return next(err);
-//         res.json(post);
-//     });
-// });
-
-// /* DELETE Evento */
-// router.delete('/:id', function (req, res, next) {
-//     Evento.findByIdAndRemove(req.params.id, req.body, function (err, post) {
-//         if (err) return next(err);
-//         res.json(post);
-//     });
-// });
-
-module.exports = router;
+    return router;
+};

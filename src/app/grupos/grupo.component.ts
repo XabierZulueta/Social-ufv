@@ -68,6 +68,8 @@ export class GrupoComponent implements OnInit {
     peticion = { id: 0, idUsuario: 0, idGrupo: 0 };
     esperando: boolean;
     ahora: any;
+    isAllow: boolean;
+
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
         private route: ActivatedRoute,
@@ -111,6 +113,9 @@ export class GrupoComponent implements OnInit {
             });
             // In a real app: dispatch action to load the details here.
         });
+
+        this.isAllow = localStorage.getItem('role') !== 'alumno';
+
         // this.token = localStorage.getItem('token');
         // this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
         // this.userId = this.tokenDecoded['id'];
@@ -194,8 +199,6 @@ export class GrupoComponent implements OnInit {
                 this.initEventos();
             }
         });
-        // this._dataService.desapuntarEvento(username, idEvento);
-        //this.ngOnInit();
     }
 
     apuntarEvento(idGrupo, evento) {
@@ -208,14 +211,12 @@ export class GrupoComponent implements OnInit {
                 this.initEventos();
             }
         });
-        // this._dataService.apuntarEvento(username, idEvento);
-        //this.ngOnInit();
     }
 
     isMember(array: any[]) {
-        const user = JSON.parse(localStorage.getItem('user'));
+        const user = localStorage.getItem('user');
         if (array) {
-            return (array.findIndex(obj => obj.name === user.username) !== -1);
+            return (array.findIndex(obj => obj.name === user) !== -1);
         } else {
             return false;
         }

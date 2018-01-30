@@ -51,15 +51,6 @@ export class NuevoGrupoComponent implements OnInit {
         if (this.authService.isAuthenticate() === false) {
             this.router.navigateByUrl('/login');
         }
-        this._dataService.getMaxId('groups').subscribe(res => {
-            this.maxId = res;
-            if (this.maxId[0] == null) {
-                this.maxId[0] = {};
-                this.maxId[0].id = 1;
-            } else {
-                this.grupo.id = this.maxId[0].id + 1;
-            }
-        });
     }
 
     createGrupoForm() {
@@ -88,7 +79,6 @@ export class NuevoGrupoComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log('Submited');
         this.procesing = true;
         this.disableForm();
         this.upload();
@@ -101,7 +91,13 @@ export class NuevoGrupoComponent implements OnInit {
             informacion: this.form.get('informacion').value,
             nombre: this.form.get('nombre').value,
             administrador: this.username,
-            imagen: imagePath
+            imagen: imagePath,
+            eventos: [{
+                title: 'Titulo 1',
+                creditos: 5,
+                maxPersonas: 10,
+                status: 'open'
+            }]
         };
         this.grupoService.newGrupo(grupo).subscribe(data => {
             if (!data.success) {
