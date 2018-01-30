@@ -18,60 +18,7 @@ export class UserService {
 
     constructor(private http: Http) { }
 
-    createAuthenticationHeaders() {
-        this.loadToken();
-        this.options = new RequestOptions({
-            headers: new Headers({
-                'content-type': 'application/json',
-                'authorization': this.authToken
-            })
-        });
-    }
 
-    loadToken() {
-        this.authToken = localStorage.getItem('token');
-    }
-
-    registerUser(user) {
-        return this.http.post(this.domain + 'authentication/register', user).map(res => res.json());
-    }
-
-    checkEmail(email) {
-        return this.http.get(this.domain + 'authentication/checkEmail/' + email).map(res => res.json());
-    }
-
-    checkUsername(username) {
-        return this.http.get(this.domain + 'authentication/checkUsername/' + username).map(res => res.json());
-    }
-
-    login(user) {
-        return this.http.post(this.domain + 'authentication/login', user).map(res => res.json());
-    }
-
-    logout() {
-        this.authToken = null;
-        this.user = null;
-        localStorage.clear();
-    }
-
-    storeData(token, user) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', user.username);
-        localStorage.setItem('role', user.role);
-        this.authToken = token;
-        this.user = user;
-    }
-
-    getProfile() {
-        this.createAuthenticationHeaders();
-        return this.http.get(this.domain + 'authentication/profile', this.options).map(res => res.json());
-    }
-
-    loggedIn() {
-        return tokenNotExpired();
-    }
-
-    // ALL XABIS FUNCTIONS
     getAll() {
         return this.http.get('/api/users', this.jwt()).map((response: Response) => response.json());
     }

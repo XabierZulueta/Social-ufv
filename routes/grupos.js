@@ -2,7 +2,7 @@ const User = require('../models/User.js');
 const Grupo = require('../models/Models.js').Grupo;
 const Evento = require('../models/Models.js').Evento;
 const jwt = require('jsonwebtoken');
-const config = require('./../config/config.local');
+const config = require('./../config/config.dev');
 const mongoose = require('mongoose');
 
 module.exports = (router) => {
@@ -44,7 +44,7 @@ module.exports = (router) => {
                 informacion: req.body.informacion,
                 administrador: req.body.administrador,
             });
-            if("eventos" in req.body) {
+            if ("eventos" in req.body) {
                 grupo.eventos = req.body.eventos;
             }
             grupo.save((err) => {

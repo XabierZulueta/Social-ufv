@@ -11,19 +11,21 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { PeticionesComponent } from './peticiones/peticiones.component';
 import { ConfirmacionAsistenciasComponent } from './_components/confirmacion-asistencias/confirmacion-asistencias.component';
+import { AuthGuard } from './_guards/auth.guard';
+import { NotAuthGuard } from './_guards/notAuth.guard';
 
 const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full', component: CalendarioComponent },
-    { path: 'grupos', component: GruposComponent },
-    { path: 'usuarios', component: UsersComponent },
-    { path: 'grupo/:id', component: GrupoComponent },
-    { path: 'user/:id', component: UserComponent },
-    { path: 'calendario', component: CalendarioComponent},
-    { path: 'nuevoEvento/:id', component: EventoComponent },
-    { path: 'nuevo/grupo', component: NuevoGrupoComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
-    { path: 'notificaciones', component: ConfirmacionAsistenciasComponent },
+    { path: 'grupos', component: GruposComponent, canActivate: [AuthGuard] },
+    { path: 'usuarios', component: UsersComponent, canActivate: [AuthGuard] },
+    { path: 'grupo/:id', component: GrupoComponent, canActivate: [AuthGuard] },
+    { path: 'user/:id', component: UserComponent, canActivate: [AuthGuard] },
+    { path: 'calendario', component: CalendarioComponent, canActivate: [AuthGuard] },
+    { path: 'nuevoEvento/:id', component: EventoComponent, canActivate: [AuthGuard] },
+    { path: 'nuevo/grupo', component: NuevoGrupoComponent, canActivate: [AuthGuard] },
+    { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
+    { path: 'register', component: RegisterComponent, canActivate: [NotAuthGuard] },
+    { path: 'notificaciones', component: ConfirmacionAsistenciasComponent, canActivate: [AuthGuard] },
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

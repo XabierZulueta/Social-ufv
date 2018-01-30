@@ -6,7 +6,6 @@ import { Grupo } from '../grupos/grupo';
 import { fadeInAnimation } from '../_animations/index';
 import { Evento } from '../eventos/evento';
 import { JwtHelper } from 'angular2-jwt';
-import { UserService } from '../_services/user.service';
 
 @Component({
     selector: 'user',
@@ -38,16 +37,16 @@ export class UserComponent implements OnInit {
     prevStep() {
         this.step--;
     }
-    constructor(private _dataService: DataService, private userService: UserService,
-    private route: ActivatedRoute, private authService: AuthenticationService,
-    private router: Router) {
+    constructor(private _dataService: DataService,
+        private route: ActivatedRoute, private authService: AuthenticationService,
+        private router: Router) {
         this.ultimoEvento = [];
-        this.organizador = {id: 0, nombre: '', imagen: '', informacion: ''};
+        this.organizador = { id: 0, nombre: '', imagen: '', informacion: '' };
         this.tags = [];
     }
 
     ngOnInit() {
-        this.isLogged = this.authService.isAuthenticate();
+        this.isLogged = this.authService.loggedIn();
         if (this.isLogged === false) {
             this.router.navigateByUrl('/login');
         }
@@ -57,7 +56,7 @@ export class UserComponent implements OnInit {
         //     // In a real app: dispatch action to load the details here.
         // });
 
-        this.userService.getProfile().subscribe(profile => {
+        this.authService.getProfile().subscribe(profile => {
             this.user = profile.user;
         });
 
@@ -77,20 +76,20 @@ export class UserComponent implements OnInit {
         this.gruposid = new Array<any>();
     }
 
-    getOrganizador(idGrupo){
+    getOrganizador(idGrupo) {
         this._dataService.getById(idGrupo, 'groups')
-        .subscribe(res => {
-            this.organizador = res;
+            .subscribe(res => {
+                this.organizador = res;
 
-        });
+            });
     }
 
-    getHobbies(user){
+    getHobbies(user) {
         for (let i = 0; i < user.tags.length; i++) {
             this._dataService.getById(user.tags[i], 'tags')
-            .subscribe(res => {
-                this.tags.push(res);
-            });
+                .subscribe(res => {
+                    this.tags.push(res);
+                });
         }
     }
 
@@ -110,7 +109,7 @@ export class UserComponent implements OnInit {
                     });
             }
             this.grupos = true;
-        } else{
+        } else {
             this.grupos = false;
         }
     }

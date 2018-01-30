@@ -30,14 +30,16 @@ var GrupoSchema = new mongoose.Schema({
   followers: [String]
 });
 
-
-GrupoSchema.pre('save', function(next) {
-  User.findOne({username: this.administrador}, (err, user) => {
+GrupoSchema.pre('save', function (next) {
+  User.findOne({ username: this.administrador }, (err, user) => {
     if (err) {
-      next(new Error(err));
-    } else if(!user){
+      console.log(err);
+      next(new Error('Se ha producido un error' + err.message));
+    } else if (!user) {
+      console.log('Error usuario no encontrado');
       next(new Error('No se ha encontrado el usuario'));
     } else {
+      console.log('All good');
       next();
     }
   })

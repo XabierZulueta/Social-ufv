@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { AlertService} from '../_services/alert.service';
+import { AlertService } from '../_services/alert.service';
 import { UserService } from '../_services/user.service';
 import { Grupo } from '../grupos/grupo';
 import { EmailValidator } from '@angular/forms/src/directives/validators';
+import { AuthenticationService } from '../_services/index';
 
 @Component({
     moduleId: module.id,
@@ -27,7 +28,7 @@ export class RegisterComponent {
 
     constructor(
         private formBuilder: FormBuilder,
-        private userService: UserService,
+        private authService: AuthenticationService,
         private router: Router) {
         this.createForm();
     }
@@ -55,7 +56,7 @@ export class RegisterComponent {
             confirm: ['', Validators.compose([
                 Validators.required]
             )]
-        }, {validator: this.comparePasswords('password', 'confirm')});
+        }, { validator: this.comparePasswords('password', 'confirm') });
     }
 
     enableForm() {
@@ -77,35 +78,35 @@ export class RegisterComponent {
             if (group.controls[pass].value === group.controls[confirm].value) {
                 return null;
             } else {
-                return {'matchingPasswords': true}
+                return { 'matchingPasswords': true }
             }
         }
     }
 
-    validateUsername(controls){
+    validateUsername(controls) {
         const regEx = new RegExp(/^[a-zA-Z0-9]+$/);
         if (regEx.test(controls.value)) {
             return null;
         } else {
-            return {'validateUsername': true};
+            return { 'validateUsername': true };
         }
     }
 
     validatePassword(controls) {
         const regExp = new RegExp(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[\d])(?=.*?[\W]).{8,35}$/);
         if (regExp.test(controls.value)) {
-          return null;
-        } else {
-          return { 'validatePassword': true };
-        }
-      }
-
-    validateEmail(controls){
-        const regEx = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
-        if(regEx.test(controls.value)){
             return null;
         } else {
-            return {'validateEmail': true };
+            return { 'validatePassword': true };
+        }
+    }
+
+    validateEmail(controls) {
+        const regEx = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+        if (regEx.test(controls.value)) {
+            return null;
+        } else {
+            return { 'validateEmail': true };
         }
     }
 
@@ -113,7 +114,7 @@ export class RegisterComponent {
         this.loading = true;
         this.disabledForm();
         console.log('Event fired');
-        this.userService.registerUser({
+        this.authService.registerUser({
             email: this.form.get('email').value,
             username: this.form.get('username').value,
             password: this.form.get('password').value
@@ -133,8 +134,8 @@ export class RegisterComponent {
 
     checkEmail() {
         const email = this.form.get('email').value;
-        if ( email !== '' ) {
-            this.userService.checkEmail(email).subscribe((data) => {
+        if (email !== '') {
+            this.authService.checkEmail(email).subscribe((data) => {
                 this.emailValid = data.success;
                 this.emailMessage = data.message;
                 if (this.emailValid) {
@@ -148,8 +149,8 @@ export class RegisterComponent {
 
     checkUsername() {
         const username = this.form.get('username').value;
-        if (username !== '' ) {
-            this.userService.checkUsername(username).subscribe((data) => {
+        if (username !== '') {
+            this.authService.checkUsername(username).subscribe((data) => {
                 this.usernameValid = data.success;
                 this.usernameMessage = data.message;
                 if (this.usernameValid) {

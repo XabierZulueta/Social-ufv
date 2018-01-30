@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthenticationService } from '../_services/authentication.service';
 import { AlertService } from '../_services/alert.service';
-import { UserService } from '../_services/user.service';
 import { AppComponent } from '../app.component';
 import { fadeInAnimation } from '../_animations/index';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -27,11 +26,10 @@ export class LoginComponent implements OnInit {
     form: FormGroup;
 
     constructor(
-        private userService: UserService,
         private authGuard: AuthGuard,
         private router: Router,
         private renderer: Renderer2,
-        private authenticationService: AuthenticationService,
+        private authService: AuthenticationService,
         private formBuilder: FormBuilder) {
         this.createForm();
         // document.body.style.backgroundColor = '#003265';
@@ -77,14 +75,14 @@ export class LoginComponent implements OnInit {
             password: this.form.get('password').value
         };
 
-        this.userService.login(user).subscribe((data) => {
+        this.authService.login(user).subscribe((data) => {
             this.error = data.message;
             if (!data.success) {
                 this.classError = 'alert alert-danger';
                 this.loading = false;
                 this.enableForm();
             } else {
-                this.userService.storeData(data.token, data.user);
+                this.authService.storeData(data.token, data.user);
                 this.classError = 'alert alert-success';
                 setTimeout(() => {
                     if (this.previousUrl) {
@@ -100,6 +98,7 @@ export class LoginComponent implements OnInit {
     ngOnInit() {
         if (this.authGuard.redirectUrl) {
             this.error = 'You must be logged in to see the page';
+            this.classError = 'alert alert-danger';
             this.previousUrl = this.authGuard.redirectUrl;
             this.authGuard.clear();
         }

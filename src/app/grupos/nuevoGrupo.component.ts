@@ -10,7 +10,6 @@ import { FancyImageUploaderOptions, UploadedFile } from 'ng2-fancy-image-uploade
 import { AuthenticationService } from '../_services/authentication.service';
 import { fadeInAnimation } from '../_animations/index';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { UserService } from '../_services/user.service';
 import { GruposService } from '../_services/grupos.service';
 
 @Component({
@@ -24,7 +23,7 @@ import { GruposService } from '../_services/grupos.service';
 
 export class NuevoGrupoComponent implements OnInit {
 
-    domain = this.userService.domain;
+    domain = this.authService.domain;
     message: any;
     messageClass: string;
     username: any;
@@ -41,14 +40,13 @@ export class NuevoGrupoComponent implements OnInit {
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
         private route: ActivatedRoute,
-        private userService: UserService,
         private grupoService: GruposService,
         private http: Http,
         private formBuilder: FormBuilder,
         private router: Router,
         private authService: AuthenticationService) {
         this.createGrupoForm();
-        if (this.authService.isAuthenticate() === false) {
+        if (this.authService.loggedIn() === false) {
             this.router.navigateByUrl('/login');
         }
     }
@@ -138,7 +136,7 @@ export class NuevoGrupoComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.userService.getProfile().subscribe(prof => {
+        this.authService.getProfile().subscribe(prof => {
             this.username = prof.user.username;
         });
     }

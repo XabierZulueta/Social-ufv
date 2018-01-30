@@ -91,7 +91,7 @@ export class CalendarioComponent implements OnInit {
         private eventosService: EventosService,
         private renderer: Renderer2,
         private authService: AuthenticationService) {
-        if (this.authService.isAuthenticate() === false) {
+        if (this.authService.loggedIn() === false) {
             this.router.navigateByUrl('/login');
         }
         // this.refresh.next();
@@ -115,7 +115,7 @@ export class CalendarioComponent implements OnInit {
         this.events = [];
         this.eventosService.getAll().subscribe(data => {
             this.events = data.eventos;
-            this.userService.getProfile().subscribe((profile) => {
+            this.authService.getProfile().subscribe((profile) => {
                 this.user = profile.user;
                 this.refresh.next();
                 setTimeout(() => {

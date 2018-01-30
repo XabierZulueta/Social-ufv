@@ -38,6 +38,7 @@ import { UserService } from './_services/user.service';
 import { EventosService } from './_services/eventos.service';
 import { NotificacionesService } from './_services/notificaciones.service';
 import { AuthGuard } from './_guards/auth.guard';
+import { NotAuthGuard } from './_guards/notAuth.guard';
 import { PeticionesComponent } from './peticiones/peticiones.component';
 import { PagerService } from './_services/index';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -51,6 +52,8 @@ import { ConfirmacionAsistenciasComponent } from './_components/confirmacion-asi
 import { GruposService } from './_services/grupos.service';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { FormsModule } from '@angular/forms';
+import { NavBarComponent } from './_components/nav-bar/nav-bar.component';
+import { FlashMessagesModule } from 'angular2-flash-messages';
 
 
 @NgModule({
@@ -67,6 +70,7 @@ import { FormsModule } from '@angular/forms';
     RegisterComponent,
     PeticionesComponent,
     ConfirmacionAsistenciasComponent,
+    NavBarComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,7 +94,8 @@ import { FormsModule } from '@angular/forms';
     MatIconModule,
     MatExpansionModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    FlashMessagesModule.forRoot()
     // DatePickerModule,
     // InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],
@@ -103,6 +108,7 @@ import { FormsModule } from '@angular/forms';
     GruposService,
     EventosService,
     AuthGuard,
+    NotAuthGuard,
     PagerService
   ],
   bootstrap: [AppComponent]

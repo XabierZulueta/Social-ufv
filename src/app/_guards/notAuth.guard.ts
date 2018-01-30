@@ -3,26 +3,19 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { AuthenticationService } from '../_services/index';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-
-    redirectUrl;
+export class NotAuthGuard implements CanActivate {
 
     constructor(
         private router: Router,
         private authService: AuthenticationService
     ) { }
 
-    canActivate(router: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        if (this.authService.loggedIn()) {
+    canActivate() {
+        if (!this.authService.loggedIn()) {
             return true;
         } else {
-            this.redirectUrl = state.url;
-            this.router.navigate(['/login']);
+            this.router.navigate(['/']);
             return false;
         }
-    }
-
-    clear() {
-        this.redirectUrl = undefined;
     }
 }

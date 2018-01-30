@@ -50,7 +50,7 @@ export class GruposComponent implements OnInit {
 
     ngOnInit() {
         this.isLoading = true;
-        this.isLogged = this.authService.isAuthenticate();
+        this.isLogged = this.authService.loggedIn();
         if (this.isLogged === false) {
             this.router.navigateByUrl('/login');
         }

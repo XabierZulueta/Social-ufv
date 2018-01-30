@@ -3,7 +3,7 @@ const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const multer = require('multer');
-const config = require('../../../config/config.local');
+const config = require('../../../config/config.dev');
 var jwt = require('jwt-simple');
 /*
     SECCION SUBIDA DE FICHEROS
@@ -13,7 +13,7 @@ var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './dist/assets/uploads/');
         //EXPLICAR A MANZA
-        cb(null,'./src/assets/uploads/' )
+        cb(null, './src/assets/uploads/')
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -33,8 +33,8 @@ router.post("/upload", upload.array("uploads[]", 12), function (req, res) {
 
 // Connect
 const connection = (closure) => {
-    return MongoClient.connect(config.uri,(err,db) => {
-    //return MongoClient.connect('mongodb://localhost:27017/mean', (err, db) => {
+    return MongoClient.connect(config.uri, (err, db) => {
+        //return MongoClient.connect('mongodb://localhost:27017/mean', (err, db) => {
         if (err) return console.log(err);
 
         closure(db);
@@ -78,7 +78,7 @@ router.get('/ultimoEvento/:idUsuario', (req, res) => {
     connection((db) => {
         db.collection('events')
             .find({ "apuntados": Number(idUsuario) })
-            .sort({ "end":-1})//order by start desc
+            .sort({ "end": -1 })//order by start desc
             .toArray()
             .then((user) => {
                 response.data = user;
@@ -95,7 +95,7 @@ router.get('/ultimoEvento/:idUsuario', (req, res) => {
 router.get('/groups/tags', (req, res) => {
     connection((db) => {
         db.collection('grupos')
-            .find( { "tags": { $in: req.body } })
+            .find({ "tags": { $in: req.body } })
             .toArray()
             .then((tag) => {
                 response.data = tag;
@@ -114,7 +114,7 @@ router.get('/tags', (req, res) => {
     connection((db) => {
         db.collection('tags')
             .find()
-            .sort({'descripcion':1})
+            .sort({ 'descripcion': 1 })
             .toArray()
             .then((tags) => {
                 response.data = tags;
@@ -128,18 +128,18 @@ router.get('/tags', (req, res) => {
 });
 
 //Ver si está esperando la petición.
-router.get('/peticiones/miembro/:idUsuario/:idGrupo', (req,res)=>{
+router.get('/peticiones/miembro/:idUsuario/:idGrupo', (req, res) => {
     var idUsuario = req.params.idUsuario;
     idUsuario = parseInt(idUsuario);
     var idGrupo = req.params.idGrupo;
     idGrupo = parseInt(idGrupo);
     connection((db) => {
         db.collection('peticiones')
-            .findOne({ idUsuario: idUsuario, idGrupo:idGrupo })
+            .findOne({ idUsuario: idUsuario, idGrupo: idGrupo })
             .then((user) => {
-                    response.data = user;
-                    res.json(response);
-                })
+                response.data = user;
+                res.json(response);
+            })
             .catch((err) => {
                 sendError(err, res);
             });
@@ -179,7 +179,7 @@ router.delete('/peticiones/:id', (req, res) => {
 });
 
 //Get npeticiones by group
-router.get('/grupo/:id/npeticiones' , (req, res) => {
+router.get('/grupo/:id/npeticiones', (req, res) => {
     var id = req.params.id;
     id = parseInt(id);
     connection((db) => {
@@ -254,21 +254,21 @@ router.get('/groups/nombre/:nombre', (req, res) => {
 });
 
 //get users like, sin diferenciar entre mayusculas y minusculas
-router.get('/users/nombre/:nombre', (req,res) => {
+router.get('/users/nombre/:nombre', (req, res) => {
     var nombre = req.params.nombre;
-    connection((db)=>{
+    connection((db) => {
         db.collection('users')
-        .find({'name': {$regex : nombre, $options : 'i'} })
-        .sort({'name':1})
-        .toArray()
-        .then((users) => {
-            response.data = users;
-            res.json(response);
-        })
-        .catch((err) => {
-            sendError(err, res);
-        });
-        
+            .find({ 'name': { $regex: nombre, $options: 'i' } })
+            .sort({ 'name': 1 })
+            .toArray()
+            .then((users) => {
+                response.data = users;
+                res.json(response);
+            })
+            .catch((err) => {
+                sendError(err, res);
+            });
+
     });
 });
 
@@ -343,18 +343,18 @@ router.get('/user/apuntado/:idUsuario/:idEvento', (req, res) => {
 });
 
 //Ver si está apuntado a un grupo.
-router.get('/user/miembro/:idUsuario/:idGrupo', (req,res)=>{
+router.get('/user/miembro/:idUsuario/:idGrupo', (req, res) => {
     var idUsuario = req.params.idUsuario;
     idUsuario = parseInt(idUsuario);
     var idGrupo = req.params.idGrupo;
     idGrupo = parseInt(idGrupo);
     connection((db) => {
         db.collection('users')
-            .findOne({ id: idUsuario, grupos:idGrupo })
+            .findOne({ id: idUsuario, grupos: idGrupo })
             .then((user) => {
-                    response.data = user;
-                    res.json(response);
-                })
+                response.data = user;
+                res.json(response);
+            })
             .catch((err) => {
                 sendError(err, res);
             });
@@ -363,7 +363,7 @@ router.get('/user/miembro/:idUsuario/:idGrupo', (req,res)=>{
 });
 
 //Get nusers by group
-router.get('/grupo/:id/nusers' , (req, res) => {
+router.get('/grupo/:id/nusers', (req, res) => {
     var id = req.params.id;
     id = parseInt(id);
     connection((db) => {
@@ -381,18 +381,17 @@ router.get('/grupo/:id/nusers' , (req, res) => {
 });
 
 //Authenticate
-router.post('/authenticate', (req,res)=>{
+router.post('/authenticate', (req, res) => {
     connection((db) => {
         db.collection('users')
-            .findOne({ name: req.body.username, password: req.body.password  },function(err,user){
-                if(err) throw err;
-                if(!user){
-                    res.json({success:false, msg:'Los datos introducidos no coinciden.'});
+            .findOne({ name: req.body.username, password: req.body.password }, function (err, user) {
+                if (err) throw err;
+                if (!user) {
+                    res.json({ success: false, msg: 'Los datos introducidos no coinciden.' });
                 }
-                else
-                {
-                    var token = jwt.encode(user, 'xxx','HS512');
-                    res.json({ success: true, msg: 'Ese usuario si existe', user:user, token:token});
+                else {
+                    var token = jwt.encode(user, 'xxx', 'HS512');
+                    res.json({ success: true, msg: 'Ese usuario si existe', user: user, token: token });
                 }
             })
             ;
@@ -415,7 +414,7 @@ router.post('/groups', (req, res) => {
     })
 });
 //Get users by group id
-router.get('/users/grupo/:id' , (req, res) => {
+router.get('/users/grupo/:id', (req, res) => {
     var id = req.params.id;
     id = parseInt(id);
     var objeto = { id: id };
@@ -494,7 +493,7 @@ router.get('/events/:id', (req, res) => {
     connection((db) => {
         db.collection('events')
             .find({ "organizador.id": Number(idGrupo) })
-            .sort({ "start":-1})//order by start desc
+            .sort({ "start": -1 })//order by start desc
             .toArray()
             .then((user) => {
                 response.data = user;
@@ -541,7 +540,7 @@ router.delete('/users/:id', (req, res) => {
     });
     connection((db) => {
         db.collection('events')
-            .update({}, { $pull: { apuntados: id }},{multi:true} );
+            .update({}, { $pull: { apuntados: id } }, { multi: true });
         db.close();
     });
 });
@@ -568,7 +567,7 @@ router.get('/users/max', (req, res) => {
 
 //POst users
 router.post('/users', (req, res) => {
-    req.body.id=parseInt(req.body.id);
+    req.body.id = parseInt(req.body.id);
     connection((db) => {
         db.collection('users')
             .insert(req.body, function (err, result) {
@@ -576,7 +575,7 @@ router.post('/users', (req, res) => {
                     res.send('Error');
                 else
                     res.send('Success');
-            }); 
+            });
         db.close();
     })
 });
@@ -603,11 +602,11 @@ router.get('/groups', (req, res) => {
     connection((db) => {
         db.collection('grupos')
             .find()
-            .sort({ "nombre":1})//order by start desc
+            .sort({ "nombre": 1 })//order by start desc
             .toArray()
             .then((users) => {
                 response.data = users;
-                res.json(response); 
+                res.json(response);
             })
             .catch((err) => {
                 sendError(err, res);
@@ -622,7 +621,7 @@ router.get('/users', (req, res) => {
     connection((db) => {
         db.collection('users')
             .find()
-            .sort({'name':1})
+            .sort({ 'name': 1 })
             .toArray()
             .then((users) => {
                 response.data = users;

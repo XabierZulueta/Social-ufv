@@ -3,22 +3,23 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/map';
 import { UserService } from './user.service';
+import { AuthenticationService } from './index';
 
 @Injectable()
 export class NotificacionesService {
 
-  domain = 'http://localhost:8080/';
+  domain = this.authService.domain + 'notificaciones/';
 
   constructor(private http: Http,
-    private userService: UserService) {
+    private authService: AuthenticationService) {
 
   }
 
   getConfirmationEventos() {
-    const username = this.userService.user.username;
-    this.userService.createAuthenticationHeaders();
-    return this.http.get(this.domain + 'notificaciones/test/eventos/confirmarAsistencia/' +
-      username, this.userService.options).map(res => res.json());
+    const username = this.authService.user.username;
+    this.authService.createAuthenticationHeaders();
+    return this.http.get(this.domain + 'test/eventos/confirmarAsistencia/' +
+      username, this.authService.options).map(res => res.json());
   }
 
   putRequestEvent(grupoName, eventoName, personName, confirmation) {
@@ -32,10 +33,10 @@ export class NotificacionesService {
 
     console.log(body);
 
-    const username = this.userService.user.username;
-    this.userService.createAuthenticationHeaders();
-    return this.http.put(this.domain + 'notificaciones/test/eventos/confirmarAsistencia/',
-      body, this.userService.options).map(res => res.json());
+    const username = this.authService.user.username;
+    this.authService.createAuthenticationHeaders();
+    return this.http.put(this.domain + 'test/eventos/confirmarAsistencia/',
+      body, this.authService.options).map(res => res.json());
   }
 
 }

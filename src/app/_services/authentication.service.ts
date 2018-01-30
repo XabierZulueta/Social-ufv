@@ -4,26 +4,69 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import { UserService } from './user.service';
+import { tokenNotExpired } from 'angular2-jwt';
 
 @Injectable()
 export class AuthenticationService {
 
-    private authenticate = new Subject<boolean>();
-    authenticateState$ = this.authenticate.asObservable();
+    domain = 'http://localhost:8080/';
+    authToken;
+    user;
+    options;
 
-    constructor(private http: Http,
-        private userService: UserService) { }
+    constructor(private http: Http) { }
 
-    register(username: string, password: string) {
-        return this.http.post('/api/register', { username: username, password: password })
-            .toPromise()
-            .catch(this.handleError);
+    createAuthenticationHeaders() {
+        this.loadToken();
+        this.options = new RequestOptions({
+            headers: new Headers({
+                'content-type': 'application/json',
+                'authorization': this.authToken
+            })
+        });
     }
 
-    login(username: string, password: string): Observable<any> {
-        return this.http.post('/api/authenticate', { username: username, password: password })
-            .map(res =>
-                res.json());
+    loadToken() {
+        this.authToken = localStorage.getItem('token');
+    }
+
+    registerUser(user) {
+        return this.http.post(this.domain + 'authentication/register', user).map(res => res.json());
+    }
+
+    checkEmail(email) {
+        return this.http.get(this.domain + 'authentication/checkEmail/' + email).map(res => res.json());
+    }
+
+    checkUsername(username) {
+        return this.http.get(this.domain + 'authentication/checkUsername/' + username).map(res => res.json());
+    }
+
+    login(user) {
+        return this.http.post(this.domain + 'authentication/login', user).map(res => res.json());
+    }
+
+    logout() {
+        this.authToken = null;
+        this.user = null;
+        localStorage.clear();
+    }
+
+    storeData(token, user) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', user.username);
+        localStorage.setItem('role', user.role);
+        this.authToken = token;
+        this.user = user;
+    }
+
+    getProfile() {
+        this.createAuthenticationHeaders();
+        return this.http.get(this.domain + 'authentication/profile', this.options).map(res => res.json());
+    }
+
+    loggedIn() {
+        return tokenNotExpired();
     }
 
     private handleError(error: any): Promise<any> {
@@ -31,20 +74,4 @@ export class AuthenticationService {
         return Promise.reject(error.message || error);
     }
 
-    logout() {
-        // remove user from local storage to log user out
-        // localStorage.removeItem('token');
-        // localStorage.clear();
-        this.authenticate.next(false);
-    }
-
-    saveToken(token: string) {
-        localStorage.removeItem('token');
-        localStorage.setItem('token', token);
-        this.authenticate.next(true);
-    }
-
-    isAuthenticate(): boolean {
-        return this.userService.loggedIn();
-    }
 }

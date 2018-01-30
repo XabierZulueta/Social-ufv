@@ -6,22 +6,23 @@ import 'rxjs/add/operator/map';
 import { User } from '../usuarios/user';
 
 import { UserService } from '../_services/user.service';
+import { AuthenticationService } from './index';
 
 @Injectable()
 export class GruposService {
 
-    domain = this.userService.domain;
+    domain = this.authService.domain;
     options;
 
-    constructor(private userService: UserService,
+    constructor(private authService: AuthenticationService,
         private http: Http) { }
 
     private createAuthenticationHeaders() {
-        this.userService.loadToken();
+        this.authService.loadToken();
         this.options = new RequestOptions({
             headers: new Headers({
                 'content-type': 'application/json',
-                'authorization': this.userService.authToken
+                'authorization': this.authService.authToken
             })
         });
     }

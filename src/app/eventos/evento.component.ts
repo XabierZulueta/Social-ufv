@@ -42,65 +42,67 @@ import { Grupo } from '../grupos/grupo';
 import { fadeInAnimation } from '../_animations/index';
 @Component({
     selector: 'evento',
-    templateUrl: './evento.component.html',animations: [fadeInAnimation],
- 
+    templateUrl: './evento.component.html', animations: [fadeInAnimation],
+
     // attach the fade in animation to the host (root) element of this component
     host: { '[@fadeInAnimation]': '' }
 })
 export class EventoComponent {
     view: string = 'month';
     viewDate: Date = new Date();
-    organizador: {id: 0,
+    organizador: {
+        id: 0,
         nombre: '',
         imagen: '',
-        informacion: ''};
+        informacion: ''
+    };
     maxId: Array<any>;
     isLogged: any;
     event: Evento =
-    {
-        id:0,
-        start: subDays(startOfDay(new Date()), 1),
-        end: addDays(new Date(), 1),
-        title: '',
-        color: '',
-        descripcion: '',
-        organizador: {id:1},
-        creditos: 0,
-        apuntados:[]
-    }
-    ;
+        {
+            id: 0,
+            start: subDays(startOfDay(new Date()), 1),
+            end: addDays(new Date(), 1),
+            title: '',
+            color: '',
+            descripcion: '',
+            organizador: { id: 1 },
+            creditos: 0,
+            apuntados: []
+        }
+        ;
 
     constructor(private modal: NgbModal, private _dataService: DataService,
         private route: ActivatedRoute, private router: Router,
-    private authService : AuthenticationService) {
-        this.isLogged = this.authService.isAuthenticate();
-        if (this.isLogged == false) {
+        private authService: AuthenticationService) {
+        this.isLogged = this.authService.loggedIn();
+        if (this.isLogged === false) {
             this.router.navigateByUrl('/login');
         }
-            this._dataService.getMaxId('events').subscribe(res => {
-                this.maxId = res;
-                this.event.id = this.maxId[0].id+1;
-            });
+        this._dataService.getMaxId('events').subscribe(res => {
+            this.maxId = res;
+            this.event.id = this.maxId[0].id + 1;
+        });
 
-            const sub = this.route.params.subscribe(params => {
-                this.event.organizador.id = +params['id']; // (+) converts string 'id' to a number
-                // In a real app: dispatch action to load the details here.
-                this._dataService.getById(params['id'],'groups').subscribe(res => {
-                    this.organizador = res;
-                    
-                });
+        const sub = this.route.params.subscribe(params => {
+            this.event.organizador.id = +params['id']; // (+) converts string 'id' to a number
+            // In a real app: dispatch action to load the details here.
+            this._dataService.getById(params['id'], 'groups').subscribe(res => {
+                this.organizador = res;
+
             });
-          
+        });
+
 
     }
-   
 
-    onSubmit(){
+
+    onSubmit() {
         this.addEvento(this.event);
         this.router.navigateByUrl('/calendario');
     }
 
-    addEvento(event:Evento){
+    addEvento(event: Evento) {
         this._dataService.addEvent(event);
     }
 

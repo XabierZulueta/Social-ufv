@@ -33,22 +33,27 @@ export class AppComponent implements OnInit {
   constructor(private router: Router,
     private userService: UserService,
     private authService: AuthenticationService) {
-    this.authService.authenticateState$.subscribe(state => {
-      this.isLogged = state;
-    });
+    // this.authService.authenticateState$.subscribe(state => {
+    //   this.isLogged = state;
+    // });
     this.reload();
   }
 
   ngOnInit() {
-    this.isLogged = this.authService.isAuthenticate();
-    this.userService.getProfile().subscribe((profile => {
-      this.user = profile.user;
-      this.userName = profile.user.username;
+    this.isLogged = this.authService.loggedIn();
+    this.authService.getProfile().subscribe((profile => {
+      if (!profile.success) {
+        this.authService.logout();
+        this.router.navigate(['/login']);
+      } else {
+        this.user = profile.user;
+        this.userName = profile.user.username;
+      }
     }));
   }
 
   reload() {
-    this.isLogged = this.authService.isAuthenticate();
+    this.isLogged = this.authService.loggedIn();
     if (this.isLogged !== false) {
       document.body.style.backgroundColor = '#f0f0f0';
       this.token = localStorage.getItem('token');
@@ -59,7 +64,6 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.userService.logout();
     this.authService.logout();
     this.router.navigateByUrl('/login');
   }
