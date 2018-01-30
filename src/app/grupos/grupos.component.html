@@ -75,8 +75,8 @@
 <div class="row" style=" text-align: center; ">
     <div class="col-md-4" *ngFor="let g of pagedItems">
         <div class="thumbnail">
-            <a [routerLink]="['/grupo', g.id]">
-                <img  style="width:100px; height:100px;"  [src] = "g.imagen">
+            <a [routerLink]="['/grupo', g._id]">
+                <img style="width:100px; height:100px;"  [src] = "g.imagen">
                 <div class="caption">
                      <p>{{g.nombre}}</p>
                 </div>

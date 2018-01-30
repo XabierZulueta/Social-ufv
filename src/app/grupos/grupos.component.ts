@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormControl } from '@angular/forms';
 import { GruposService } from '../_services/grupos.service';
+
 @Component({
     selector: 'grupos',
     templateUrl: './grupos.component.html',
@@ -36,9 +37,11 @@ export class GruposComponent implements OnInit {
     // paged items
     pagedItems: any[];
     // Create an instance of the DataService through dependency injection
-    constructor(private _dataService: DataService, private authService: AuthenticationService,
+    constructor(private _dataService: DataService,
+        private authService: AuthenticationService,
         private grupoService: GruposService,
-        private router: Router, private pagerService: PagerService) {
+        private router: Router,
+        private pagerService: PagerService) {
         this.tagschecked = [];
         this.gruposTotal = [];
         this.gruposTag = [];
@@ -51,20 +54,20 @@ export class GruposComponent implements OnInit {
         if (this.isLogged === false) {
             this.router.navigateByUrl('/login');
         }
-
-        this.grupoService.getAll()
-            .subscribe(res => {
+        this.grupoService.getAll().subscribe(data => {
+            if (!data.success) {
+                alert('err: ' + data.message);
+            } else {
                 this.isLoading = false;
-                console.log(res);
-                this.grupos = res;
+                console.log(data);
+                this.grupos = data.grupos;
                 this.setPage(1);
-            });
-        this._dataService.getGeneral('tags').subscribe(res => { this.tags = res; });
+            }
+        });
+        // this._dataService.getGeneral('tags').subscribe(res => { this.tags = res; });
     }
 
     search(nombre) {
-        var grupo = null;
-        var valor;
 
         if (this.gruposTotal.length === 0) {
             this.gruposTotal = this.grupos;
@@ -73,14 +76,13 @@ export class GruposComponent implements OnInit {
         this.grupos = [];
         this.grupos = this.gruposTotal;
 
-        if (nombre.length != 0 && this.tagschecked.length == 0) {
+        if (nombre.length !== 0 && this.tagschecked.length === 0) {
             this.grupos = this.gruposTotal.filter(grupo =>
                 grupo.nombre.toUpperCase().includes(nombre.toUpperCase()));
-        }
-        else if (this.tagschecked.length > 0 && nombre.length == 0) {
+        } else if (this.tagschecked.length > 0 && nombre.length === 0) {
             for (let g of this.grupos) {
                 if (this.arrayContainsArray(g.tags, this.tagschecked)) {
-                    if (this.gruposTag.indexOf(g) == -1) {
+                    if (this.gruposTag.indexOf(g) === -1) {
                         this.gruposTag.push(g);
                     }
                 }
@@ -89,7 +91,7 @@ export class GruposComponent implements OnInit {
                 }
             }
             this.grupos = this.gruposTag;
-        } else if (this.tagschecked.length > 0 && nombre.length != 0) {
+        } else if (this.tagschecked.length > 0 && nombre.length !== 0) {
             this.grupos = this.gruposTotal.filter(grupo =>
                 grupo.nombre.toUpperCase().includes(nombre.toUpperCase()));
             if (this.grupos.length > 0) {
@@ -133,15 +135,15 @@ export class GruposComponent implements OnInit {
         this.pager = this.pagerService.getPager(this.grupos.length, page);
 
         // get current page of items
+        console.log(this.grupos);
         this.pagedItems = this.grupos.slice(this.pager.startIndex, this.pager.endIndex + 1);
     }
 
     checkear(event, nombre) {
-        var index = this.tagschecked.indexOf(+event.source.value);
-        if (index == -1) {
+        const index = this.tagschecked.indexOf(+event.source.value);
+        if (index === -1) {
             this.tagschecked.push(+event.source.value);
-        }
-        else {
+        } else {
             this.tagschecked.splice(index, 1);
         }
 
@@ -149,14 +151,12 @@ export class GruposComponent implements OnInit {
     }
 
     checkear2(value, nombre) {
-        var index = this.tagschecked.indexOf(+value);
-        if (index == -1) {
+        const index = this.tagschecked.indexOf(+value);
+        if (index === -1) {
             this.tagschecked.push(+value);
-        }
-        else {
+        } else {
             this.tagschecked.splice(index, 1);
         }
-
         this.search(nombre);
     }
 

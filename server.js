@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router(); 
+const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
-const config = require('./config/config.local'); 
+const config = require('./config/config.dev');
 const authentication = require('./routes/authentication')(router);
 const notifications = require('./routes/notificaciones')(router);
+const eventos = require('./routes/events')(router);
 const grupos = require('./routes/grupos')(router);
 const cors = require('cors');
 
@@ -14,11 +15,11 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 mongoose.connect(config.uri)
-  .then(() =>  console.log('connection successful ' + config.db))
-  .catch((err) => console.error(err));
+    .then(() => console.log('connection successful ' + config.db))
+    .catch((err) => console.error(err));
 
 // EVENTOS
-var evento = require('./routes/eventos');
+// var evento = require('./routes/eventos');
 
 const app = express();
 
@@ -32,24 +33,26 @@ const api = require('./src/server/routes/api');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/evento', evento);
+// app.use('/evento', evento);
 
 // Angular DIST output folder
 app.use(express.static(path.join(__dirname, 'dist')));
+
 app.use('/authentication', authentication);
 app.use('/notificaciones', notifications);
 app.use('/grupos', grupos);
+app.use('/eventos', eventos);
 
 // API location
 app.use('/api', api);
 
 // Send all other requests to the Angular app
 app.get('*', (req, res) => {
-    res.json({success:false, message:'Ruta desconocida'});
+    res.json({ success: false, message: 'Ruta desconocida' });
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);

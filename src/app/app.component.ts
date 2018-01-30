@@ -41,15 +41,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.isLogged = this.authService.isAuthenticate();
-    if (this.isLogged !== false) {
-      document.body.style.backgroundColor = '#f0f0f0';
-      document.getElementById('contenido').style.boxShadow = ' 0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, \
-        50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);';
-      this.token = localStorage.getItem('token');
-      this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
-      this.userName = this.tokenDecoded['name'];
-      this.userId = this.tokenDecoded['id'];
-    }
+    this.userService.getProfile().subscribe((profile => {
+      this.user = profile.user;
+      this.userName = profile.user.username;
+    }));
   }
 
   reload() {

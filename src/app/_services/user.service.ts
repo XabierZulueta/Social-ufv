@@ -70,7 +70,7 @@ export class UserService {
         return tokenNotExpired();
     }
 
-    ///ALL XABIS FUNCTIONS
+    // ALL XABIS FUNCTIONS
     getAll() {
         return this.http.get('/api/users', this.jwt()).map((response: Response) => response.json());
     }

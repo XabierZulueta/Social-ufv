@@ -44,7 +44,7 @@
                 {{userName}}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" [routerLink]="['/user', userId]" routerLinkActive="active">Ver perfil</a>
+                    <a class="dropdown-item" [routerLink]="['/user', userName]" routerLinkActive="active">Ver perfil</a>
                     <a class="dropdown-item" role="button" (click)="logout()">Logout</a>
                 </div>
             </li>

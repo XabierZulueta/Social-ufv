@@ -35,6 +35,7 @@ import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 import { AuthenticationService } from './_services/authentication.service';
 import { AlertService } from './_services/alert.service';
 import { UserService } from './_services/user.service';
+import { EventosService } from './_services/eventos.service';
 import { NotificacionesService } from './_services/notificaciones.service';
 import { AuthGuard } from './_guards/auth.guard';
 import { PeticionesComponent } from './peticiones/peticiones.component';
@@ -100,6 +101,7 @@ import { FormsModule } from '@angular/forms';
     AlertService,
     UserService,
     GruposService,
+    EventosService,
     AuthGuard,
     PagerService
   ],

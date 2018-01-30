@@ -1,6 +1,6 @@
 const User = require('../models/User.js');
 const jwt = require('jsonwebtoken');
-const config = require('./../config/config.local');
+const config = require('./../config/config.dev');
 
 module.exports = (router) =>{
 
@@ -122,7 +122,7 @@ module.exports = (router) =>{
                 }
             });
         }
-    })
+    });
 
     router.get('/profile', (req, res)=>{
         console.log('busqueda de usuario.');

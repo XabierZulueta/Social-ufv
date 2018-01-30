@@ -27,11 +27,17 @@ export class GruposService {
     }
 
     getAll() {
+        this.createAuthenticationHeaders();
         return this.http.get(this.domain + 'grupos/', this.options).map(res => res.json());
     }
 
     newGrupo(newGrupo) {
         this.createAuthenticationHeaders();
         return this.http.post(this.domain + 'grupos/', newGrupo, this.options).map(res => res.json());
+    }
+
+    getById(id) {
+        this.createAuthenticationHeaders();
+        return this.http.get(this.domain + 'grupos/' + id, this.options).map(res => res.json());
     }
 }

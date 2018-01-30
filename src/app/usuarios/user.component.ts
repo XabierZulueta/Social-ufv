@@ -6,6 +6,7 @@ import { Grupo } from '../grupos/grupo';
 import { fadeInAnimation } from '../_animations/index';
 import { Evento } from '../eventos/evento';
 import { JwtHelper } from 'angular2-jwt';
+import { UserService } from '../_services/user.service';
 
 @Component({
     selector: 'user',
@@ -15,7 +16,7 @@ import { JwtHelper } from 'angular2-jwt';
     host: { '[@fadeInAnimation]': '' }
 })
 
-export class UserComponent implements OnInit{
+export class UserComponent implements OnInit {
     user: any;
     grupos: boolean;
     gruposid: Array<any>;
@@ -37,8 +38,8 @@ export class UserComponent implements OnInit{
     prevStep() {
         this.step--;
     }
-    constructor(private _dataService: DataService,
-        private route: ActivatedRoute, private authService: AuthenticationService,
+    constructor(private _dataService: DataService, private userService: UserService,
+    private route: ActivatedRoute, private authService: AuthenticationService,
     private router: Router) {
         this.ultimoEvento = [];
         this.organizador = {id: 0, nombre: '', imagen: '', informacion: ''};
@@ -47,26 +48,31 @@ export class UserComponent implements OnInit{
 
     ngOnInit() {
         this.isLogged = this.authService.isAuthenticate();
-        if (this.isLogged == false) {
+        if (this.isLogged === false) {
             this.router.navigateByUrl('/login');
         }
-        const sub = this.route.params.subscribe(params => {
-            this.id = +params['id']; // (+) converts string 'id' to a number
-            // In a real app: dispatch action to load the details here.
+
+        // const sub = this.route.params.subscribe(params => {
+        //     this.id = +params['id']; // (+) converts string 'id' to a number
+        //     // In a real app: dispatch action to load the details here.
+        // });
+
+        this.userService.getProfile().subscribe(profile => {
+            this.user = profile.user;
         });
 
-        this._dataService.getById(this.id, '')
-            .subscribe(res => {
-            this.user = res;
-            this.onSelect(this.user);
+        // this._dataService.getById(this.id, '')
+        //     .subscribe(res => {
+        //     this.user = res;
+        //     this.onSelect(this.user);
 
-            this.getHobbies(this.user);
-            });
-        this._dataService.getUltimoEvento(this.id)
-            .subscribe(res => {
-                this.ultimoEvento = res;
-                this.getOrganizador(this.ultimoEvento[0].organizador.id);
-            });
+        //     this.getHobbies(this.user);
+        //     });
+        // this._dataService.getUltimoEvento(this.id)
+        //     .subscribe(res => {
+        //         this.ultimoEvento = res;
+        //         this.getOrganizador(this.ultimoEvento[0].organizador.id);
+        //     });
         this.grupos = false;
         this.gruposid = new Array<any>();
     }
@@ -80,8 +86,7 @@ export class UserComponent implements OnInit{
     }
 
     getHobbies(user){
-        for(var i = 0;i<user.tags.length;i++)
-        {
+        for (let i = 0; i < user.tags.length; i++) {
             this._dataService.getById(user.tags[i], 'tags')
             .subscribe(res => {
                 this.tags.push(res);
@@ -90,24 +95,23 @@ export class UserComponent implements OnInit{
     }
 
     onSelect(user): void {
-        var n = user.grupos.length;
-        var g = Array<any>();
-        if(this.gruposid.length==0){
-            this.gruposid=user.grupos;
+        const n = user.grupos.length;
+        let g = Array<any>();
+        if (this.gruposid.length === 0) {
+            this.gruposid = user.grupos;
         }
-        if(this.grupos == false){
+        if (this.grupos === false) {
             g = this.gruposid;
             user.grupos = new Array<Grupo>();
-            for(var i=1; i< n+1;i++){
-                this._dataService.getById(g[i - 1],'groups')
+            for (let i = 1; i < n + 1; i++) {
+                this._dataService.getById(g[i - 1], 'groups')
                     .subscribe(res => {
                         user.grupos.push(res);
                     });
             }
-            this.grupos=true;
-        }
-        else{
-            this.grupos=false;
+            this.grupos = true;
+        } else{
+            this.grupos = false;
         }
     }
 }
