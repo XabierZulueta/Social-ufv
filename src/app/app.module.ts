@@ -53,7 +53,6 @@ import { GruposService } from './_services/grupos.service';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { FormsModule } from '@angular/forms';
 import { NavBarComponent } from './_components/nav-bar/nav-bar.component';
-import { FlashMessagesModule } from 'angular2-flash-messages';
 
 
 @NgModule({
@@ -95,7 +94,6 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
     MatExpansionModule,
     ReactiveFormsModule,
     FormsModule,
-    FlashMessagesModule.forRoot()
     // DatePickerModule,
     // InMemoryWebApiModule.forRoot(InMemoryDataService),
   ],
