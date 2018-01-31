@@ -3,7 +3,7 @@ const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const multer = require('multer');
-const config = require('../../../config/config.local');
+const config = require('../../../config/config.dev');
 var jwt = require('jwt-simple');
 /*
     SECCION SUBIDA DE FICHEROS
@@ -36,7 +36,6 @@ const connection = (closure) => {
     return MongoClient.connect(config.uri, (err, db) => {
         //return MongoClient.connect('mongodb://localhost:27017/mean', (err, db) => {
         if (err) return console.log(err);
-
         closure(db);
     });
 };

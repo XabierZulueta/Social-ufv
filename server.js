@@ -3,7 +3,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
-const config = require('./config/config.local');
+const config = require('./config/config');
 const authentication = require('./routes/authentication')(router);
 const notifications = require('./routes/notificaciones')(router);
 const eventos = require('./routes/eventos')(router);
@@ -18,6 +18,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect(config.uri)
     .then(() => console.log('connection successful ' + config.db))
     .catch((err) => console.error(err));
+
 
 // EVENTOS
 // var evento = require('./routes/eventos2');
@@ -75,7 +76,6 @@ app.use(function (req, res, next) {
 // app.set('port', port);
 
 // const server = http.createServer(app);
-
 app.listen(port, () => console.log('Running on 127.0.0.1:' + port));
 
 module.exports = app;
