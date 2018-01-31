@@ -9,7 +9,7 @@ import { tokenNotExpired } from 'angular2-jwt';
 @Injectable()
 export class AuthenticationService {
 
-    domain = '';
+    domain = 'http://localhost:8182/';
     authToken;
     user;
     options;
@@ -73,5 +73,4 @@ export class AuthenticationService {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);
     }
-
 }

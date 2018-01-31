@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthenticationService } from '../_services/authentication.service';
@@ -7,7 +7,6 @@ import { AppComponent } from '../app.component';
 import { fadeInAnimation } from '../_animations/index';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { AuthGuard } from '../_guards/auth.guard';
-import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({

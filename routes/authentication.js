@@ -1,6 +1,6 @@
 const User = require('../models/User.js');
 const jwt = require('jsonwebtoken');
-const config = require('./../config/config.dev');
+const config = require('./../config/config.local');
 
 module.exports = (router) => {
 
@@ -108,13 +108,10 @@ module.exports = (router) => {
     router.use((req, res, next) => {
         const token = req.headers.authorization;
         if (!token) {
-            console.log('err');
             res.json({ success: false, message: 'No token provided.' })
         } else {
-            console.log('jwt verify');
             jwt.verify(token, config.secret, (err, decoded) => {
                 if (err) {
-                    console.log('err');
                     res.json({ succes: false, message: err });
                 } else {
                     req.decoded = decoded;
@@ -125,15 +122,13 @@ module.exports = (router) => {
     });
 
     router.get('/profile', (req, res) => {
-        console.log('busqueda de usuario.');
         User.findOne({ _id: req.decoded.userid }, (err, data) => {
             if (err) {
-                console.log('err err');
                 res.json({ success: false, message: err });
             } else if (!data) {
-                console.log('err user not found' + data);
                 res.json({ success: false, message: 'User not found' });
             } else {
+                console.log(data);
                 res.json({ success: true, message: 'User found', user: data });
             }
         })

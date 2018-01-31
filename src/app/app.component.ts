@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { AuthenticationService } from './_services/authentication.service';
 import { Router } from '@angular/router';
 import { User } from './usuarios/user';
@@ -19,15 +19,7 @@ import { UserService } from './_services/user.service';
 
 export class AppComponent implements OnInit {
 
-  public static updateUserStatus: Subject<boolean> = new Subject();
-
-  jwtHelper: JwtHelper = new JwtHelper();
-  token: string;
-  tokenDecoded: Object;
   userName: string;
-  isLogged: boolean;
-  user: string;
-  userId: string;
 
   // Create an instance of the DataService through dependency injection
   constructor(private router: Router,
@@ -36,31 +28,19 @@ export class AppComponent implements OnInit {
     // this.authService.authenticateState$.subscribe(state => {
     //   this.isLogged = state;
     // });
-    this.reload();
   }
 
   ngOnInit() {
-    this.isLogged = this.authService.loggedIn();
     this.authService.getProfile().subscribe((profile => {
       if (!profile.success) {
         this.authService.logout();
         this.router.navigate(['/login']);
+        console.log('no funciona');
       } else {
-        this.user = profile.user;
+        console.log('funciona');
         this.userName = profile.user.username;
       }
     }));
-  }
-
-  reload() {
-    this.isLogged = this.authService.loggedIn();
-    if (this.isLogged !== false) {
-      document.body.style.backgroundColor = '#f0f0f0';
-      this.token = localStorage.getItem('token');
-      this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
-      this.userName = this.tokenDecoded['name'];
-      this.userId = this.tokenDecoded['id'];
-    }
   }
 
   logout() {

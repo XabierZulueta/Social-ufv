@@ -3,13 +3,13 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
-const config = require('./config/config');
+const config = require('./config/config.local');
 const authentication = require('./routes/authentication')(router);
 const notifications = require('./routes/notificaciones')(router);
 const eventos = require('./routes/eventos')(router);
 const grupos = require('./routes/grupos')(router);
 const cors = require('cors');
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8182;
 
 var mongoose = require('mongoose');
 
@@ -27,6 +27,11 @@ const app = express();
 
 //Cross origin
 app.use(cors());
+
+//bootstrap and jquery
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 // API file for interacting with MongoDB
 const api = require('./src/server/routes/api');

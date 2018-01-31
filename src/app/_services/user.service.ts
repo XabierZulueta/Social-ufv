@@ -7,16 +7,19 @@ import { User } from '../usuarios/user';
 
 
 import { tokenNotExpired } from 'angular2-jwt';
+import { AuthenticationService } from './index';
 
 @Injectable()
 export class UserService {
 
-    domain = '';
+    domain = this.authService.domain;
     authToken;
     user;
     options;
 
-    constructor(private http: Http) { }
+    constructor(
+        private authService: AuthenticationService,
+        private http: Http) { }
 
 
     getAll() {
