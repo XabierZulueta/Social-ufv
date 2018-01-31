@@ -76,6 +76,18 @@ module.exports = (router) => {
         } else {
             let creditosConseguidos = 0;
             let userRegister = false;
+            /* {
+                'nombre': req.body.grupo ,
+                $and: [
+                {"eventos": {$ne: [], $exists:true}},
+                {"eventos.go": {
+                    $exists:true, 
+                    $ne: [],
+                    $elemMatch: {"confirmed": {$exists:false}}
+                }}
+                ]
+            }
+            */
             Grupo.findOne({'nombre': req.body.grupo }, (err, grupo)=>{
                 if(err){ res.json({success:false, message: err})}
                 else if(grupo) {
@@ -87,12 +99,12 @@ module.exports = (router) => {
                             if(typeof grupo.eventos[eventIndex].go[personIndex].confirmed === 'undefined') {
                                 grupo.eventos[eventIndex].go[personIndex].confirmed = req.body.confirmacion;
                                 
-                                User.findOne({name: req.body.usuario}, (err, user)=>{
+                                User.findOne({name: req.body.usuario}).select('creditos').exec((err, user)=>{
                                     if(err){
                                         res.json({success:false, message:err});
                                     } else if (!user) {
                                         creditosConseguidos = 0;
-                                        console.log();
+                                        next();
                                     } else {
                                         creditosConseguidos += user.creditos;
                                         console.log();

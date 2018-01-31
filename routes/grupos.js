@@ -2,7 +2,6 @@ const User = require('../models/User.js');
 const Grupo = require('../models/Models.js').Grupo;
 const Evento = require('../models/Models.js').Evento;
 const jwt = require('jsonwebtoken');
-const config = require('./../config/config.dev');
 const mongoose = require('mongoose');
 
 module.exports = (router) => {

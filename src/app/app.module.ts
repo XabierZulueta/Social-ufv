@@ -53,6 +53,7 @@ import { GruposService } from './_services/grupos.service';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { FormsModule } from '@angular/forms';
 import { NavBarComponent } from './_components/nav-bar/nav-bar.component';
+import { TagsComponent } from './tags/tags.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { NavBarComponent } from './_components/nav-bar/nav-bar.component';
     UsersComponent,
     CalendarioComponent,
     EventoComponent,
+    TagsComponent,
     NuevoGrupoComponent,
     LoginComponent,
     RegisterComponent,

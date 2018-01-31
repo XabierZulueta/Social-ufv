@@ -13,6 +13,6 @@ import { fadeInAnimation } from '../_animations/index';
 })
 
 
-export class TagsComponent{
-    
+export class TagsComponent {
+
 }

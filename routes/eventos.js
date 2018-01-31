@@ -79,7 +79,11 @@ module.exports = (router) => {
     });
 
     router.get('/', (req, res) => {
-        Grupo.find({}, (err, grupos) => {
+        Grupo.find({
+            $and: [
+                {"eventos": {$ne: []}},
+                {"eventos": {$exists:true}}]
+            }, (err, grupos) => {
             if (err) {
                 res.json({ success: false, message: err });
             } else {

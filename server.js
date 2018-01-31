@@ -3,12 +3,13 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
-const config = require('./config/config.dev');
+const config = require('./config/config.local');
 const authentication = require('./routes/authentication')(router);
 const notifications = require('./routes/notificaciones')(router);
 const eventos = require('./routes/eventos')(router);
 const grupos = require('./routes/grupos')(router);
 const cors = require('cors');
+const port = process.env.PORT || 8080;
 
 var mongoose = require('mongoose');
 
@@ -36,7 +37,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // app.use('/evento', evento);
 
 // Angular DIST output folder
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, '/dist')));
 
 app.use('/authentication', authentication);
 app.use('/notificaciones', notifications);
@@ -48,7 +49,7 @@ app.use('/api', api);
 
 // Send all other requests to the Angular app
 app.get('*', (req, res) => {
-    res.json({ success: false, message: 'Ruta desconocida' });
+    res.send(path.join(__dirname + '/dist/index.html'));
 });
 
 // catch 404 and forward to error handler
@@ -75,6 +76,6 @@ app.use(function (req, res, next) {
 
 // const server = http.createServer(app);
 
-app.listen(8080, () => console.log('Running on 127.0.0.1:8080'));
+app.listen(port, () => console.log('Running on 127.0.0.1:' + port));
 
 module.exports = app;
