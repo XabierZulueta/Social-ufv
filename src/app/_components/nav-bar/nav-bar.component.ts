@@ -13,6 +13,7 @@ export class NavBarComponent implements OnInit {
 
   constructor(public authService: AuthenticationService,
     private router: Router) {
+    this.userName = localStorage.getItem('user') || '';
   }
 
   logout() {
@@ -21,6 +22,5 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userName = this.authService.user.username;
   }
 }

@@ -31,16 +31,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.getProfile().subscribe((profile => {
-      if (!profile.success) {
-        this.authService.logout();
-        this.router.navigate(['/login']);
-        console.log('no funciona');
-      } else {
-        console.log('funciona');
-        this.userName = profile.user.username;
-      }
-    }));
   }
 
   logout() {
