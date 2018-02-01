@@ -90,12 +90,6 @@ export class NuevoGrupoComponent implements OnInit {
             nombre: this.form.get('nombre').value,
             administrador: this.username,
             imagen: imagePath,
-            eventos: [{
-                title: 'Titulo 1',
-                creditos: 5,
-                maxPersonas: 10,
-                status: 'open'
-            }]
         };
         this.grupoService.newGrupo(grupo).subscribe(data => {
             if (!data.success) {

@@ -9,7 +9,7 @@ const notifications = require('./routes/notificaciones')(router);
 const eventos = require('./routes/eventos')(router);
 const grupos = require('./routes/grupos')(router);
 const cors = require('cors');
-const port = process.env.PORT || 8182;
+const port = process.env.PORT || 8080;
 
 var mongoose = require('mongoose');
 

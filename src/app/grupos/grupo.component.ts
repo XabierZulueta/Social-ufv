@@ -109,6 +109,9 @@ export class GrupoComponent implements OnInit {
                             this.eventos[i].apuntado = false;
                         }
                     }
+
+                    this.miembros = this.grupo.equipo.filter(value => value.confirmed === true);
+                    console.log(this.miembros);
                 }
             });
             // In a real app: dispatch action to load the details here.
@@ -134,8 +137,6 @@ export class GrupoComponent implements OnInit {
         //         this.eventos[i].apuntado = false;
         //     }
         // }
-        this._dataService.getById(this.id, 'users/grupo')
-            .subscribe(res => this.miembros = res);
 
         this._dataService.getNUsers(this.id)
             .subscribe(res => this.nusers = res);
@@ -160,7 +161,6 @@ export class GrupoComponent implements OnInit {
                 }
             });
         this.ahora = new Date(new Date().toUTCString());
-
     }
 
     desapuntarGrupo(idUsuario, idGrupo) {

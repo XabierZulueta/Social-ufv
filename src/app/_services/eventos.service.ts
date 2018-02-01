@@ -51,6 +51,6 @@ export class EventosService {
 
     getAll() {
         this.createAuthenticationHeaders();
-        return this.http.get(this.domain + '', this.options).map(res => res.json());
+        return this.http.get(this.domain + 'allEventos', this.options).map(res => res.json());
     }
 }

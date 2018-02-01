@@ -16,8 +16,8 @@ var EventSchema = new mongoose.Schema({
     default: 'open',
     lowercase: true,
   },
-  start: { type: Date, required: true, default: Date.now },
-  end: { type: Date, required: true, default: Date.now },
+  start: { type: Date, required: true },
+  end: { type: Date },
   updated_at: { type: Date, default: Date.now },
 });
 
@@ -33,16 +33,13 @@ var GrupoSchema = new mongoose.Schema({
 GrupoSchema.pre('save', function (next) {
   User.findOne({ username: this.administrador }, (err, user) => {
     if (err) {
-      console.log(err);
       next(new Error('Se ha producido un error' + err.message));
     } else if (!user) {
-      console.log('Error usuario no encontrado');
       next(new Error('No se ha encontrado el usuario'));
     } else {
-      console.log('All good');
       next();
     }
-  })
+  });
 });
 
 module.exports = { Grupo: mongoose.model('Grupo', GrupoSchema), Evento: mongoose.model('Evento', EventSchema) };

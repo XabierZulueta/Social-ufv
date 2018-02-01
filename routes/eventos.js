@@ -10,23 +10,19 @@ module.exports = (router) => {
         } else {
             Grupo.findById(req.body.idGrupo, (err, grupo) => {
                 if (err) {
-                    console.log('El error esta en findById de grupo');
                     res.json({ success: false, message: err });
                 } else {
                     User.findOne({ username: req.body.username }).select('username').exec((err, user) => {
                         if (err) {
-                            console.log('El error esta en findOne de usuarios')
                             res.json({ success: false, message: err });
                         } else if (!user) {
                             res.json({ success: false, message: 'No existe el usuario en base de datos' });
                         } else {
                             let eventoIndex = grupo.eventos.findIndex(obj => obj.title == req.body.evento);
-                            console.log(grupo.eventos[eventoIndex]);
                             if (!grupo.eventos[eventoIndex].go.find(obj => obj.name == req.body.username)) {
                                 grupo.eventos[eventoIndex].go.push({ name: user.username });
                                 grupo.save(err => {
                                     if (err) {
-                                        console.log('El error esta al guardar el grupo.');
                                         res.json({ success: false, message: err });
                                     } else {
                                         res.json({ success: true, message: 'grupo actualizado correctamente', grupo: grupo });
@@ -58,7 +54,6 @@ module.exports = (router) => {
                         } else {
                             let eventoIndex = grupo.eventos.findIndex(obj => obj.title == req.body.evento);
                             let personaIndex = grupo.eventos[eventoIndex].go.findIndex(obj => obj.name == user.username);
-                            console.log(grupo.eventos[eventoIndex]);
                             if (personaIndex >= 0) {
                                 grupo.eventos[eventoIndex].go.splice(personaIndex, 1);
                                 grupo.save(err => {
@@ -78,12 +73,12 @@ module.exports = (router) => {
         }
     });
 
-    router.get('/', (req, res) => {
+    router.get('/allEventos', (req, res) => {
         Grupo.find({
             $and: [
-                {"eventos": {$ne: []}},
-                {"eventos": {$exists:true}}]
-            }, (err, grupos) => {
+                { "eventos": { $ne: [] } },
+                { "eventos": { $exists: true } }]
+        }, (err, grupos) => {
             if (err) {
                 res.json({ success: false, message: err });
             } else {
@@ -98,8 +93,7 @@ module.exports = (router) => {
                         eventos.push(e);
                     });
                 });
-                console.log(eventos);
-                res.json({ success: true, message: 'Grupos', eventos: eventos });
+                res.json({ success: true, message: 'Eventos', eventos: eventos });
             }
         });
     });
