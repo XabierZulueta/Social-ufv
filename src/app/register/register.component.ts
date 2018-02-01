@@ -78,9 +78,11 @@ export class RegisterComponent {
             if (group.controls[pass].value === group.controls[confirm].value) {
                 return null;
             } else {
-                return { 'matchingPasswords': true }
+                return {
+                    'matchingPasswords': true
+                };
             }
-        }
+        };
     }
 
     validateUsername(controls) {
@@ -113,12 +115,12 @@ export class RegisterComponent {
     onRegisterSubmit() {
         this.loading = true;
         this.disabledForm();
-        console.log('Event fired');
-        this.authService.registerUser({
+        const user = {
             email: this.form.get('email').value,
             username: this.form.get('username').value,
             password: this.form.get('password').value
-        }).subscribe((data) => {
+        };
+        this.authService.registerUser(user).subscribe((data) => {
             if (!data.success) {
                 this.messageClass = 'alert alert-danger';
                 this.message = data.message;
@@ -160,9 +162,5 @@ export class RegisterComponent {
                 }
             });
         }
-    }
-
-    register() {
-        document.body.style.backgroundColor = '#fff';
     }
 }
