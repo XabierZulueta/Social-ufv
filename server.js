@@ -28,11 +28,6 @@ const app = express();
 //Cross origin
 app.use(cors());
 
-//bootstrap and jquery
-app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
-app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
-
 // API file for interacting with MongoDB
 const api = require('./src/server/routes/api');
 
@@ -43,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // app.use('/evento', evento);
 
 // Angular DIST output folder
-app.use(express.static(path.join(__dirname, '/dist')));
+app.use(express.static(__dirname + '/dist'));
 
 app.use('/authentication', authentication);
 app.use('/notificaciones', notifications);
