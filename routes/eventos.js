@@ -73,6 +73,9 @@ module.exports = (router) => {
         }
     });
 
+    // CRUD
+
+    // GET ALL (READ)
     router.get('/eventos/', (req, res) => {
         Grupo.find({
             $and: [
@@ -99,22 +102,101 @@ module.exports = (router) => {
     });
 
     /* 
+        DELETE BY TITLE(ID) (DELETE)
         Borrar un evento.
         @param idGrupo: Necesitamos el id del grupo para obtener el grupo al que pertenece un evento.
                         Un evento puede ser identico en varios grupos.
         @body param: El evento que se va a borrar. (Con el titulo vale.).
     */
-    router.delete('/eventos/delete/:idGrupo/:title', (req, res) => {
+    router.delete('/eventos/:idGrupo/:title', (req, res) => {
         Grupo.findByIdAndUpdate(
             req.params.idGrupo,
             { $pull: { "eventos": { title: req.params.title } } }
-            , (err, grupos) => {
+            , (err) => {
                 if (err) {
                     res.json({ success: false, message: err });
                 } else {
-                    res.json({ success: true, message: 'Evento actualizado.' });
+                    console.log(req.user);
+                    res.json({ success: true, message: 'Evento eliminado correctamente.' });
                 }
             });
+    });
+
+    // CREATE (CREATE)
+    router.post('/eventos/:idGrupo', (req, res) => {
+        if (!req.params.idGrupo) {
+            console.log('falta id');
+            res.json({ success: false, message: 'Id incorrecto.' });
+        } else if (!req.body.evento) {
+            console.log('falta evento');
+            res.json({ success: false, message: 'No se ha seleccionado evento.' });
+        } else {
+            console.log('CreandoEvento');
+            let evento = new Evento(req.body.evento);
+            console.log(evento);
+            if (!evento.title) {
+                console.log('falta titulo');
+                res.json({ success: false, message: 'Nombre del evento obligatorio.' });
+            } else if (!evento.start) {
+                console.log('falta start');
+                res.json({ success: false, message: 'Fecha de comienzo del evento obligatoria.' });
+            } else {
+                console.log('Evento Aniadido al grupo.(supongo');
+
+                // No se ha usado .update porque se quiere comprobar que el titulo del evento no exista para ese grupo.
+
+                Grupo.findById(req.params.idGrupo, (err, grupo) => {
+                    if (err) {
+                        res.json({ success: false, message: 'Err' })
+                    } else if (!grupo) {
+                        res.json({ success: false, message: 'Grupo No encontrado.' })
+                    } else if (grupo.eventos.findIndex(obj => obj.title === evento.title) !== -1) {
+                        res.json({ success: false, message: 'No se puede insertar un titulo duplicado' });
+                    } else {
+                        grupo.eventos.push(evento);
+                        grupo.save((err) => {
+                            if (err) {
+                                res.json({ success: false, message: 'Err' });
+                            } else {
+                                res.json({ success: true, message: 'Grupo aniadido' })
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    });
+
+    // PUT (MODIFY)
+    /* BODY EXAMPLE:
+        {
+            title: '123 al escondite ingles',
+            evento: { Object con el evento y los parametros que se quieran cambiar}
+        }
+    */
+    router.put('/eventos/:idGrupo/', (req, res) => {
+        if (!req.body.title) {
+            res.json({ success: false, message: 'No se ha especificado el titulo del evento que se quiere modificar.' });
+        } else {
+            Grupo.find({ _id: req.params.idGrupo, "eventos.title": req.body.title }, (err, grupo) => {
+                if (err) {
+                    res.json({ success: false, message: err });
+                } else if (!grupo) {
+                    res.json({ success: false, message: 'grupo no encontrado' });
+                } else {
+                    const evIndex = grupo.eventos.findIndex(obj => obj.title === req.body.title);
+                    const eventoModificado = new Evento(req.body.evento);
+                    grupo.eventos[evIndex] = eventoModificado;
+                    grupo.save(err => {
+                        if (err) {
+                            res.json({ success: false, message: err });
+                        } else {
+                            res.json({ success: true, message: 'Evento modificado correctamente.' });
+                        }
+                    })
+                }
+            })
+        }
     });
 
     return router;
