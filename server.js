@@ -3,7 +3,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
-const config = require('./config/config.dev');
+const config = require('./config/config.local');
 const authentication = require('./routes/authentication')(router);
 const notifications = require('./routes/notificaciones')(router);
 const eventos = require('./routes/eventos')(router);
@@ -42,8 +42,8 @@ app.use(express.static(__dirname + '/dist'));
 
 app.use('/authentication', authentication);
 app.use('/notificaciones', notifications);
-app.use('/grupos', grupos);
-app.use('/eventos', eventos);
+app.use(grupos);
+app.use(eventos);
 
 // API location
 app.use('/api', api);

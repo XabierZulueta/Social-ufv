@@ -4,7 +4,7 @@ const Evento = require('../models/Models.js').Evento;
 
 module.exports = (router) => {
 
-    router.post('/apuntarse', (req, res) => {
+    router.post('/eventos/apuntarse', (req, res) => {
         if (!req.body.username || !req.body.idGrupo || !req.body.evento) {
             res.json({ success: false, message: 'Parametros invalidos.' });
         } else {
@@ -38,7 +38,7 @@ module.exports = (router) => {
         }
     });
 
-    router.post('/desapuntarse', (req, res) => {
+    router.post('/eventos/desapuntarse', (req, res) => {
         if (!req.body.username || !req.body.idGrupo || !req.body.evento) {
             res.json({ success: false, message: 'Parametros invalidos.' });
         } else {
@@ -73,7 +73,7 @@ module.exports = (router) => {
         }
     });
 
-    router.get('/allEventos', (req, res) => {
+    router.get('/eventos/', (req, res) => {
         Grupo.find({
             $and: [
                 { "eventos": { $ne: [] } },
@@ -96,6 +96,25 @@ module.exports = (router) => {
                 res.json({ success: true, message: 'Eventos', eventos: eventos });
             }
         });
+    });
+
+    /* 
+        Borrar un evento.
+        @param idGrupo: Necesitamos el id del grupo para obtener el grupo al que pertenece un evento.
+                        Un evento puede ser identico en varios grupos.
+        @body param: El evento que se va a borrar. (Con el titulo vale.).
+    */
+    router.delete('/eventos/delete/:idGrupo/:title', (req, res) => {
+        Grupo.findByIdAndUpdate(
+            req.params.idGrupo,
+            { $pull: { "eventos": { title: req.params.title } } }
+            , (err, grupos) => {
+                if (err) {
+                    res.json({ success: false, message: err });
+                } else {
+                    res.json({ success: true, message: 'Evento actualizado.' });
+                }
+            });
     });
 
     return router;
