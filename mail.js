@@ -1,10 +1,7 @@
-var fs = require('fs');
-var path = require('path');
-var config = JSON.parse(fs.readFileSync('config/config.json'));
-
-var nodemailer = require('nodemailer'); 
+var nodemailer = require('nodemailer');
 
 var transporter = nodemailer.createTransport({
+    host: 'universidad.test123@gmail.com',
     service: 'gmail',
     auth: {
         user: 'universidad.test123@gmail.com',
@@ -12,19 +9,19 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-let HelperOptions = {
-    from: 'Prueba <universidad.test123@gmail.com>',
-    to: 'jorge.manza1@gmail.com',
-    subject: 'tested',
-    text: 'Hello world'
-};
+module.exports = function (params) {
+    this.from = 'universidad.test123@gmail.com';
 
-transporter.sendMail(HelperOptions, (err, info) => { 
-    if(err){
-        console.log(err);
-        return console.log('nothing send');
-    } else {
-        console.log('Email sent');
-        console.log(info);
-    }
-});
+    this.send = function () {
+        var options = {
+            from: this.from,
+            to: params.to,
+            subject: params.subject,
+            text: params.message
+        };
+
+        transporter.sendMail(options, function (err, suc) {
+            err ? params.errorCallback(err) : params.successCallback(suc);
+        });
+    };
+};

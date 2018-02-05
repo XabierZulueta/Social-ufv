@@ -91,27 +91,28 @@ export class GrupoComponent implements OnInit {
         this.route.params.subscribe(params => {
             this.gruposService.getById(params['id']).subscribe(data => {
                 if (!data.success) {
+                    console.log(data);
                     alert('err' + data.message);
                 } else {
-                    console.log(data.grupo);
                     this.grupo = data.grupo;
+                    if (!!this.grupo) {
+                        this.eventos = this.grupo.eventos;
 
-                    this.eventos = this.grupo.eventos;
-
-                    for (let i = 0; i < this.eventos.length; i++) {
-                        this.eventos[i].start = new Date(new Date(this.eventos[i].start).toUTCString());
-                        this.eventos[i].end = new Date(new Date(this.eventos[i].end).toUTCString());
-                        this.eventos[i].color = colors.blue;
-                        console.log(this.eventos[i]);
-                        if (this.isMember(this.eventos[i].go)) {
-                            this.eventos[i].apuntado = true;
-                        } else {
-                            this.eventos[i].apuntado = false;
+                        for (let i = 0; i < this.eventos.length; i++) {
+                            this.eventos[i].start = new Date(new Date(this.eventos[i].start).toUTCString());
+                            this.eventos[i].end = new Date(new Date(this.eventos[i].end).toUTCString());
+                            this.eventos[i].color = colors.blue;
+                            console.log(this.eventos[i]);
+                            if (this.isMember(this.eventos[i].go)) {
+                                this.eventos[i].apuntado = true;
+                            } else {
+                                this.eventos[i].apuntado = false;
+                            }
                         }
-                    }
 
-                    this.miembros = this.grupo.equipo.filter(value => value.confirmed === true);
-                    console.log(this.miembros);
+                        this.miembros = this.grupo.equipo.filter(value => value.confirmed === true);
+                        console.log(this.grupo);
+                    }
                 }
             });
             // In a real app: dispatch action to load the details here.

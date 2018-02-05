@@ -114,31 +114,34 @@ export class CalendarioComponent implements OnInit {
         this.isLoading = true;
         this.events = [];
         this.eventosService.getAll().subscribe(data => {
-            this.events = data.eventos;
-            this.authService.getProfile().subscribe((profile) => {
-                this.user = profile.user;
-                this.refresh.next();
-                setTimeout(() => {
-                    this.isLoading = false;
-                }, 500);
-            });
-            for (let i = 0; i < this.events.length; i++) {
-                this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
-                this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
-                this.events[i].color = colors.blue;
-                // Si está en la lista de apuntados, ponemos el color del evento en rojo
-                // y el boolean apuntado a true, si no, lo pongo a false.
-                if (this.isMember(this.events[i].go)) {
-                    this.events[i].apuntado = true;
-                    this.events[i].color = colors.red;
-                } else {
-                    this.events[i].apuntado = false;
-                }
+            console.log(data);
+            if (data.success) {
+                this.events = data.eventos;
+                this.authService.getProfile().subscribe((profile) => {
+                    this.user = profile.user;
+                    this.refresh.next();
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 500);
+                });
             }
-            this.refresh.next();
-            this.procesingRequest = false;
-            console.log(this.events);
         });
+        for (let i = 0; i < this.events.length; i++) {
+            this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
+            this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
+            this.events[i].color = colors.blue;
+            // Si está en la lista de apuntados, ponemos el color del evento en rojo
+            // y el boolean apuntado a true, si no, lo pongo a false.
+            if (this.isMember(this.events[i].go)) {
+                this.events[i].apuntado = true;
+                this.events[i].color = colors.red;
+            } else {
+                this.events[i].apuntado = false;
+            }
+        }
+        this.refresh.next();
+        this.procesingRequest = false;
+        console.log(this.events);
     }
 
     handleEvent(action: string, event: Evento): void {
@@ -209,21 +212,22 @@ export class CalendarioComponent implements OnInit {
     }
 
     private initEventos() {
-        for (let i = 0; i < this.events.length; i++) {
-            this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
-            this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
-            this.events[i].color = colors.blue;
-            // Si está en la lista de apuntados, ponemos el color del evento en rojo
-            // y el boolean apuntado a true, si no, lo pongo a false.
-            if (this.isMember(this.events[i].go)) {
-                this.events[i].apuntado = true;
-                this.events[i].color = colors.red;
-            } else {
-                this.events[i].apuntado = false;
+        if (this.events) {
+            for (let i = 0; i < this.events.length; i++) {
+                this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
+                this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
+                this.events[i].color = colors.blue;
+                // Si está en la lista de apuntados, ponemos el color del evento en rojo
+                // y el boolean apuntado a true, si no, lo pongo a false.
+                if (this.isMember(this.events[i].go)) {
+                    this.events[i].apuntado = true;
+                    this.events[i].color = colors.red;
+                } else {
+                    this.events[i].apuntado = false;
+                }
             }
         }
         this.procesingRequest = false;
         this.refresh.next();
     }
-
 }

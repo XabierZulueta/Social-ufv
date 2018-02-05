@@ -92,7 +92,7 @@ module.exports = (router) => {
                         e.grupo = {
                             _id: grupo._id,
                             nombre: grupo.nombre
-                        }
+                        };
                         eventos.push(e);
                     });
                 });
@@ -147,7 +147,7 @@ module.exports = (router) => {
 
                 Grupo.findById(req.params.idGrupo, (err, grupo) => {
                     if (err) {
-                        res.json({ success: false, message: 'Err' })
+                        res.json({ success: false, message: 'Err' });
                     } else if (!grupo) {
                         res.json({ success: false, message: 'Grupo No encontrado.' })
                     } else if (grupo.eventos.findIndex(obj => obj.title === evento.title) !== -1) {
@@ -201,3 +201,41 @@ module.exports = (router) => {
 
     return router;
 };
+
+checkIfUserCanModifyGrupos = function (req, res, callback) {
+    console.log('holi?');
+    if (!req.body.username) {
+        console.log('esque le falta username?');
+        return callback(null, { success: false, message: 'Parametros incorrectos para este tipo de peticion.' });
+    } else {
+        User.findOne({ username: req.body.username }, 'username role', (err, user) => {
+            if (err) {
+                console.log('Error al buscar usuario: ' + err);
+                return callback(null, { success: false, message: err });
+            } else if (!user) {
+                console.log('Usuario no encontrado: ' + user);
+                return callback(null, { success: false, message: 'Usuario no encontrado en la base de datos.' });
+            } else if (user.role === 'admin') {
+                console.log('Es admin, se admite todo: ' + user);
+                return callback(null, { success: true });
+            } else if (user.role === 'alumno') {
+                console.log('Alumno no puede modificar: ' + user);
+                return callback(null, { success: false, message: 'Permisos denegados para el rol de alumno' });
+            } else {
+                //Representante o parte del equipo?
+                return Grupo.findOne({
+                    _id: req.body.idGrupo,
+                    $or: [
+                        { administrador: user.username },
+                        { equipo: user.username }
+                    ]
+                }, (err, grupo) => {
+                    console.log('Perfecto, todo en regla!' + grupo);
+                    // On callback, solve the promise.
+                    const result = !!user;
+                    callback(err, { success: grupo });
+                });
+            }
+        });
+    }
+}

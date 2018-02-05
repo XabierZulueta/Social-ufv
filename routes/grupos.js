@@ -1,15 +1,43 @@
 const User = require('../models/User.js');
 const Grupo = require('../models/Models.js').Grupo;
-const Evento = require('../models/Models.js').Evento;
-const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
+const functions = require('./AuthFunctions');
+const nodemailer = require('nodemailer');
+
+var Mail = require('../mail');
+
 
 module.exports = (router) => {
     // CRUD OPERATIONS:
     // GET ALL (READ)
 
-    router.get('/grupos/test1', (req, res) => {
-        res.send('holi test');
+    router.get('/grupos/testEmail', (req, res) => {
+
+        var options = {
+            to: 'jorge.manza1@gmail.com',
+            subject: 'subject',
+            message: 'your message goes here'
+        };
+
+        var mail = new Mail({
+            to: options.to,
+            subject: options.subject,
+            message: options.message,
+            successCallback: function (suc) {
+                console.log('success');
+            },
+            errorCallback: function (err) {
+                console.log('error: ' + err);
+            }
+        });
+
+        mail.send();
+
+        Grupo.find({}, (err, grupos) => {
+            if (err) {
+                res.json({ success: false, message: err });
+            }
+            res.json({ success: true, message: 'Grupos', grupos: grupos });
+        });
     });
 
     router.get('/grupos', (req, res) => {
@@ -18,7 +46,7 @@ module.exports = (router) => {
                 res.json({ success: false, message: err });
             }
             res.json({ success: true, message: 'Grupos', grupos: grupos });
-        })
+        });
     });
 
     // GET ONE BY ID (READ)
@@ -34,10 +62,10 @@ module.exports = (router) => {
 
     // CREATE GRUPO. (CREATE)
     router.post('/grupos/', (req, res) => {
-        checkIfUserCanModify(req, res, (err, result) => {
+        checkIfUserCanModifyGrupos(req, res, (err, result) => {
             if (err) {
                 res.json({ success: false, message: err });
-            } else if (result.sucess) {
+            } else if (result.success) {
                 if (!req.body.nombre) {
                     res.json({ success: false, message: 'No se ha introducido un nombre' });
                 } else {
@@ -52,22 +80,21 @@ module.exports = (router) => {
                     }
                     grupo.save((err) => {
                         if (err) {
-                            console.log(err);
                             res.json({ success: false, message: 'Error ' + err });
                         } else {
-                            console.log(grupo);
                             res.json({ success: true, message: 'Grupo añadido ' });
                         }
-                    })
+                    });
                 }
+            } else {
+                res.json(result);
             }
         });
     });
 
     // (MODIFY)
-
     router.put('/grupos/:id', (req, res) => {
-        checkIfUserCanModify(req, res, (err, result) => {
+        checkIfUserCanModifyGrupos(req, res, (err, result) => {
             if (err) {
                 res.json({ success: false, message: err });
             } else if (result.sucess) {
@@ -90,7 +117,7 @@ module.exports = (router) => {
 
     // (DELETE)
     router.delete('/grupos/:id', (req, res) => {
-        checkIfUserCanModify(req, res, (err, result) => {
+        checkIfUserCanModifyGrupos(req, res, (err, result) => {
             if (err) {
                 res.json({ success: false, message: err });
             } else if (result.sucess) {
@@ -106,24 +133,30 @@ module.exports = (router) => {
     });
 
     return router;
-}
-// If error, return the json to send to the response.
-// {success:T/F, message: string }
-const checkIfUserCanModify = (req, res, callback) => {
+};
+
+checkIfUserCanModifyGrupos = function (req, res, callback) {
+    console.log('holi?');
     if (!req.body.username) {
-        return callback(null, { success: false, message: 'No se ha especificado usuario.' });
+        console.log('esque le falta username?');
+        return callback(null, { success: false, message: 'Parametros incorrectos para este tipo de peticion.' });
     } else {
         User.findOne({ username: req.body.username }, 'username role', (err, user) => {
             if (err) {
+                console.log('Error al buscar usuario: ' + err);
                 return callback(null, { success: false, message: err });
             } else if (!user) {
+                console.log('Usuario no encontrado: ' + user);
                 return callback(null, { success: false, message: 'Usuario no encontrado en la base de datos.' });
             } else if (user.role === 'admin') {
+                console.log('Es admin, se admite todo: ' + user);
                 return callback(null, { success: true });
             } else if (user.role === 'alumno') {
+                console.log('Alumno no puede modificar: ' + user);
                 return callback(null, { success: false, message: 'Permisos denegados para el rol de alumno' });
             } else {
                 //Representante o parte del equipo?
+
                 return Grupo.findOne({
                     _id: req.body.idGrupo,
                     $or: [
@@ -131,11 +164,18 @@ const checkIfUserCanModify = (req, res, callback) => {
                         { equipo: user.username }
                     ]
                 }, (err, grupo) => {
-                    // On callback, solve the promise.
-                    const result = !!user;
-                    callback(err, { success: grupo });
+                    if (err) {
+                        return callback(null, { success: false, message: 'Error en la busqueda de grupos.' });
+                    } else if (!grupo) {
+                        //Grupo no existe por lo tanto o se crea o el error aparecera en cada metodo individual
+                        return callback(null, { success: true });
+                    } else {
+                        // On callback, solve the promise.
+                        const result = !!user;
+                        return callback(err, { success: result });
+                    }
                 });
             }
         });
     }
-};
+}

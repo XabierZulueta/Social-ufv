@@ -90,6 +90,7 @@ export class NuevoGrupoComponent implements OnInit {
             nombre: this.form.get('nombre').value,
             administrador: this.username,
             imagen: imagePath,
+            username: this.username
         };
         this.grupoService.newGrupo(grupo).subscribe(data => {
             if (!data.success) {
@@ -121,7 +122,7 @@ export class NuevoGrupoComponent implements OnInit {
         // this.address.documents = files.toString();
 
         this.http.post(this.domain + 'api/upload', formData)
-            .map(files => files.json())
+            .map(response => response.json())
             .subscribe();
     }
 

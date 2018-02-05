@@ -56,6 +56,7 @@ export class GruposComponent implements OnInit {
         }
         this.grupoService.getAll().subscribe(data => {
             if (!data.success) {
+                console.log(data);
                 alert('err: ' + data.message);
             } else {
                 this.isLoading = false;

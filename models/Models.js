@@ -16,7 +16,7 @@ var EventSchema = new mongoose.Schema({
     default: 'open',
     lowercase: true,
   },
-  start: { type: Date, required: true },
+  start: { type: Date, required: true, default: Date.now },
   end: { type: Date },
   updated_at: { type: Date, default: Date.now },
 });

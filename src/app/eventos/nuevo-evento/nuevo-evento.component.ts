@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { Router } from '@angular/router';
+import { GruposService } from '../../_services/grupos.service';
 
 @Component({
   moduleId: module.id,
@@ -10,9 +11,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./nuevo-evento.component.css']
 })
 export class NuevoEventoComponent implements OnInit {
+  titleMessageClass: string;
+  titleMessage: string;
+  titleValid: boolean;
 
-
-  @Input() grupo;
+  @Input() padre;
 
   usernameMessageClass: string;
   emailMessageClass: string;
@@ -28,139 +31,115 @@ export class NuevoEventoComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthenticationService,
+    private gruposService: GruposService,
     private router: Router) {
     this.createForm();
+    alert(this.padre);
   }
 
   createForm() {
     this.form = this.formBuilder.group({
-      email: ['', Validators.compose([
+      title: ['', Validators.compose([
         Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(30),
-        this.validateEmail]
+        this.validateTitle]
       )],
-      username: ['', Validators.compose([
-        Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(30),
-        this.validateUsername]
-      )],
-      password: ['', Validators.compose([
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
-        this.validatePassword]
-      )],
-      confirm: ['', Validators.compose([
-        Validators.required]
-      )]
-    }, { validator: this.comparePasswords('password', 'confirm') });
-  }
-
-  enableForm() {
-    this.form.controls['password'].enable();
-    this.form.controls['username'].enable();
-    this.form.controls['confirm'].enable();
-    this.form.controls['email'].enable();
-  }
-
-  disabledForm() {
-    this.form.controls['password'].disable();
-    this.form.controls['username'].disable();
-    this.form.controls['confirm'].disable();
-    this.form.controls['email'].disable();
-  }
-
-  comparePasswords(pass, confirm) {
-    return (group: FormGroup) => {
-      if (group.controls[pass].value === group.controls[confirm].value) {
-        return null;
-      } else {
-        return {
-          'matchingPasswords': true
-        };
-      }
-    };
-  }
-
-  validateUsername(controls) {
-    const regEx = new RegExp(/^[a-zA-Z0-9]+$/);
-    if (regEx.test(controls.value)) {
-      return null;
-    } else {
-      return { 'validateUsername': true };
-    }
-  }
-
-  validatePassword(controls) {
-    const regExp = new RegExp(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[\d])(?=.*?[\W]).{8,35}$/);
-    if (regExp.test(controls.value)) {
-      return null;
-    } else {
-      return { 'validatePassword': true };
-    }
-  }
-
-  validateEmail(controls) {
-    const regEx = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
-    if (regEx.test(controls.value)) {
-      return null;
-    } else {
-      return { 'validateEmail': true };
-    }
-  }
-
-  onRegisterSubmit() {
-    this.loading = true;
-    this.disabledForm();
-    const user = {
-      email: this.form.get('email').value,
-      username: this.form.get('username').value,
-      password: this.form.get('password').value
-    };
-    this.authService.registerUser(user).subscribe((data) => {
-      if (!data.success) {
-        this.messageClass = 'alert alert-danger';
-        this.message = data.message;
-        this.loading = false;
-        this.enableForm();
-      } else {
-        this.messageClass = 'alert alert-success';
-        this.message = data.message;
-      }
-      console.log(data);
+      // start: ['', Validators.compose([
+      //   Validators.required]
+      // )],
+      // end: ['', Validators.compose([]
+      // )],
+      // go: ['', Validators.compose([]
+      // )],
+      // maxPersonas: ['', Validators.compose([
+      //   Validators.min(1)
+      // ]
+      // )],
+      // description: ['', Validators.compose([]
+      // )],
+      // creditos: ['', Validators.compose([
+      //   Validators.min(0)]
+      // )]
     });
   }
 
-  checkEmail() {
-    const email = this.form.get('email').value;
-    if (email !== '') {
-      this.authService.checkEmail(email).subscribe((data) => {
-        this.emailValid = data.success;
-        this.emailMessage = data.message;
-        if (this.emailValid) {
-          this.emailMessageClass = 'alert-success';
-        } else {
-          this.emailMessageClass = 'alert-danget';
-        }
-      });
-    }
+  enableForm() {
+    this.form.controls['title'].enable();
+    // this.form.controls['start'].enable();
+    // this.form.controls['end'].enable();
+    // this.form.controls['go'].enable();
+    // this.form.controls['maxPersonas'].enable();
+    // this.form.controls['description'].enable();
+    // this.form.controls['creditos'].enable();
   }
 
-  checkUsername() {
-    const username = this.form.get('username').value;
-    if (username !== '') {
-      this.authService.checkUsername(username).subscribe((data) => {
-        this.usernameValid = data.success;
-        this.usernameMessage = data.message;
-        if (this.usernameValid) {
-          this.usernameMessageClass = 'alert-success';
-        } else {
-          this.usernameMessageClass = 'alert-danger';
-        }
-      });
+  disabledForm() {
+    this.form.controls['title'].disable();
+    // this.form.controls['start'].disable();
+    // this.form.controls['end'].disable();
+    // this.form.controls['go'].disable();
+    // this.form.controls['maxPersonas'].disable();
+    // this.form.controls['description'].disable();
+    // this.form.controls['creditos'].disable();
+  }
+
+  validateTitle(controls) {
+    // if (this.padre) {
+    //   if (this.padre.eventos.findIndex(obj => obj.title === controls.value) !== -1) {
+    //     return null;
+    //   } else {
+    //     return { 'validateTitle': true };
+    //   }
+    // } else {
+    //   return null;
+    // }
+    return null;
+  }
+
+  onAddEventoSubmit() {
+    this.loading = true;
+    this.disabledForm();
+    const title = {
+      title: {
+        title: this.form.get('title').value,
+        start: this.form.get('start').value
+      }
+    };
+
+    this.gruposService.addEvento(this.padre._id, title).subscribe(data => {
+      if (!data.success) {
+
+      } else {
+
+      }
+    });
+
+    // this.authService.registerUser(user).subscribe((data) => {
+    //   if (!data.success) {
+    //     this.messageClass = 'alert alert-danger';
+    //     this.message = data.message;
+    //     this.loading = false;
+    //     this.enableForm();
+    //   } else {
+    //     this.messageClass = 'alert alert-success';
+    //     this.message = data.message;
+    //   }
+    //   console.log(data);
+    // });
+  }
+
+  checkTitle() {
+    const title = this.form.get('title').value;
+    if (title !== '') {
+      const index = this.padre.findIndex(obj => obj.title !== title);
+      if (index === -1) {
+        this.titleValid = true;
+        this.titleMessage = 'Titulo disponible';
+        this.titleMessageClass = 'alert-success';
+      } else {
+        this.titleValid = true;
+        this.titleMessage = 'Ya existe un evento en este grupo con ese nombre';
+        this.titleMessageClass = 'alert-success';
+      }
     }
   }
 
