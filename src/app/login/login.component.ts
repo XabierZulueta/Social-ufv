@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { AlertService } from '../_services/alert.service';
 import { AppComponent } from '../app.component';
-import { fadeInAnimation } from '../_animations/index';
+import { fadeInAnimation } from '../_animations/fadein.animation';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { AuthGuard } from '../_guards/auth.guard';
 
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
         private authService: AuthenticationService,
         private formBuilder: FormBuilder) {
         this.createForm();
-        // document.body.style.backgroundColor = '#003265';
+        document.body.style.backgroundColor = '#003265';
         this.renderer.setStyle(
             document.body,
             'background-color',
@@ -88,6 +88,15 @@ export class LoginComponent implements OnInit {
                         this.router.navigate([this.previousUrl]);
                     } else {
                         this.router.navigate(['/']);
+                        document.body.style.backgroundColor = '#003265';
+                        this.renderer.removeStyle(
+                            document.body,
+                            'background-color',
+                        );
+                        this.renderer.removeStyle(
+                            document.getElementById('contenido'),
+                            'background-color'
+                        );
                     }
                 }, 2000);
             }

@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/map';
 import { UserService } from './user.service';
-import { AuthenticationService } from './index';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable()
 export class NotificacionesService {
@@ -16,26 +16,21 @@ export class NotificacionesService {
   }
 
   getConfirmationEventos() {
-    const username = this.authService.user.username;
+    const username = localStorage.getItem('user');
     this.authService.createAuthenticationHeaders();
-    return this.http.get(this.domain + 'test/eventos/confirmarAsistencia/' +
+    return this.http.get(this.domain + 'eventos/confirmarAsistencia/' +
       username, this.authService.options).map(res => res.json());
   }
 
   putRequestEvent(grupoName, eventoName, personName, confirmation) {
-
     const body = {
       grupo: grupoName,
       evento: eventoName,
       usuario: personName,
       confirmacion: confirmation
     };
-
-    console.log(body);
-
-    const username = this.authService.user.username;
     this.authService.createAuthenticationHeaders();
-    return this.http.put(this.domain + 'test/eventos/confirmarAsistencia/',
+    return this.http.put(this.domain + 'eventos/confirmarAsistencia/',
       body, this.authService.options).map(res => res.json());
   }
 

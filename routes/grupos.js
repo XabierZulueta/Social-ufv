@@ -55,6 +55,10 @@ module.exports = (router) => {
             if (err) {
                 res.json({ success: false, message: err });
             } else {
+                console.log(grupo.eventos);
+                grupo.eventos.sort(function (a, b) {
+                    return new Date(b.start) - new Date(a.start);
+                });
                 res.json({ success: true, message: 'Grupos', grupo: grupo });
             }
         });
@@ -130,6 +134,73 @@ module.exports = (router) => {
                 });
             }
         });
+    });
+
+    router.post('/grupos/apuntarse', (req, res) => {
+        if (!req.body.username || !req.body.idGrupo) {
+            res.json({ success: false, message: 'Parametros invalidos.' });
+        } else {
+            Grupo.findById(req.body.idGrupo, (err, grupo) => {
+                if (err) {
+                    res.json({ success: false, message: err });
+                } else {
+                    User.findOne({ username: req.body.username }).select('username').exec((err, user) => {
+                        if (err) {
+                            res.json({ success: false, message: err });
+                        } else if (!user) {
+                            res.json({ success: false, message: 'No existe el usuario en base de datos' });
+                        } else {
+                            if (!grupo.followers.find(obj => obj.name == req.body.username)) {
+                                grupo.followers.push({ name: user.username });
+                                grupo.save(err => {
+                                    if (err) {
+                                        res.json({ success: false, message: err });
+                                    } else {
+                                        res.json({ success: true, message: 'grupo (followers) actualizado(s) correctamente', grupo: grupo });
+                                    }
+                                })
+                            } else {
+                                res.json({ success: false, message: 'El usuario ya esta siguiendo el grupo.' });
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    router.post('/grupos/desapuntarse', (req, res) => {
+        if (!req.body.username || !req.body.idGrupo) {
+            res.json({ success: false, message: 'Parametros invalidos.' });
+        } else {
+            Grupo.findById(req.body.idGrupo, (err, grupo) => {
+                if (err) {
+                    res.json({ success: false, message: err });
+                } else {
+                    User.findOne({ username: req.body.username }).select('username').exec((err, user) => {
+                        if (err) {
+                            res.json({ success: false, message: err });
+                        } else if (!user) {
+                            res.json({ success: false, message: 'No existe el usuario en base de datos' });
+                        } else {
+                            let personaIndex = grupo.followers.findIndex(obj => obj.name == user.username);
+                            if (personaIndex >= 0) {
+                                grupo.followers.splice(personaIndex, 1);
+                                grupo.save(err => {
+                                    if (err) {
+                                        res.json({ success: false, message: err });
+                                    } else {
+                                        res.json({ success: true, message: 'grupo (followers) actualizado(eliminado) correctamente', grupo: grupo });
+                                    }
+                                })
+                            } else {
+                                res.json({ success: false, message: 'El usuario no esta siguiendo el grupo' });
+                            }
+                        }
+                    });
+                }
+            });
+        }
     });
 
     return router;

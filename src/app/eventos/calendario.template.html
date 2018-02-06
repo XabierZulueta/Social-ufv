@@ -1,62 +1,75 @@
-<div *ngIf="isLoading" style="position: absolute;top: 50%;left: 50%;margin-left: -50px;" >
-    <img style="width:100px;" src="http://www.freetoursbyfoot.com/wp-content/uploads/2017/05/loading.gif"/>
-</div>
-<ng-template #modalContent let-close="close">
-    <div class="modal-header" style="background-color: #292b2c;color:white;">
-        <h5 class="modal-title">Evento</h5>
-        <button type="button" class="close" style="color:white;opacity: 1;"  (click)="close()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+<app-nav-bar></app-nav-bar>
+<div class="container" id="contenido" style="background-color:#fff;margin-top:30px;padding-top: 15px;
+padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
+    <div *ngIf="isLoading" style="position: absolute;top: 50%;left: 50%;margin-left: -50px;">
+        <img style="width:100px;" src="http://www.freetoursbyfoot.com/wp-content/uploads/2017/05/loading.gif" />
     </div>
-    <div class="modal-body">
-        <div>
-            Evento: <b> {{ modalData?.event.title }}</b> 
-            <div style="float:right;color:rgba(255, 0, 0, 0.8);">
-                <b>{{ modalData?.event.creditos }} ECTs</b>
+    <ng-template #modalContent let-close="close">
+        <div class="modal-header" style="background-color: #292b2c;color:white;">
+            <h5 class="modal-title">Evento</h5>
+            <button type="button" class="close" style="color:white;opacity: 1;" (click)="close()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div>
+                Evento:
+                <b> {{ modalData?.event.title }}</b>
+                <div style="float:right;color:rgba(255, 0, 0, 0.8);">
+                    <b>{{ modalData?.event.creditos }} ECTs</b>
+                </div>
+            </div>
+            <div>
+                Grupo organizador:
+                <a [routerLink]="['/grupo', modalData?.event.grupo._id]" (click)="close()">
+                    <b> {{ modalData?.event.grupo.nombre }}</b>
+                </a>
+                <div style="float:right;">
+                    <tr>
+                        <td>
+                            <div>
+                                Empieza:
+                                <input class="form-control" type="text" value=" {{ modalData?.event.start | date:'dd/MM/yyyy HH:mm'}}" disabled>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="float:right;margin-left:10px;">
+                                Acaba:
+                                <input class="form-control" type="text" disabled value="{{ modalData?.event.end | date:'dd/MM/yyyy HH:mm'}}">
+                            </div>
+                        </td>
+                    </tr>
+                </div>
+            </div>
+            <br/>
+            <div style="margin-top:20px;">
+                <pre><b>{{ modalData?.event.description }}</b></pre>
             </div>
         </div>
-        <div>
-            Grupo organizador: <a [routerLink]="['/grupo', modalData?.event.grupo._id]" (click)="close()"><b> {{ modalData?.event.grupo.nombre }}</b></a>
-        <div style="float:right;">
-            <tr >
-            <td><div >
-                Empieza: <input class="form-control" type="text" value=" {{ modalData?.event.start | date:'dd/MM/yyyy HH:mm'}}" disabled>
-            </div></td>
-            <td><div style="float:right;margin-left:10px;">
-                Acaba: <input class="form-control" type="text" disabled value="{{ modalData?.event.end | date:'dd/MM/yyyy HH:mm'}}">
-            </div></td>
-            </tr>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary " (click)="close()">Volver</button>
+            <div *ngIf="modalData?.event.apuntado==false">
+                <button [disabled]='procesingRequest' type="button" class="btn btn-primary " (click)="apuntarEvento(modalData?.event.grupo._id, modalData?.event.title);close();">Apuntarse</button>
+            </div>
+            <div *ngIf="modalData?.event.apuntado==true">
+                <button [disabled]='procesingRequest' type="button" class="btn btn-danger " (click)="desapuntarEvento(modalData?.event.grupo._id, modalData?.event.title); close();">Desapuntarse</button>
+            </div>
         </div>
-        </div>
-        <br/>
-        <div style="margin-top:20px;">
-            <pre><b>{{ modalData?.event.description }}</b></pre>
-        </div>
+    </ng-template>
+
+
+    <mwl-demo-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate">
+    </mwl-demo-utils-calendar-header>
+
+
+    <div [ngSwitch]="view">
+        <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)"
+            [events]="events" [cellTemplate]="customCellTemplate" [activeDayIsOpen]="activeDayIsOpen" [weekStartsOn]="1">
+        </mwl-calendar-month-view>
+        <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" (eventClicked)="handleEvent('Clicked', $event.event)"
+            [weekStartsOn]="1">
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" (eventClicked)="handleEvent('Clicked', $event.event)">
+        </mwl-calendar-day-view>
     </div>
-    <div class="modal-footer">  
-        <button type="button" class="btn btn-secondary " (click)="close()">Volver</button>
-        <div *ngIf="modalData?.event.apuntado==false">
-            <button [disabled]='procesingRequest' type="button" class="btn btn-primary " (click)="apuntarEvento(modalData?.event.grupo._id, modalData?.event.title);close();">Apuntarse</button>
-        </div>
-        <div *ngIf="modalData?.event.apuntado==true">
-            <button [disabled]='procesingRequest' type="button" class="btn btn-danger " (click)="desapuntarEvento(modalData?.event.grupo._id, modalData?.event.title); close();">Desapuntarse</button>
-        </div>
-    </div>
-</ng-template>
-
-
-<mwl-demo-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate">
-</mwl-demo-utils-calendar-header>
-
-
-<div [ngSwitch]="view">
-    <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" (dayClicked)="dayClicked($event.day)" 
-    (eventClicked)="handleEvent('Clicked', $event.event)" [events]="events" [cellTemplate]="customCellTemplate"
-     [activeDayIsOpen]="activeDayIsOpen" [weekStartsOn]="1">
-    </mwl-calendar-month-view>
-    <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" (eventClicked)="handleEvent('Clicked', $event.event)"
-     [weekStartsOn]="1">
-    </mwl-calendar-week-view>
-    <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" (eventClicked)="handleEvent('Clicked', $event.event)" >
-    </mwl-calendar-day-view>
 </div>

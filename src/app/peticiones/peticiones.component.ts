@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { User } from '../usuarios/user';
-import { fadeInAnimation } from '../_animations/index';
+import { fadeInAnimation } from '../_animations/fadein.animation';
 @Component({
     selector: 'peticiones',
     templateUrl: './peticiones.component.html', animations: [fadeInAnimation],

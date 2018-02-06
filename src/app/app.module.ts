@@ -40,7 +40,7 @@ import { NotificacionesService } from './_services/notificaciones.service';
 import { AuthGuard } from './_guards/auth.guard';
 import { NotAuthGuard } from './_guards/notAuth.guard';
 import { PeticionesComponent } from './peticiones/peticiones.component';
-import { PagerService } from './_services/index';
+import { PagerService } from './_services/pager.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';

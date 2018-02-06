@@ -3,7 +3,7 @@ import { DataService } from '../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { Grupo } from '../grupos/grupo';
-import { fadeInAnimation } from '../_animations/index';
+import { fadeInAnimation } from '../_animations/fadein.animation';
 import { Evento } from '../eventos/evento';
 import { JwtHelper } from 'angular2-jwt';
 

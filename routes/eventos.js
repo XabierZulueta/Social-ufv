@@ -4,6 +4,32 @@ const Evento = require('../models/Models.js').Evento;
 
 module.exports = (router) => {
 
+    // GET ALL (READ)
+    router.get('/eventos/', (req, res) => {
+        Grupo.find({
+            $and: [
+                { "eventos": { $ne: [] } },
+                { "eventos": { $exists: true } }]
+        }, (err, grupos) => {
+            if (err) {
+                res.json({ success: false, message: err });
+            } else {
+                let eventos = [];
+                grupos.forEach(grupo => {
+                    grupo.eventos.forEach(evento => {
+                        let e = evento.toObject();
+                        e.grupo = {
+                            _id: grupo._id,
+                            nombre: grupo.nombre
+                        };
+                        eventos.push(e);
+                    });
+                });
+                res.json({ success: true, message: 'Eventos', eventos: eventos });
+            }
+        });
+    });
+
     router.post('/eventos/apuntarse', (req, res) => {
         if (!req.body.username || !req.body.idGrupo || !req.body.evento) {
             res.json({ success: false, message: 'Parametros invalidos.' });
@@ -75,32 +101,6 @@ module.exports = (router) => {
 
     // CRUD
 
-    // GET ALL (READ)
-    router.get('/eventos/', (req, res) => {
-        Grupo.find({
-            $and: [
-                { "eventos": { $ne: [] } },
-                { "eventos": { $exists: true } }]
-        }, (err, grupos) => {
-            if (err) {
-                res.json({ success: false, message: err });
-            } else {
-                let eventos = [];
-                grupos.forEach(grupo => {
-                    grupo.eventos.forEach(evento => {
-                        let e = evento.toObject();
-                        e.grupo = {
-                            _id: grupo._id,
-                            nombre: grupo.nombre
-                        };
-                        eventos.push(e);
-                    });
-                });
-                res.json({ success: true, message: 'Eventos', eventos: eventos });
-            }
-        });
-    });
-
     /* 
         DELETE BY TITLE(ID) (DELETE)
         Borrar un evento.
@@ -141,7 +141,7 @@ module.exports = (router) => {
                 console.log('falta start');
                 res.json({ success: false, message: 'Fecha de comienzo del evento obligatoria.' });
             } else {
-                console.log('Evento Aniadido al grupo.(supongo');
+                console.log('Evento Aniadido al grupo.(supongo)');
 
                 // No se ha usado .update porque se quiere comprobar que el titulo del evento no exista para ese grupo.
 
@@ -158,7 +158,7 @@ module.exports = (router) => {
                             if (err) {
                                 res.json({ success: false, message: 'Err' });
                             } else {
-                                res.json({ success: true, message: 'Grupo aniadido' })
+                                res.json({ success: true, message: 'Evento aniadido al grupo: ' + grupo.nombre })
                             }
                         });
                     }
@@ -176,7 +176,7 @@ module.exports = (router) => {
     */
     router.put('/eventos/:idGrupo/', (req, res) => {
         if (!req.body.title) {
-            res.json({ success: false, message: 'No se ha especificado el titulo del evento que se quiere modificar.' });
+            res.json({ success: false, message: 'No se ha especificado el titulo del evento que se quiere modificar.' }); nb
         } else {
             Grupo.find({ _id: req.params.idGrupo, "eventos.title": req.body.title }, (err, grupo) => {
                 if (err) {
@@ -203,7 +203,6 @@ module.exports = (router) => {
 };
 
 checkIfUserCanModifyGrupos = function (req, res, callback) {
-    console.log('holi?');
     if (!req.body.username) {
         console.log('esque le falta username?');
         return callback(null, { success: false, message: 'Parametros incorrectos para este tipo de peticion.' });

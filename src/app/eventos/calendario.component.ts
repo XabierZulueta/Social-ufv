@@ -26,7 +26,7 @@ import { Evento } from './evento';
 import { JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
-import { fadeInAnimation } from '../_animations/index';
+import { fadeInAnimation } from '../_animations/fadein.animation';
 import { UserService } from '../_services/user.service';
 import { GruposService } from '../_services/grupos.service';
 import { EventosService } from '../_services/eventos.service';
@@ -95,19 +95,19 @@ export class CalendarioComponent implements OnInit {
             this.router.navigateByUrl('/login');
         }
         // this.refresh.next();
-        this.renderer.removeStyle(
-            document.body,
-            'background-color'
-        );
-        this.renderer.setStyle(
-            document.getElementById('contenido'),
-            'box-shadow',
-            '0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;'
-        );
-        this.renderer.removeStyle(
-            document.getElementById('contenido'),
-            'background-color'
-        );
+        // this.renderer.removeStyle(
+        //     document.body,
+        //     'background-color'
+        // );
+        // this.renderer.setStyle(
+        //     document.getElementById('contenido'),
+        //     'box-shadow',
+        //     '0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;'
+        // );
+        // this.renderer.removeStyle(
+        //     document.getElementById('contenido'),
+        //     'background-color'
+        // );
     }
 
     ngOnInit() {
@@ -125,23 +125,26 @@ export class CalendarioComponent implements OnInit {
                     }, 500);
                 });
             }
-        });
-        for (let i = 0; i < this.events.length; i++) {
-            this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
-            this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
-            this.events[i].color = colors.blue;
-            // Si está en la lista de apuntados, ponemos el color del evento en rojo
-            // y el boolean apuntado a true, si no, lo pongo a false.
-            if (this.isMember(this.events[i].go)) {
-                this.events[i].apuntado = true;
-                this.events[i].color = colors.red;
-            } else {
-                this.events[i].apuntado = false;
+            for (let i = 0; i < this.events.length; i++) {
+                this.events[i].start = new Date(new Date(this.events[i].start).toUTCString());
+                if (!!this.events[i].end) {
+                    this.events[i].end = new Date(new Date(this.events[i].end).toUTCString());
+                } else {
+                }
+                this.events[i].color = colors.blue;
+                // Si está en la lista de apuntados, ponemos el color del evento en rojo
+                // y el boolean apuntado a true, si no, lo pongo a false.
+                if (this.isMember(this.events[i].go)) {
+                    this.events[i].apuntado = true;
+                    this.events[i].color = colors.red;
+                } else {
+                    this.events[i].apuntado = false;
+                }
             }
-        }
-        this.refresh.next();
-        this.procesingRequest = false;
-        console.log(this.events);
+            this.refresh.next();
+            this.procesingRequest = false;
+            console.log(this.events);
+        });
     }
 
     handleEvent(action: string, event: Evento): void {

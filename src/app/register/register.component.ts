@@ -6,7 +6,7 @@ import { AlertService } from '../_services/alert.service';
 import { UserService } from '../_services/user.service';
 import { Grupo } from '../grupos/grupo';
 import { EmailValidator } from '@angular/forms/src/directives/validators';
-import { AuthenticationService } from '../_services/index';
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
     moduleId: module.id,

@@ -4,7 +4,7 @@ import { User } from './user';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { AuthenticationService } from '../_services/authentication.service';
-import { fadeInAnimation } from '../_animations/index';
+import { fadeInAnimation } from '../_animations/fadein.animation';
 
 
 @Component({

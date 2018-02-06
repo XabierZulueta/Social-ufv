@@ -6,7 +6,7 @@ import { JwtHelper, AuthConfig } from 'angular2-jwt';
 import { Http } from '@angular/http';
 import { Evento } from '../eventos/evento';
 import { AuthenticationService } from '../_services/authentication.service';
-import { fadeInAnimation } from '../_animations/index';
+import { fadeInAnimation } from '../_animations/fadein.animation';
 import { GruposService } from '../_services/grupos.service';
 import { UserService } from '../_services/user.service';
 import { EventosService } from '../_services/eventos.service';
@@ -27,7 +27,7 @@ const colors: any = {
 };
 
 @Component({
-    selector: 'grupos',
+    selector: 'app-grupo',
     templateUrl: './grupo.component.html',
     styleUrls: ['./grupo.component.css'],
     animations: [fadeInAnimation],
@@ -37,6 +37,7 @@ const colors: any = {
 })
 
 export class GrupoComponent implements OnInit {
+
     procesingRequest = false;
     grupo: any;
     id: number;
@@ -63,7 +64,7 @@ export class GrupoComponent implements OnInit {
     prueba: any;
     jwtHelper: JwtHelper = new JwtHelper();
     isLogged: any;
-    npeticiones: any;
+    npeticiones: Number;
     maxIdPeticion: any;
     peticion = { id: 0, idUsuario: 0, idGrupo: 0 };
     esperando: boolean;
@@ -79,7 +80,6 @@ export class GrupoComponent implements OnInit {
         private userService: UserService,
         private http: Http,
         private authService: AuthenticationService) {
-
     }
 
     ngOnInit() {
@@ -96,29 +96,15 @@ export class GrupoComponent implements OnInit {
                 } else {
                     this.grupo = data.grupo;
                     if (!!this.grupo) {
-                        this.eventos = this.grupo.eventos;
-
-                        for (let i = 0; i < this.eventos.length; i++) {
-                            this.eventos[i].start = new Date(new Date(this.eventos[i].start).toUTCString());
-                            this.eventos[i].end = new Date(new Date(this.eventos[i].end).toUTCString());
-                            this.eventos[i].color = colors.blue;
-                            console.log(this.eventos[i]);
-                            if (this.isMember(this.eventos[i].go)) {
-                                this.eventos[i].apuntado = true;
-                            } else {
-                                this.eventos[i].apuntado = false;
-                            }
-                        }
-
-                        this.miembros = this.grupo.equipo.filter(value => value.confirmed === true);
-                        console.log(this.grupo);
+                        this.initEventos();
                     }
+                    console.log(this.eventos);
+                    this.npeticiones = this.grupo.followers.filter(obj => obj.confirmed === undefined).length;
                 }
             });
-            // In a real app: dispatch action to load the details here.
         });
 
-        this.isAllow = localStorage.getItem('role') !== 'alumno';
+        this.isAllow = this.comprobarUser();
 
         // this.token = localStorage.getItem('token');
         // this.tokenDecoded = this.jwtHelper.decodeToken(this.token);
@@ -141,8 +127,8 @@ export class GrupoComponent implements OnInit {
 
         this._dataService.getNUsers(this.id)
             .subscribe(res => this.nusers = res);
-        this._dataService.getNPeticiones(this.id)
-            .subscribe(res => this.npeticiones = res);
+        // this._dataService.getNPeticiones(this.id)
+        //     .subscribe(res => this.npeticiones = res);
         this._dataService.esMiembro(this.id, this.userId)
             .subscribe(res => {
                 this.miembro = res;
@@ -151,6 +137,7 @@ export class GrupoComponent implements OnInit {
                 } else {
                     this.miembro = false;
                 }
+                this.miembro = true;
             });
         this._dataService.esperando(this.id, this.userId)
             .subscribe(res => {
@@ -225,19 +212,54 @@ export class GrupoComponent implements OnInit {
 
     initEventos() {
         this.eventos = this.grupo.eventos;
+        console.log(this.eventos);
+        this.eventos = this.eventos.sort(function (a, b) {
+            return (new Date(b.start).getTime() - new Date(a.start).getTime());
+        });
+        console.log(this.eventos);
         for (let i = 0; i < this.eventos.length; i++) {
             this.eventos[i].start = new Date(new Date(this.eventos[i].start).toUTCString());
-            this.eventos[i].end = new Date(new Date(this.eventos[i].end).toUTCString());
+            if (!!this.eventos[i].end) {
+                this.eventos[i].end = new Date(new Date(this.eventos[i].end).toUTCString());
+            }
             this.eventos[i].color = colors.blue;
-            console.log(this.eventos[i]);
             if (this.isMember(this.eventos[i].go)) {
                 this.eventos[i].apuntado = true;
             } else {
                 this.eventos[i].apuntado = false;
             }
         }
+        this.miembros = this.grupo.equipo.filter(value => value.confirmed === true);
         setTimeout(() => {
             this.procesingRequest = false;
         }, 1500);
+    }
+
+    updateEvents(event: object) {
+        this.gruposService.getById(this.grupo._id).subscribe(data => {
+            if (!data.success) {
+                console.log(data);
+                alert('err' + data.message);
+            } else {
+                this.grupo = data.grupo;
+                if (!!this.grupo) {
+                    this.initEventos();
+                }
+                console.log(this.eventos);
+            }
+        });
+    }
+
+    comprobarUser(): boolean {
+        const username = localStorage.getItem('user');
+        if (localStorage.getItem('role') === 'admin') {
+            return true;
+        } else if (username === this.grupo.administrador) {
+            return true;
+        } else if (username in this.grupo.equipo) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

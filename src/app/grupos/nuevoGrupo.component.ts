@@ -8,7 +8,7 @@ import { Ng2FileInputService, Ng2FileInputAction } from 'ng2-file-input';
 import { Grupo } from './grupo';
 import { FancyImageUploaderOptions, UploadedFile } from 'ng2-fancy-image-uploader';
 import { AuthenticationService } from '../_services/authentication.service';
-import { fadeInAnimation } from '../_animations/index';
+import { fadeInAnimation } from '../_animations/fadein.animation';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { GruposService } from '../_services/grupos.service';
 

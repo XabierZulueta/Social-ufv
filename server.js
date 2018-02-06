@@ -41,7 +41,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/dist'));
 
 app.use('/authentication', authentication);
-app.use('/notificaciones', notifications);
+app.use(notifications);
 app.use(grupos);
 app.use(eventos);
 

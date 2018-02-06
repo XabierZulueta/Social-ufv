@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import { User } from '../usuarios/user';
 
 import { UserService } from '../_services/user.service';
-import { AuthenticationService } from './index';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable()
 export class GruposService {
@@ -42,9 +42,9 @@ export class GruposService {
         return this.http.get(this.domain + id, this.options).map(res => res.json());
     }
 
-    addEvento(idGrupo, evento) {
-        console.log(evento);
-        this.createAuthenticationHeaders();
-        return this.http.post(this.domain + idGrupo + '/addEvento', evento, this.options).map(res => res.json());
-    }
+    // addEvento(idGrupo, evento) {
+    //     console.log(evento);
+    //     this.createAuthenticationHeaders();
+    //     return this.http.post(this.domain + idGrupo + '/addEvento', evento, this.options).map(res => res.json());
+    // }
 }

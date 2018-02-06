@@ -16,7 +16,7 @@ export class ConfirmacionAsistenciasComponent implements OnInit {
     private notificacionesService: NotificacionesService,
     private renderer: Renderer2,
     private router: Router) {
-    notificacionesService.getConfirmationEventos().subscribe(data => {
+    this.notificacionesService.getConfirmationEventos().subscribe(data => {
       if (data.success) {
         console.log(data);
         data.grupos.forEach(grupoData => {

@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import { User } from '../usuarios/user';
 
 import { UserService } from '../_services/user.service';
-import { AuthenticationService } from './index';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable()
 export class EventosService {
@@ -50,7 +50,13 @@ export class EventosService {
     }
 
     getAll() {
+        console.log('que pasa?');
         this.createAuthenticationHeaders();
         return this.http.get(this.domain + '', this.options).map(res => res.json());
+    }
+
+    addEvento(evento) {
+        this.createAuthenticationHeaders();
+        return this.http.post(this.domain + evento.idGrupo, evento, this.options).map(res => res.json());
     }
 }

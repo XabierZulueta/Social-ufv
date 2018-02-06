@@ -5,7 +5,7 @@ import { User } from './usuarios/user';
 import { JwtHelper } from 'angular2-jwt';
 import { Subject } from 'rxjs/Subject';
 // import fade in animation
-import { fadeInAnimation } from './_animations/index';
+import { fadeInAnimation } from './_animations/fadein.animation';
 import { UserService } from './_services/user.service';
 
 @Component({

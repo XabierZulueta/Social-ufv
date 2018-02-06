@@ -386,11 +386,11 @@ router.post('/authenticate', (req, res) => {
             .findOne({ name: req.body.username, password: req.body.password }, function (err, user) {
                 if (err) throw err;
                 if (!user) {
-                    res.json({ success: false, msg: 'Los datos introducidos no coinciden.' });
+                    res.json({ success: false, message: 'Los datos introducidos no coinciden.' });
                 }
                 else {
                     var token = jwt.encode(user, 'xxx', 'HS512');
-                    res.json({ success: true, msg: 'Ese usuario si existe', user: user, token: token });
+                    res.json({ success: true, message: 'Ese usuario si existe', user: user, token: token });
                 }
             })
             ;
@@ -508,6 +508,7 @@ router.get('/events/:id', (req, res) => {
 //Post events
 router.post('/events', (req, res) => {
     res.send('success');
+    console.log('not posible')
     req.body.start = new Date(req.body.start);
     req.body.id = parseInt(req.body.id);
     connection((db) => {

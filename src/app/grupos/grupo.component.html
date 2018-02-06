@@ -1,124 +1,128 @@
-<div class="" *ngIf="grupo">
-    <div class="card hovercard" style="background-color: #013660;">
-        <div class="card-background">
-            <img class="card-bkimg" alt="">
-            <!-- http://lorempixel.com/850/280/people/9/ -->
-        </div>
-
-        <div class="useravatar">
-            <img alt="" [src]="grupo.imagen" style="border-radius:0px;background-color: white;">
-        </div>
-        <div *ngIf="miembro==false && esperando == false" class="" style="margin-bottom:15px;">
-            <button class="btn btn-success " (click)="apuntarGrupo(userId, grupo.id);">Enviar petición</button>
-        </div>
-        <div *ngIf="miembro==false && esperando == true" class="" style="margin-bottom:15px;">
-            <button class="btn btn-info ">Esperando...</button>
-        </div>
-        <div *ngIf="miembro==true" class="" style="margin-bottom:15px;">
-            <button class="btn btn-danger" (click)="desapuntarGrupo(userId, grupo.id);">Desapuntarse</button>
-            <div class="btn-group dropup">
-                <button type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <i class="material-icons">settings</i>
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" [routerLink]="['/nuevoEvento', grupo.id]">Nuevo Evento</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" [routerLink]="['/peticiones', grupo.id]">Peticiones
-                        <span *ngIf="npeticiones>0" class="badge badge-notify" style="background: red;position:relative;/* top: -20px; *//* left: -24px; */z-index: 1000;">
-                            {{npeticiones}}</span>
-                    </a>
-
-                </div>
+<app-nav-bar></app-nav-bar>
+<div class="container" id="contenido" style="background-color:#fff;margin-top:30px;padding-top: 15px;
+padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
+    <div class="" *ngIf="grupo">
+        <div class="card hovercard" style="background-color: #013660;">
+            <div class="card-background">
+                <img class="card-bkimg" alt="">
+                <!-- http://lorempixel.com/850/280/people/9/ -->
             </div>
-            <span *ngIf="npeticiones>0" class="badge badge-notify" style="background: red;position:relative;top: -20px;left: -24px;z-index: 1000;">
-                {{npeticiones}}</span>
-        </div>
 
-        <div class="card-info">
-            <span class="card-title" style="color:white;">{{grupo.nombre}}</span>
-        </div>
-    </div>
-    <nav style="margin-bottom: 10px;margin-top:15px;text-align: center;">
-        <button type="button" class="btn btn-outline-primary active" aria-expanded="true" href="#tab1" data-toggle="tab">Información</button>
-        <button type="button" class="btn btn-outline-primary" href="#tab2" data-toggle="tab">Miembros</button>
-        <button type="button" class="btn btn-outline-primary" href="#tab3" data-toggle="tab">Eventos</button>
-        <button *ngIf="isAllow" type="button" class="btn btn-outline-success" href="#tab4" data-toggle="tab">Nuevo Evento</button>
-    </nav>
+            <div class="useravatar">
+                <img alt="" [src]="grupo.imagen" style="border-radius:0px;background-color: white;">
+            </div>
+            <div *ngIf="miembro==false && esperando == false" class="" style="margin-bottom:15px;">
+                <button class="btn btn-success " (click)="apuntarGrupo(userId, grupo.id);">Enviar petición</button>
+            </div>
+            <div *ngIf="miembro==false && esperando == true" class="" style="margin-bottom:15px;">
+                <button class="btn btn-info ">Esperando...</button>
+            </div>
+            <div *ngIf="miembro==true" class="" style="margin-bottom:15px;">
+                <button class="btn btn-danger" (click)="desapuntarGrupo(userId, grupo.id);">Desapuntarse</button>
+                <div class="btn-group dropup">
+                    <button type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="material-icons">settings</i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" [routerLink]="['/nuevoEvento', grupo.id]">Nuevo Evento</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['/peticiones', grupo.id]">Peticiones
+                            <span *ngIf="npeticiones>0" class="badge badge-notify" style="background: red;position:relative;/* top: -20px; *//* left: -24px; */z-index: 1000;">
+                                {{npeticiones}}</span>
+                        </a>
 
-    <div class="well">
-        <div class="tab-content">
-            <div class="tab-pane fade active show in" id="tab1">
-                <h3>Información</h3>
-                <div class="card text-normal">
-                    <div class="card-block">
-                        {{grupo.informacion}}
                     </div>
                 </div>
+                <span *ngIf="npeticiones>0" class="badge badge-notify" style="background: red;position:relative;top: -20px;left: -24px;z-index: 1000;">
+                    {{npeticiones}}</span>
             </div>
-            <div class="tab-pane fade in" id="tab2">
-                <p class="h3">Miembros
-                    <span class="badge" style="background-color: #343a40;">{{nusers}}</span>:
-                </p>
-                {{this.grupo.administrador}}
-                <h4>Equipo
-                    <span class="badge" style="background-color: #343a40;">{{grupo.equipo.length}}</span>
-                </h4>
-                {{miembros}}
-                <ul class="list-group" style="margin-top: 20px;">
-                    <li *ngFor="let miembro of miembros" class="list-group-item justify-content-between">
-                        <a [routerLink]="['/user', miembro.id]">{{miembro}}</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="tab-pane fade in" id="tab3">
-                <h3 style="text-align: center;">Eventos</h3>
-                <ul class="timeline">
-                    <li *ngFor="let evento of eventos;let i = index" [ngClass]="{'timeline-inverted': i%2==0}">
-                        <div class="timeline-badge danger">
-                            <i class="material-icons">event</i>
-                        </div>
-                        <div class="timeline-panel">
-                            <!-- <form role="form"> -->
-                            <div class="timeline-heading">
-                                <div class="form-group">
-                                    <label for="title">{{evento.title}}</label>
-                                </div>
-                                <p>
-                                    <i class="material-icons">event</i>
-                                    <small class="text-muted">{{evento.start|date:'dd/MM/y HH:mm'}}</small> -
-                                    <small class="text-muted">{{evento.end|date:'dd/MM/y HH:mm'}}</small>
-                                </p>
-                            </div>
-                            <div class="timeline-body">
-                                <div class="form-group">
-                                    <label for="Text">{{evento.descripcion}}</label>
-                                </div>
 
+            <div class="card-info">
+                <span class="card-title" style="color:white;">{{grupo.nombre}}</span>
+            </div>
+        </div>
+        <nav style="margin-bottom: 10px;margin-top:15px;text-align: center;">
+            <button type="button" class="btn btn-outline-primary active" aria-expanded="true" href="#tab1" data-toggle="tab">Información</button>
+            <button type="button" class="btn btn-outline-primary" href="#tab2" data-toggle="tab">Miembros</button>
+            <button type="button" class="btn btn-outline-primary" href="#tab3" data-toggle="tab">Eventos</button>
+            <button *ngIf="isAllow" type="button" class="btn btn-outline-success" href="#tab4" data-toggle="tab">Nuevo Evento</button>
+        </nav>
+
+        <div class="well">
+            <div class="tab-content">
+                <div class="tab-pane fade active show in" id="tab1">
+                    <h3>Información</h3>
+                    <div class="card text-normal">
+                        <div class="card-block">
+                            {{grupo.informacion}}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="tab2">
+                    <p>
+                        <strong class="h3">Administrador:</strong>
+                        {{this.grupo.administrador}}
+                    </p>
+                    <h4>Equipo
+                        <span class="badge" style="background-color: #343a40;">{{grupo.equipo.length}}</span>
+                    </h4>
+                    {{miembros}}
+                    <ul class="list-group" style="margin-top: 20px;">
+                        <li *ngFor="let miembro of miembros" class="list-group-item justify-content-between">
+                            <a [routerLink]="['/user', miembro.id]">{{miembro}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-pane fade in" id="tab3">
+                    <h3 style="text-align: center;">Eventos</h3>
+                    <ul class="timeline">
+                        <li *ngFor="let evento of eventos;let i = index" [ngClass]="{'timeline-inverted': i%2==0}">
+                            <div class="timeline-badge danger">
+                                <i class="material-icons">event</i>
                             </div>
-                            <div class="ploc-tags">
-                                <div class="pull-right">
-                                    <label>Créditos: </label>
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-danger btn-xs active">{{evento.creditos}}</label>
+                            <div class="timeline-panel">
+                                <!-- <form role="form"> -->
+                                <div class="timeline-heading">
+                                    <div class="form-group">
+                                        <label for="title">{{evento.title}}</label>
+                                    </div>
+                                    <p>
+                                        <i class="material-icons">event</i>
+                                        <small class="text-muted">{{evento.start|date:'dd/MM/y HH:mm'}}</small> -
+                                        <small class="text-muted">{{evento.end|date:'dd/MM/y HH:mm'}}</small>
+                                    </p>
+                                </div>
+                                <div class="timeline-body">
+                                    <div class="form-group">
+                                        <label for="Text">{{evento.descripcion}}</label>
+                                    </div>
+
+                                </div>
+                                <div class="ploc-tags">
+                                    <div class="pull-right">
+                                        <label>Créditos: </label>
+                                        <div class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-danger btn-xs active">{{evento.creditos}}</label>
+                                        </div>
                                     </div>
                                 </div>
+                                <br />
+                                <br />
+                                <div *ngIf="evento.apuntado==false && evento.start > ahora">
+                                    <button [disabled]="procesingRequest" type="button" (click)="apuntarEvento(grupo._id, evento.title);" class="btn btn-warning btn-lg btn-block">¡Quiero ir!</button>
+                                </div>
+                                <div *ngIf="evento.apuntado==true && evento.start > ahora ">
+                                    <button [disabled]="procesingRequest" type="button" (click)="desapuntarEvento(grupo._id, evento.title);" class="btn btn-danger btn-lg btn-block">Darme de baja</button>
+                                </div>
+                                <!-- </form> -->
                             </div>
-                            <br />
-                            <br />
-                            <div *ngIf="evento.apuntado==false && evento.start > ahora">
-                                <button [disabled]="procesingRequest" type="button" (click)="apuntarEvento(grupo._id, evento.title);" class="btn btn-warning btn-lg btn-block">¡Quiero ir!</button>
-                            </div>
-                            <div *ngIf="evento.apuntado==true && evento.start > ahora ">
-                                <button [disabled]="procesingRequest" type="button" (click)="desapuntarEvento(grupo._id, evento.title);" class="btn btn-danger btn-lg btn-block">Darme de baja</button>
-                            </div>
-                            <!-- </form> -->
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="tab-pane fade in" id="tab4">
-                <h3>Nuevo evento</h3>
-                <app-nuevo-evento *ngIf='grupo' [padre]='grupo'></app-nuevo-evento>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-pane fade in" id="tab4" *ngIf="isAllow">
+                    <h3>Nuevo evento</h3>
+                    <app-nuevo-evento *ngIf="grupo" [grupoPadre]="grupo" (update)="updateEvents($event)"></app-nuevo-evento>
+                </div>
             </div>
         </div>
     </div>

@@ -39,7 +39,7 @@ const colors: any = {
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { Grupo } from '../grupos/grupo';
-import { fadeInAnimation } from '../_animations/index';
+import { fadeInAnimation } from '../_animations/fadein.animation';
 @Component({
     selector: 'evento',
     templateUrl: './evento.component.html', animations: [fadeInAnimation],
