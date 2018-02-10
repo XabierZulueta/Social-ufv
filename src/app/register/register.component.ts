@@ -35,6 +35,7 @@ export class RegisterComponent {
 
     createForm() {
         this.form = this.formBuilder.group({
+            nombre: [''],
             email: ['', Validators.compose([
                 Validators.required,
                 Validators.minLength(5),
@@ -60,6 +61,7 @@ export class RegisterComponent {
     }
 
     enableForm() {
+        this.form.controls['nombre'].enable();
         this.form.controls['password'].enable();
         this.form.controls['username'].enable();
         this.form.controls['confirm'].enable();
@@ -68,6 +70,7 @@ export class RegisterComponent {
 
     disabledForm() {
         this.form.controls['password'].disable();
+        this.form.controls['nombre'].disable();
         this.form.controls['username'].disable();
         this.form.controls['confirm'].disable();
         this.form.controls['email'].disable();
@@ -118,19 +121,21 @@ export class RegisterComponent {
         const user = {
             email: this.form.get('email').value,
             username: this.form.get('username').value,
-            password: this.form.get('password').value
+            password: this.form.get('password').value,
+            nombre: this.form.get('nombre').value
         };
         this.authService.registerUser(user).subscribe((data) => {
             if (!data.success) {
                 this.messageClass = 'alert alert-danger';
                 this.message = data.message;
-                this.loading = false;
                 this.enableForm();
             } else {
                 this.messageClass = 'alert alert-success';
                 this.message = data.message;
             }
             console.log(data);
+            this.loading = false;
+            this.enableForm();
         });
     }
 
@@ -143,7 +148,7 @@ export class RegisterComponent {
                 if (this.emailValid) {
                     this.emailMessageClass = 'alert-success';
                 } else {
-                    this.emailMessageClass = 'alert-danget';
+                    this.emailMessageClass = 'alert-danger';
                 }
             });
         }

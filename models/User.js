@@ -131,7 +131,7 @@ const passwordValidators = [
 
 // User Model Definition
 const userSchema = new Schema({
-  creditos: {type:Number, default:0},
+  creditos: { type: Number, default: 0 },
   role: {
     type: String,
     enum: ['alumno', 'admin', 'rep'],
@@ -141,14 +141,18 @@ const userSchema = new Schema({
   },
   email: { type: String, required: true, unique: true, lowercase: true, validate: emailValidators },
   username: { type: String, required: true, unique: true, lowercase: true, validate: usernameValidators },
-  password: { type: String, required: true, validate: passwordValidators }
+  nombre: { type: String, required: true, default: '' },
+  password: { type: String, required: true, validate: passwordValidators },
+  active: { type: Boolean, required: true, default: false },
+  temporaryToken: { type: String, required: false }
 });
 
 // Schema Middleware to Encrypt Password
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
   // Ensure password is new or modified before applying encryption
-  if (!this.isModified('password'))
+  if (!this.isModified('password')) {
     return next();
+  }
 
   // Apply encryption
   bcrypt.hash(this.password, null, null, (err, hash) => {
@@ -159,7 +163,7 @@ userSchema.pre('save', function(next) {
 });
 
 // Methods to compare password to encrypted password upon login
-userSchema.methods.comparePassword = function(password) {
+userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password); // Return comparison of login password to password in database (true or false)
 };
 

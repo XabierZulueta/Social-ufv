@@ -55,6 +55,7 @@ import { FormsModule } from '@angular/forms';
 import { NavBarComponent } from './_components/nav-bar/nav-bar.component';
 import { TagsComponent } from './tags/tags.component';
 import { NuevoEventoComponent } from './eventos/nuevo-evento/nuevo-evento.component';
+import { CuentaActivadaComponent } from './_components/cuenta-activada/cuenta-activada.component';
 
 
 @NgModule({
@@ -74,6 +75,7 @@ import { NuevoEventoComponent } from './eventos/nuevo-evento/nuevo-evento.compon
     ConfirmacionAsistenciasComponent,
     NavBarComponent,
     NuevoEventoComponent,
+    CuentaActivadaComponent,
   ],
   imports: [
     BrowserModule,

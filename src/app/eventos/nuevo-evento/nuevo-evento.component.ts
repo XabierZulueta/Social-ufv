@@ -39,13 +39,12 @@ export class NuevoEventoComponent implements OnInit {
   createForm() {
     this.form = this.formBuilder.group({
       title: ['', Validators.compose([
-        Validators.required]
+        Validators.required, Validators.minLength(5), Validators.maxLength(150)]
       )],
       start: ['', Validators.compose([
         Validators.required]
       )],
-      // end: ['', Validators.compose([]
-      // )],
+      end: [''],
       // go: ['', Validators.compose([]
       // )],
       // maxPersonas: ['', Validators.compose([
@@ -54,9 +53,9 @@ export class NuevoEventoComponent implements OnInit {
       // )],
       // description: ['', Validators.compose([]
       // )],
-      // creditos: ['', Validators.compose([
-      //   Validators.min(0)]
-      // )]
+      creditos: ['0', Validators.compose([
+        Validators.min(0), Validators.required]
+      )]
     });
     this.enableForm();
   }
@@ -64,21 +63,21 @@ export class NuevoEventoComponent implements OnInit {
   enableForm() {
     this.form.controls['title'].enable();
     this.form.controls['start'].enable();
-    // this.form.controls['end'].enable();
+    this.form.controls['end'].enable();
     // this.form.controls['go'].enable();
     // this.form.controls['maxPersonas'].enable();
     // this.form.controls['description'].enable();
-    // this.form.controls['creditos'].enable();
+    this.form.controls['creditos'].enable();
   }
 
   disabledForm() {
     this.form.controls['title'].disable();
     this.form.controls['start'].disable();
-    // this.form.controls['end'].disable();
+    this.form.controls['end'].disable();
     // this.form.controls['go'].disable();
     // this.form.controls['maxPersonas'].disable();
     // this.form.controls['description'].disable();
-    // this.form.controls['creditos'].disable();
+    this.form.controls['creditos'].disable();
   }
 
   onAddEventoSubmit() {
@@ -87,7 +86,9 @@ export class NuevoEventoComponent implements OnInit {
     const body = {
       evento: {
         title: this.form.get('title').value,
-        start: this.form.get('start').value
+        start: this.form.get('start').value,
+        creditos: this.form.get('creditos').value,
+        end: this.form.get('end').value
       },
       idGrupo: this.grupoPadre._id
     };
@@ -98,12 +99,13 @@ export class NuevoEventoComponent implements OnInit {
       } else {
         console.log(data);
         this.update.emit();
+        setTimeout(() => {
+          this.enableForm();
+          this.loading = false;
+        }, 1000);
       }
     });
 
-    // this.eventosService.addEvento(evento);
-
-    console.log(body);
   }
 
   checkTitle() {
@@ -114,7 +116,6 @@ export class NuevoEventoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.grupoPadre);
     this.createForm();
   }
 

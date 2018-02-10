@@ -12,26 +12,6 @@ module.exports = (router) => {
 
     router.get('/grupos/testEmail', (req, res) => {
 
-        var options = {
-            to: 'jorge.manza1@gmail.com',
-            subject: 'subject',
-            message: 'your message goes here'
-        };
-
-        var mail = new Mail({
-            to: options.to,
-            subject: options.subject,
-            message: options.message,
-            successCallback: function (suc) {
-                console.log('success');
-            },
-            errorCallback: function (err) {
-                console.log('error: ' + err);
-            }
-        });
-
-        mail.send();
-
         Grupo.find({}, (err, grupos) => {
             if (err) {
                 res.json({ success: false, message: err });

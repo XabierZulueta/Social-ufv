@@ -8,10 +8,11 @@ import { Evento } from '../eventos/evento';
 import { JwtHelper } from 'angular2-jwt';
 
 @Component({
-    selector: 'user',
+    selector: 'app-user',
     templateUrl: './user.component.html',
     styleUrls: ['../app.component.css'],
     animations: [fadeInAnimation],
+    // tslint:disable-next-line:use-host-property-decorator
     host: { '[@fadeInAnimation]': '' }
 })
 
@@ -26,6 +27,14 @@ export class UserComponent implements OnInit {
     tags;
     step = 0;
 
+    constructor(private _dataService: DataService,
+        private route: ActivatedRoute, private authService: AuthenticationService,
+        private router: Router) {
+        this.ultimoEvento = [];
+        this.organizador = { id: 0, nombre: '', imagen: '', informacion: '' };
+        this.tags = [];
+    }
+
     setStep(index: number) {
         this.step = index;
     }
@@ -36,13 +45,6 @@ export class UserComponent implements OnInit {
 
     prevStep() {
         this.step--;
-    }
-    constructor(private _dataService: DataService,
-        private route: ActivatedRoute, private authService: AuthenticationService,
-        private router: Router) {
-        this.ultimoEvento = [];
-        this.organizador = { id: 0, nombre: '', imagen: '', informacion: '' };
-        this.tags = [];
     }
 
     ngOnInit() {

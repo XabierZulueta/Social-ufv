@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthenticationService } from '../_services/authentication.service';
@@ -14,6 +14,7 @@ import { AuthGuard } from '../_guards/auth.guard';
     templateUrl: 'login.component.html',
     animations: [fadeInAnimation],
     // attach the fade in animation to the host (root) element of this component
+    // tslint:disable-next-line:use-host-property-decorator
     host: { '[@fadeInAnimation]': '' }
 })
 
@@ -27,26 +28,10 @@ export class LoginComponent implements OnInit {
     constructor(
         private authGuard: AuthGuard,
         private router: Router,
-        private renderer: Renderer2,
         private authService: AuthenticationService,
         private formBuilder: FormBuilder) {
         this.createForm();
         document.body.style.backgroundColor = '#003265';
-        this.renderer.setStyle(
-            document.body,
-            'background-color',
-            '#003265'
-        );
-        this.renderer.setStyle(
-            document.getElementById('contenido'),
-            'background-color',
-            'rgba(0, 0, 0, 0.13)'
-        );
-        // document.getElementById('contenido').style.backgroundColor = 'rgba(0, 0, 0, 0.13)';
-        // renderer.addClass(document.body, 'background-blue');
-        // renderer.addClass
-        // document.body.style.backgroundColor = '#003265';
-        // document.getElementById('contenido').style.backgroundColor = 'rgba(0, 0, 0, 0.13)';
     }
 
     createForm() {
@@ -88,17 +73,8 @@ export class LoginComponent implements OnInit {
                         this.router.navigate([this.previousUrl]);
                     } else {
                         this.router.navigate(['/']);
-                        document.body.style.backgroundColor = '#003265';
-                        this.renderer.removeStyle(
-                            document.body,
-                            'background-color',
-                        );
-                        this.renderer.removeStyle(
-                            document.getElementById('contenido'),
-                            'background-color'
-                        );
                     }
-                }, 2000);
+                }, 10000);
             }
         });
     }

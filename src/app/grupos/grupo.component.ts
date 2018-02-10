@@ -33,6 +33,7 @@ const colors: any = {
     animations: [fadeInAnimation],
 
     // attach the fade in animation to the host (root) element of this component
+    // tslint:disable-next-line:use-host-property-decorator
     host: { '[@fadeInAnimation]': '' }
 })
 
@@ -101,10 +102,9 @@ export class GrupoComponent implements OnInit {
                     console.log(this.eventos);
                     this.npeticiones = this.grupo.followers.filter(obj => obj.confirmed === undefined).length;
                 }
+                this.isAllow = this.comprobarUser();
             });
         });
-
-        this.isAllow = this.comprobarUser();
 
         // this.token = localStorage.getItem('token');
         // this.tokenDecoded = this.jwtHelper.decodeToken(this.token);

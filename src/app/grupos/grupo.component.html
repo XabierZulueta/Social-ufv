@@ -120,7 +120,6 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                     </ul>
                 </div>
                 <div class="tab-pane fade in" id="tab4" *ngIf="isAllow">
-                    <h3>Nuevo evento</h3>
                     <app-nuevo-evento *ngIf="grupo" [grupoPadre]="grupo" (update)="updateEvents($event)"></app-nuevo-evento>
                 </div>
             </div>

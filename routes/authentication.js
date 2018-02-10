@@ -1,6 +1,7 @@
 const User = require('../models/User.js');
 const jwt = require('jsonwebtoken');
 const config = require('./../config/config.local');
+const Mail = require('./../mail');
 
 module.exports = (router) => {
 
@@ -17,7 +18,9 @@ module.exports = (router) => {
                     let user = new User({
                         username: req.body.username.toLowerCase(),
                         email: req.body.email.toLowerCase(),
-                        password: req.body.password
+                        password: req.body.password,
+                        nombre: req.body.nombre,
+                        temporaryToken: jwt.sign({ username: req.body.username.toLowerCase() }, config.secret, { expiresIn: '24h' }),
                     });
                     user.save((err) => {
                         if (err) {
@@ -30,9 +33,37 @@ module.exports = (router) => {
                                     res.json({ message: err.errors.username.message, success: false });
                                 } else if (err.errors.password) {
                                     res.json({ message: err.errors.password.message, success: false });
+                                } else {
+                                    console.log(err);
+                                    res.json({ success: false, message: err });
                                 }
                             }
                         } else {
+                            console.log('enviando el email');
+                            var options = {
+                                to: user.email,
+                                subject: 'Localhost activation link',
+                                text: 'Hello ' + user.nombre + ', ' + '<br> <br> Por favor pincha en el enlace para confirmar ' +
+                                    'la cuenta en (localhost.com: http://localhost:4200/activate/' + user.temporaryToken + ')',
+                                html: 'Hello ' + user.nombre + ', ' + '<br> <br> Por favor pincha en el enlace para confirmar ' +
+                                    'la cuenta en (localhost.com)<br><br> <a href="http://localhost:4200/activate/' + user.temporaryToken +
+                                    '">http://localhost:4200/activate</a> '
+                            };
+
+                            var mail = new Mail({
+                                to: options.to,
+                                subject: options.subject,
+                                text: options.text,
+                                html: options.html,
+                                successCallback: function (suc) {
+                                    console.log('success');
+                                },
+                                errorCallback: function (err) {
+                                    console.log('error: ' + err);
+                                }
+                            });
+
+                            mail.send();
                             res.json({ message: "Usuario creado!", success: true });
                         }
                     });
@@ -42,7 +73,6 @@ module.exports = (router) => {
     });
 
     router.get('/checkEmail/:email', (req, res) => {
-        console.log('email');
         if (!req.params.email) {
             res.json({ success: false, message: "No se ha especificado e-mail." });
         } else {
@@ -89,18 +119,110 @@ module.exports = (router) => {
                     res.json({ success: false, message: err });
                 } else if (!user) {
                     res.json({ success: false, message: "Usuario no existente." });
+                } else if (!user.comparePassword(req.body.password)) {
+                    res.json({ success: false, message: "Usuario o contraseña incorrectos." });
+                } else if (!user.active) {
+                    res.json({ success: false, message: "Esta cuenta no ha sido activada. Por favor revise el correo." });
                 } else {
-                    const pssOk = user.comparePassword(req.body.password);
-                    if (!pssOk) {
-                        res.json({ success: false, message: "Usuario o contraseña incorrectos." });
-                    } else {
-                        const token = jwt.sign({ userid: user._id }, config.secret, { expiresIn: '24h' });
-                        res.json({ success: true, message: "Bienvenido " + user.username, token: token, user: user });
-                    }
+                    console.log(user);
+                    const token = jwt.sign({ userid: user._id }, config.secret, { expiresIn: '24h' });
+                    res.json({ success: true, message: "Bienvenido " + user.username, token: token, user: user });
                 }
             }
             );
         }
+    });
+
+    router.put('/activate/:token', (req, res) => {
+        const token = req.params.token;
+        jwt.verify(token, config.secret, (err, decoded) => {
+            if (err) {
+                console.log('err');
+                res.json({ succes: false, message: 'Activation link has expired.' });
+            } else {
+                console.log('todo ok continuamos.');
+                User.findOneAndUpdate({ temporaryToken: req.params.token }, { active: true, $unset: { temporaryToken: '' } }, (err, user) => {
+                    if (err) {
+                        res.json({ succes: false, message: err });
+                    } else {
+                        console.log(user.email);
+                        var options = {
+                            to: user.email,
+                            subject: 'Localhost cuenta activada!',
+                            html: 'Hello ' + user.nombre + ', ' + '<br> <br> Tu cuenta ha sido activada correctamente',
+                            text: 'Hello ' + user.nombre + ', ' + '. Tu cuenta ha sido activada correctamente'
+                        };
+
+                        var mail = new Mail({
+                            to: options.to,
+                            subject: options.subject,
+                            html: options.hmtml,
+                            text: options.text,
+                            successCallback: function (suc) {
+                                console.log('Correo enviado correctamente');
+                            },
+                            errorCallback: function (err) {
+                                console.log('error: ' + err);
+                            }
+                        });
+
+                        mail.send();
+
+                        res.json({ succes: true, message: 'Account has been activated.' });
+                    }
+                });
+            }
+        });
+        // User.findOne({ temporaryToken: req.params.token }, (err, user) => {
+        //     if (err) {
+        //         console.log('err');
+        //         res.json({ succes: false, message: err });
+        //     } else {
+        //         console.log('user');
+        //         const token = req.params.token;
+        //         jwt.verify(token, config.secret, (err, decoded) => {
+        //             if (err) {
+        //                 console.log('err');
+        //                 res.json({ succes: false, message: 'Activation link has expired.' });
+        //             } else if (!user) {
+        //                 console.log('No user found');
+        //                 res.json({ succes: false, message: 'Activation link has expired.' });
+        //             } else {
+        //                 console.log('todo ok continuamos.');
+        //                 user.temporaryToken = '';
+        //                 user.active = true;
+        //                 user.save((err) => {
+        //                     if (err) {
+        //                         console.log('error al guardar entonces.');
+        //                         console.log(err);
+        //                         res.json({ succes: false, message: err });
+        //                     } else {
+
+        //                         var options = {
+        //                             to: user.email,
+        //                             subject: 'Localhost cuenta activada!',
+        //                             message: 'Hello' + user.name + ', ' + '<br> <br> Tu cuenta ha sido activada correctamente'
+        //                         };
+
+        //                         var mail = new Mail({
+        //                             to: options.to,
+        //                             subject: options.subject,
+        //                             message: options.message,
+        //                             successCallback: function (suc) {
+        //                                 console.log('success');
+        //                             },
+        //                             errorCallback: function (err) {
+        //                                 console.log('error: ' + err);
+        //                             }
+        //                         });
+
+        //                         res.json({ succes: true, message: 'Account has been activated.' });
+        //                     }
+        //                 });
+        //             }
+        //         });
+        //     }
+        // });
     });
 
     router.use((req, res, next) => {
@@ -130,7 +252,6 @@ module.exports = (router) => {
             }
         });
     });
-
 
     return router;
 };

@@ -1,6 +1,5 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NotificacionesService } from '../../_services/notificaciones.service';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-confirmacion-asistencias',
@@ -13,9 +12,7 @@ export class ConfirmacionAsistenciasComponent implements OnInit {
   procesingRequest = false;
 
   constructor(
-    private notificacionesService: NotificacionesService,
-    private renderer: Renderer2,
-    private router: Router) {
+    private notificacionesService: NotificacionesService) {
     this.notificacionesService.getConfirmationEventos().subscribe(data => {
       if (data.success) {
         console.log(data);
@@ -32,23 +29,9 @@ export class ConfirmacionAsistenciasComponent implements OnInit {
         console.log(data);
       }
     });
-    this.renderer.removeStyle(
-      document.body,
-      'background-color'
-    );
-    this.renderer.setStyle(
-      document.getElementById('contenido'),
-      'box-shadow',
-      '0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1) !important;'
-    );
-    this.renderer.removeStyle(
-      document.getElementById('contenido'),
-      'background-color'
-    );
   }
 
   sendDenyToEvent(grupoName, eventoName, personName) {
-    console.log('deny');
     this.putRequestEvent(grupoName, eventoName, personName, false);
   }
 
@@ -76,7 +59,6 @@ export class ConfirmacionAsistenciasComponent implements OnInit {
   }
 
   private containsConfirmed(go, grupoName) {
-    console.log(go);
     let i = 0;
     // Si existe ya el grupo en el array.
     if (this.grupos.findIndex(obj => obj.nombre === grupoName) !== -1) {

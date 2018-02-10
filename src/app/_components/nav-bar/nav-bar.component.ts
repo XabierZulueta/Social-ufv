@@ -10,10 +10,12 @@ import { Router } from '@angular/router';
 export class NavBarComponent implements OnInit {
 
   userName;
+  role;
 
   constructor(public authService: AuthenticationService,
     private router: Router) {
     this.userName = localStorage.getItem('user') || '';
+    this.role = localStorage.getItem('role') || '';
   }
 
   logout() {
@@ -22,5 +24,13 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  isRepOrAdmin() {
+    return this.role !== 'alumno';
+  }
+
+  isAdmin() {
+    return this.role === 'alumno';
   }
 }

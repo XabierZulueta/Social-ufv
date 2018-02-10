@@ -1,40 +1,61 @@
-<app-nav-bar></app-nav-bar>
-<div class="container" id="contenido" style="background-color:#fff;margin-top:30px;padding-top: 15px;
-padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
-  <p>
-    nuevo-evento works! {{grupoPadre?.nombre}}
-  </p>
-  <div class='container-fluid'>
-    <!-- Registration Form -->
-    <form [formGroup]="form" (submit)="onAddEventoSubmit()">
-
+<div class='container-fluid'>
+  <!-- Registration Form -->
+  <form [formGroup]="form" (submit)="onAddEventoSubmit()">
+    <fieldset>
+      <legend>Crear nuevo Evento: {{grupoPadre?.nombre}}</legend>
       <!-- title Input -->
-      <div class="form-group col-6">
-        <label for="title">Title</label>
-        <div [ngClass]="{'has-error': (form.controls.title.errors && form.controls.title.dirty) || (!titleValid && form.controls.title.dirty), 'has-success': !form.controls.title.errors && titleValid}">
+      <div class="form-group row">
+        <label for="title" class="col-2 col-form-label">Title</label>
+        <div class="col-10" [ngClass]="{'has-error': (form.controls.title.errors && form.controls.title.dirty) || (!titleValid && form.controls.title.dirty), 'has-success': !form.controls.title.errors && titleValid}">
           <input type="text" name="title" class="form-control" autocomplete="off" placeholder="*Title" formControlName="title" (blur)="checkTitle()"
           />
           <!-- Validation -->
-          <div>
-            <p *ngIf="form.controls.title.errors?.required && form.controls.title.dirty" class="alert alert-danger text-sm-left">This field is required</p>
-            <p *ngIf="form.controls.title.errors?.minlength && form.controls.title.dirty || form.controls.title.errors?.maxlength && form.controls.title.dirty "
-              class="alert alert-warning">Minimum characters: 3, Maximum characters: 15</p>
-            <p *ngIf="form.controls.title.errors?.validatetitle && form.controls.title.dirty" class="alert alert-warning">title must not have any special characters</p>
-            <p *ngIf="titleMessage" class="alert {{titleMessageClass}} text-sm-left"> {{titleMessage}} </p>
-          </div>
+          <ul>
+            <li *ngIf="form.controls.title.errors?.required && form.controls.title.dirty" class="text-danger text-sm-left">This field is required</li>
+            <li *ngIf="form.controls.title.errors?.minlength && form.controls.title.dirty || form.controls.title.errors?.maxlength && form.controls.title.dirty "
+              class="text-warning">Minimum characters: 5, Maximum characters: 150</li>
+            <li *ngIf="form.controls.title.errors?.validatetitle && form.controls.title.dirty" class="text-warning">Title must not have any special characters</li>
+            <li *ngIf="titleMessage" class="{{titleMessageClass}} text-sm-left"> {{titleMessage}} </li>
+          </ul>
         </div>
       </div>
 
-      <div class="form-group col-6">
-        <label for="start">Title</label>
-        <input class='form-control' type="datetime-local" placeholder="Required" formControlName="start" name='start'>
+      <div class="form-group row">
+        <label for="start" class="col-2 col-form-label">Fecha de comienzo: </label>
+        <div class="col-4">
+          <input class='form-control' type="datetime-local" formControlName="start" name='start'>
+          <ul>
+            <li *ngIf="form.controls.start.errors?.required && form.controls.start.dirty" class="text-danger text-sm-left">This field is required</li>
+            <li *ngIf="form.controls.start.errors?.minlength && form.controls.start.dirty || form.controls.start.errors?.maxlength && form.controls.start.dirty "
+              class="text-warning">Minimum characters: 5, Maximum characters: 150</li>
+            <li *ngIf="form.controls.start.errors?.validatestart && form.controls.start.dirty" class="text-warning">start must not have any special characters</li>
+            <li *ngIf="startMessage" class="{{startMessageClass}} text-sm-left"> {{startMessage}} </li>
+          </ul>
+        </div>
+        <label for="end" class="col-2 col-form-label">Fecha de Fin: </label>
+        <div class="col-4">
+          <input class='form-control' type="datetime-local" formControlName="end" name='end'>
+        </div>
       </div>
-      <!-- Submit Input -->
 
+      <div class="form-group row">
+        <label for="example-number-input" class="col-2 col-form-label">Creditos: </label>
+        <div class="col-2">
+          <input class="form-control" type="number" id="creditos" formControlName="creditos" name="creditos" step="0.1">
+          <ul>
+            <li *ngIf="form.controls.creditos.errors?.required && form.controls.creditos.dirty" class="text-danger text-sm-left">This field is required</li>
+            <li *ngIf="form.controls.creditos.errors?.min && form.controls.creditos.dirty || form.controls.creditos.errors?.max && form.controls.creditos.dirty "
+              class="text-warning">Minimum value: 0</li>
+            <li *ngIf="form.controls.creditos.errors?.validatecreditos && form.controls.creditos.dirty" class="text-warning">creditos must not have any special characters</li>
+            <li *ngIf="creditosMessage" class="{{creditosMessageClass}} text-sm-left"> {{creditosMessage}} </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Submit Input -->
       <input [disabled]="!form.valid || loading" type="submit" class="btn btn-primary" value="Submit" /> {{!form.valid }} || {{loading }}
 
+    </fieldset>
+  </form>
 
-    </form>
-
-  </div>
 </div>

@@ -1,100 +1,106 @@
-<div *ngIf="user">
+<app-nav-bar></app-nav-bar>
+<div class="container" id="contenido" style="background-color:#fff;margin-top:30px;padding-top: 15px;
+padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
+  <div *ngIf="user">
     <h3 style="margin-bottom: 10px;">{{user.name}}</h3>
     <mat-accordion class="example-headers-align">
-            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Datos
-                </mat-panel-title>
-                <mat-panel-description>
-                  <mat-icon>account_circle</mat-icon>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <h6>{{user.name}}</h6>
-              <h6>Grado en Ingeniería Informática</h6>
-              <h6>Hobbies</h6>
-              <span><b *ngFor="let tag of tags;" >#{{tag.descripcion}}</b></span>
-              <mat-action-row>
-                <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
-              </mat-action-row>
-            </mat-expansion-panel>
-          
-            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="true">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Grupos
-                </mat-panel-title>
-                <mat-panel-description>
-                  <mat-icon>people</mat-icon>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-          
-             <!-- <button *ngIf="user.grupos.length>0 && grupos ==false" (click)="grupos=true;" mat-raised-button color="primary">
+      <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Datos
+          </mat-panel-title>
+          <mat-panel-description>
+            <mat-icon>account_circle</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <h6>{{user.name}}</h6>
+        <h6>Grado en Ingeniería Informática</h6>
+        <h6>Hobbies</h6>
+        <span>
+          <b *ngFor="let tag of tags;">#{{tag.descripcion}}</b>
+        </span>
+        <mat-action-row>
+          <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Grupos
+          </mat-panel-title>
+          <mat-panel-description>
+            <mat-icon>people</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <!-- <button *ngIf="user.grupos.length>0 && grupos ==false" (click)="grupos=true;" mat-raised-button color="primary">
                     Ver grupos <mat-icon >visibility</mat-icon>
                  </button>
                  <button *ngIf="user.grupos.length>0 && grupos ==true" (click)="grupos=false;" mat-button color="primary">
                      Ocultar grupos <mat-icon >visibility_off</mat-icon>
                  </button>-->
-                 <div class="d-flex flex-row" style="margin-top:10px;text-align: center;"  >
-                     <div class="p-3" *ngFor="let grupo of user.grupos">
-                            <div class="thumbnail"  @fadeInAnimation >
-                                <a [routerLink]="['/grupo', grupo.id]">
-                                    <img  style="width:100px; height:100px;"  [src] = "grupo.imagen">
-                                    <div class="caption">
-                                         <p>{{grupo.nombre}}</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                 </div>
-          
-              <mat-action-row>
-                <button mat-button color="warn" (click)="prevStep()">Anterior</button>
-                <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
-              </mat-action-row>
-            </mat-expansion-panel>
-          
-            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Eventos
-                </mat-panel-title>
-                <mat-panel-description>
-                  <mat-icon>date_range</mat-icon>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <h4>Último evento</h4>
-              <div *ngIf="ultimoEvento.length > 0" class="d-flex flex-row" style="margin-top:10px;text-align: center;"  >
-                <mat-form-field>
-                    <input matInput value="{{ultimoEvento[0].title}}" placeholder="Título" readonly>
-                </mat-form-field>
-                <mat-form-field style="margin-left:25px;">
-                    <input matInput value="{{ultimoEvento[0].creditos}}" placeholder="Créditos" readonly>
-                </mat-form-field>
+        <div class="d-flex flex-row" style="margin-top:10px;text-align: center;">
+          <div class="p-3" *ngFor="let grupo of user.grupos">
+            <div class="thumbnail" @fadeInAnimation>
+              <a [routerLink]="['/grupo', grupo.id]">
+                <img style="width:100px; height:100px;" [src]="grupo.imagen">
+                <div class="caption">
+                  <p>{{grupo.nombre}}</p>
                 </div>
-                <div *ngIf="ultimoEvento.length > 0" class="d-flex flex-row" style="margin-top:10px;text-align: center;"  >
-                        <mat-form-field>
-                                <input matInput value="{{organizador.nombre}}" placeholder="Grupo" readonly>
-                            </mat-form-field>
-              </div>
-              <div *ngIf="ultimoEvento.length > 0" class="d-flex flex-row" style="margin-top:10px;text-align: center;"  >
-                    <span>Descripción</span>
-                    </div>
-              <div *ngIf="ultimoEvento.length > 0" class="d-flex flex-row" style="margin-top:10px;text-align: center;"  >
-                <pre style="width:100%;text-align: justify;"><b>{{ ultimoEvento[0].descripcion }}</b></pre>
-                </div>
-              <div *ngIf="ultimoEvento.length == 0">
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong>Holy guacamole!</strong> {{user.name}} todavía no ha ido a ningún evento.
-                    </div>
-              </div>
-            
-          
-              <mat-action-row>
-                <button mat-button color="warn" (click)="prevStep()">Anterior</button>
-                <button mat-button color="primary" (click)="nextStep()">Fin</button>
-              </mat-action-row>
-            </mat-expansion-panel>
-          
-          </mat-accordion>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <mat-action-row>
+          <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+          <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Eventos
+          </mat-panel-title>
+          <mat-panel-description>
+            <mat-icon>date_range</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <h4>Último evento</h4>
+        <div *ngIf="ultimoEvento.length > 0" class="d-flex flex-row" style="margin-top:10px;text-align: center;">
+          <mat-form-field>
+            <input matInput value="{{ultimoEvento[0].title}}" placeholder="Título" readonly>
+          </mat-form-field>
+          <mat-form-field style="margin-left:25px;">
+            <input matInput value="{{ultimoEvento[0].creditos}}" placeholder="Créditos" readonly>
+          </mat-form-field>
+        </div>
+        <div *ngIf="ultimoEvento.length > 0" class="d-flex flex-row" style="margin-top:10px;text-align: center;">
+          <mat-form-field>
+            <input matInput value="{{organizador.nombre}}" placeholder="Grupo" readonly>
+          </mat-form-field>
+        </div>
+        <div *ngIf="ultimoEvento.length > 0" class="d-flex flex-row" style="margin-top:10px;text-align: center;">
+          <span>Descripción</span>
+        </div>
+        <div *ngIf="ultimoEvento.length > 0" class="d-flex flex-row" style="margin-top:10px;text-align: center;">
+          <pre style="width:100%;text-align: justify;"><b>{{ ultimoEvento[0].descripcion }}</b></pre>
+        </div>
+        <div *ngIf="ultimoEvento.length == 0">
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Holy guacamole!</strong> {{user.name}} todavía no ha ido a ningún evento.
+          </div>
+        </div>
+
+
+        <mat-action-row>
+          <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+          <button mat-button color="primary" (click)="nextStep()">Fin</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+  </div>
 </div>

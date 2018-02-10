@@ -13,11 +13,12 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { GruposService } from '../_services/grupos.service';
 
 @Component({
-    selector: 'nuevoGrupo',
+    selector: 'app-nuevo-grupo',
     templateUrl: './nuevoGrupo.component.html',
     styleUrls: ['./grupo.component.css'],
     animations: [fadeInAnimation],
     // attach the fade in animation to the host (root) element of this component
+    // tslint:disable-next-line:use-host-property-decorator
     host: { '[@fadeInAnimation]': '' }
 })
 

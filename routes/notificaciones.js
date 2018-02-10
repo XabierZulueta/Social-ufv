@@ -12,36 +12,9 @@ function containsElementByName(array, object) {
 }
 
 module.exports = (router) => {
-    // router.get('/notificaciones/eventos', (req, res) => {
-    //     let grupo = new Grupo({
-    //         nombre: 'Grupo 4',
-    //         administrador: 'Manza',
-    //         equipo: ['Xabier Zulueta', 'Jorge Manzanares'],
-    //         eventos: [],
-    //     });
-    //     grupo.eventos.push(new Evento({
-    //         title: 'Evento 4',
-    //         organizador: 'Otro admin distinto',
-    //         descripcion: 'desc',
-    //         creditos: 10,
-    //         status: 'PeNdInG',
-    //         maxPersonas: 500,
-    //         go: grupo.equipo.concat('Xabier Zulueta'),
-    //         checked: [],
-    //     }));
-    //     console.log('naah');
-    //     grupo.save(err => {
-    //         if (err) {
-    //             res.json({ success: false, message: err });
-    //         } else {
-    //             res.json({ success: true, message: "Grupo aniadido!" });
-    //         }
-    //     });
-    // });
 
     router.get('/notificaciones/eventos/confirmarAsistencia/:nombre', (req, res) => {
         let eventsArray = [];
-        console.log(req.params.nombre);
         // Grupo.find({'eventos.status': 'pending', $or: [{'administrador': req.params.nombre}, {'eventos.equipo' : req.params.nombre }]}).exec((err,data) => {
         //     if(err){
         //         res.json({success:false, message:err});
@@ -56,23 +29,22 @@ module.exports = (router) => {
             } else {
                 res.json({ success: true, message: "grupos", grupos: data });
             }
-        })
+        });
     });
 
     router.put('/notificaciones/eventos/confirmarAsistencia/', (req, res) => {
-        console.log(req.body);
         if (!req.body.grupo || !req.body.evento || !req.body.usuario || !("confirmacion" in req.body)) {
             if (!req.body.grupo) {
-                res.json({ success: false, message: 'Grupo Incorrecto.' })
+                res.json({ success: false, message: 'Grupo Incorrecto.' });
             }
             if (!req.body.evento) {
-                res.json({ success: false, message: 'Evento incorrecto.' })
+                res.json({ success: false, message: 'Evento incorrecto.' });
             }
             if (!req.body.usuario) {
-                res.json({ success: false, message: 'usuario Incorrecto.' })
+                res.json({ success: false, message: 'usuario Incorrecto.' });
             }
             if (req.body.confirmacion) {
-                res.json({ success: false, message: 'Confirmacion Incorrecto.' })
+                res.json({ success: false, message: 'Confirmacion Incorrecto.' });
             }
         } else {
             let creditosConseguidos = 0;
@@ -90,8 +62,9 @@ module.exports = (router) => {
             }
             */
             Grupo.findOne({ 'nombre': req.body.grupo }, (err, grupo) => {
-                if (err) { res.json({ success: false, message: err }) }
-                else if (grupo) {
+                if (err) {
+                    res.json({ success: false, message: err });
+                } else if (grupo) {
                     const eventIndex = grupo.eventos.findIndex(obj => obj.title === req.body.evento);
                     if (eventIndex !== -1) {
                         console.log(grupo.eventos[eventIndex]);
@@ -100,12 +73,12 @@ module.exports = (router) => {
                             if (typeof grupo.eventos[eventIndex].go[personIndex].confirmed === 'undefined') {
                                 grupo.eventos[eventIndex].go[personIndex].confirmed = req.body.confirmacion;
 
-                                User.findOne({ $or: [{ name: req.body.usuario }, { username: req.body.usuario }] }).select('creditos').exec((err, user) => {
+                                User.findOne({ name: req.body.usuario }).select('creditos').exec((err, user) => {
                                     if (err) {
                                         res.json({ success: false, message: err });
                                     } else if (!user) {
                                         creditosConseguidos = 0;
-                                        console.log();
+                                        next();
                                     } else {
                                         creditosConseguidos += user.creditos;
                                         console.log();
@@ -115,7 +88,7 @@ module.exports = (router) => {
                                     if (err) {
                                         res.json({ success: false, message: err });
                                     } else if (creditosConseguidos !== 0) {
-                                        User.findOneAndUpdate({ $or: [{ name: req.body.usuario }, { username: req.body.usuario }] }, {
+                                        User.findOneAndUpdate({ name: req.body.usuario }, {
                                             creditos: creditosConseguidos
                                         }, function (err, numberAffected, rawResponse) {
                                             if (!err) {
@@ -134,7 +107,7 @@ module.exports = (router) => {
                         }
                     }
                 } else {
-                    res.json({ success: false, message: 'Error: Grupo no existe. "notificaciones.js" ' })
+                    res.json({ success: false, message: 'Error: Grupo no existe. "notificaciones.js" ' });
                 }
             });
         }

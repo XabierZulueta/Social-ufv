@@ -73,4 +73,8 @@ export class AuthenticationService {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);
     }
+
+    activateAccount(token) {
+        return this.http.put(this.domain + 'authentication/activate/' + token, null).map(res => res.json());
+    }
 }

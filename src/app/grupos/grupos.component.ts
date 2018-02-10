@@ -14,11 +14,12 @@ import { FormControl } from '@angular/forms';
 import { GruposService } from '../_services/grupos.service';
 
 @Component({
-    selector: 'grupos',
+    selector: 'app-grupos',
     templateUrl: './grupos.component.html',
     styleUrls: ['../app.component.css'], animations: [fadeInAnimation],
 
     // attach the fade in animation to the host (root) element of this component
+    // tslint:disable-next-line:use-host-property-decorator
     host: { '[@fadeInAnimation]': '' },
 })
 
@@ -81,7 +82,7 @@ export class GruposComponent implements OnInit {
             this.grupos = this.gruposTotal.filter(grupo =>
                 grupo.nombre.toUpperCase().includes(nombre.toUpperCase()));
         } else if (this.tagschecked.length > 0 && nombre.length === 0) {
-            for (let g of this.grupos) {
+            for (const g of this.grupos) {
                 if (this.arrayContainsArray(g.tags, this.tagschecked)) {
                     if (this.gruposTag.indexOf(g) === -1) {
                         this.gruposTag.push(g);
@@ -97,7 +98,7 @@ export class GruposComponent implements OnInit {
                 grupo.nombre.toUpperCase().includes(nombre.toUpperCase()));
             if (this.grupos.length > 0) {
                 this.gruposTag = [];
-                for (let g of this.grupos) {
+                for (const g of this.grupos) {
                     if (this.arrayContainsArray(g.tags, this.tagschecked)) {
                         if (this.gruposTag.indexOf(g) === -1) {
                             this.gruposTag.push(g);

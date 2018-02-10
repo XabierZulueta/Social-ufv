@@ -1,5 +1,5 @@
 import { Component, TemplateRef } from '@angular/core';
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
 import { DataService } from '../data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -41,14 +41,15 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { Grupo } from '../grupos/grupo';
 import { fadeInAnimation } from '../_animations/fadein.animation';
 @Component({
-    selector: 'evento',
+    selector: 'app-evento',
     templateUrl: './evento.component.html', animations: [fadeInAnimation],
 
     // attach the fade in animation to the host (root) element of this component
+    // tslint:disable-next-line:use-host-property-decorator
     host: { '[@fadeInAnimation]': '' }
 })
 export class EventoComponent {
-    view: string = 'month';
+    view = 'month';
     viewDate: Date = new Date();
     organizador: {
         id: 0,

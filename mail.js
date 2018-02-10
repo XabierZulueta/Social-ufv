@@ -10,14 +10,15 @@ var transporter = nodemailer.createTransport({
 });
 
 module.exports = function (params) {
-    this.from = 'universidad.test123@gmail.com';
+    this.from = 'Actividades y Eventos Ufv, universidad.test123@gmail.com';
 
     this.send = function () {
         var options = {
             from: this.from,
             to: params.to,
             subject: params.subject,
-            text: params.message
+            html: params.html,
+            text: params.text
         };
 
         transporter.sendMail(options, function (err, suc) {

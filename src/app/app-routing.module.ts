@@ -13,6 +13,7 @@ import { PeticionesComponent } from './peticiones/peticiones.component';
 import { ConfirmacionAsistenciasComponent } from './_components/confirmacion-asistencias/confirmacion-asistencias.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { NotAuthGuard } from './_guards/notAuth.guard';
+import { CuentaActivadaComponent } from './_components/cuenta-activada/cuenta-activada.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full', component: CalendarioComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
     { path: 'register', component: RegisterComponent, canActivate: [NotAuthGuard] },
     { path: 'notificaciones', component: ConfirmacionAsistenciasComponent, canActivate: [AuthGuard] },
+    { path: 'activate/:token', component: CuentaActivadaComponent }
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

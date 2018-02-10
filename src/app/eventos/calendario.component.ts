@@ -52,11 +52,13 @@ interface Film {
 }
 
 @Component({
+    // tslint:disable-next-line:component-selector
     selector: 'mwl-demo-component',
     // changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['../styles.css'],
     templateUrl: 'calendario.template.html', animations: [fadeInAnimation],
     // attach the fade in animation to the host (root) element of this component
+    // tslint:disable-next-line:use-host-property-decorator
     host: { '[@fadeInAnimation]': '' }
 })
 
