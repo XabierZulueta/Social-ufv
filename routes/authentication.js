@@ -122,7 +122,7 @@ module.exports = (router) => {
                 } else if (!user.comparePassword(req.body.password)) {
                     res.json({ success: false, message: "Usuario o contraseña incorrectos." });
                 } else if (!user.active) {
-                    res.json({ success: false, message: "Esta cuenta no ha sido activada. Por favor revise el correo." });
+                    res.json({ success: false, message: "Esta cuenta no ha sido activada. Por favor revise el correo.", expired: true });
                 } else {
                     console.log(user);
                     const token = jwt.sign({ userid: user._id }, config.secret, { expiresIn: '24h' });

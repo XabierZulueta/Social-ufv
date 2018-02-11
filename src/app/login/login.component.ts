@@ -7,6 +7,7 @@ import { AppComponent } from '../app.component';
 import { fadeInAnimation } from '../_animations/fadein.animation';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { AuthGuard } from '../_guards/auth.guard';
+import { isValid } from 'date-fns';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit {
     error;
     classError: string;
     loading = false;
+    isActive = true;
     form: FormGroup;
 
     constructor(
@@ -61,7 +63,9 @@ export class LoginComponent implements OnInit {
 
         this.authService.login(user).subscribe((data) => {
             this.error = data.message;
+
             if (!data.success) {
+                this.isActive = !data.expired;
                 this.classError = 'alert alert-danger';
                 this.loading = false;
                 this.enableForm();
@@ -86,6 +90,9 @@ export class LoginComponent implements OnInit {
             this.previousUrl = this.authGuard.redirectUrl;
             this.authGuard.clear();
         }
+    }
+    resendActivationLink() {
+        // this.authService.sendActivationLink();
     }
 }
 /*    model: any = {};

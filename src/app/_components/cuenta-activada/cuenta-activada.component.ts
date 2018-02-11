@@ -23,10 +23,10 @@ export class CuentaActivadaComponent implements OnInit {
           this.message = res.message;
         } else {
           this.message = res.message;
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 5000);
         }
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 1000);
       });
     });
   }
