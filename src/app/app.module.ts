@@ -56,6 +56,9 @@ import { NavBarComponent } from './_components/nav-bar/nav-bar.component';
 import { TagsComponent } from './tags/tags.component';
 import { NuevoEventoComponent } from './eventos/nuevo-evento/nuevo-evento.component';
 import { CuentaActivadaComponent } from './_components/cuenta-activada/cuenta-activada.component';
+import { SendActivationLinkComponent } from './_components/send-activation-link/send-activation-link.component';
+import { ResetPasswordComponent } from './_components/reset/reset-password/reset-password.component';
+import { ResetUsernameComponent } from './_components/reset/reset-username/reset-username.component';
 
 
 @NgModule({
@@ -76,6 +79,9 @@ import { CuentaActivadaComponent } from './_components/cuenta-activada/cuenta-ac
     NavBarComponent,
     NuevoEventoComponent,
     CuentaActivadaComponent,
+    SendActivationLinkComponent,
+    ResetPasswordComponent,
+    ResetUsernameComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,33 @@
+<div class="login-form">
+  <div class="top-login">
+    <span>
+      <img src="../../assets/logo2.png" width="200px" alt="">
+    </span>
+  </div>
+  <!---728x90-->
+  <div class="login-top">
+    <div *ngIf="error" [class]="classError">
+      <strong>{{error}}</strong>
+      <a *ngIf='!isActive' class='btn btn-link' routerLink="/resend" routerLinkActive="active">Send activation link</a>
+    </div>
+    <!-- Login Form -->
+    <form [formGroup]="form" (submit)="onLoginSubmit()">
+
+      <!-- Username Field -->
+      <div class="form-group">
+        <label for="username" class='text-white'>Username</label>
+        <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }">
+          <input class="form-control" type="text" name="username" formControlName="username" />
+          <!-- Validation -->
+          <ul class="help-block">
+            <li *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required.</li>
+          </ul>
+        </div>
+      </div>
+
+      <input [disabled]="!form.valid || loading " class="btn btn-primary" type="submit" value="Login" />
+    </form>
+    <a class="btn btn-primary" routerLink="/register" routerLinkActive="active" style="margin-top:10px;">Registrarse</a>
+    <a class='link' routerLink='' </div>
+
+  </div>

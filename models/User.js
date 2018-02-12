@@ -142,7 +142,7 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true, lowercase: true, validate: emailValidators },
   username: { type: String, required: true, unique: true, lowercase: true, validate: usernameValidators },
   nombre: { type: String, required: true, default: '' },
-  password: { type: String, required: true, validate: passwordValidators },
+  password: { type: String, required: true, validate: passwordValidators, select: false },
   active: { type: Boolean, required: true, default: false },
   temporaryToken: { type: String, required: false }
 });
@@ -164,7 +164,18 @@ userSchema.pre('save', function (next) {
 
 // Methods to compare password to encrypted password upon login
 userSchema.methods.comparePassword = function (password) {
-  return bcrypt.compareSync(password, this.password); // Return comparison of login password to password in database (true or false)
+  console.log(password);
+  console.log(this.password);
+  try {
+    if (bcrypt.compareSync(password, this.password)) {
+      return true;
+    } // Return comparison of login password to password in database (true or false)
+    else {
+      return false;
+    }
+  } catch (err) {
+    return false;
+  }
 };
 
 // Export Module/Schema

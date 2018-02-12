@@ -14,6 +14,9 @@ import { ConfirmacionAsistenciasComponent } from './_components/confirmacion-asi
 import { AuthGuard } from './_guards/auth.guard';
 import { NotAuthGuard } from './_guards/notAuth.guard';
 import { CuentaActivadaComponent } from './_components/cuenta-activada/cuenta-activada.component';
+import { SendActivationLinkComponent } from './_components/send-activation-link/send-activation-link.component';
+import { ResetPasswordComponent } from './_components/reset/reset-password/reset-password.component';
+import { ResetUsernameComponent } from './_components/reset/reset-username/reset-username.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full', component: CalendarioComponent },
@@ -27,7 +30,10 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
     { path: 'register', component: RegisterComponent, canActivate: [NotAuthGuard] },
     { path: 'notificaciones', component: ConfirmacionAsistenciasComponent, canActivate: [AuthGuard] },
-    { path: 'activate/:token', component: CuentaActivadaComponent }
+    { path: 'activate/:token', component: CuentaActivadaComponent },
+    { path: 'resend', component: SendActivationLinkComponent },
+    { path: 'resetPassword', component: ResetPasswordComponent, canActivate: [NotAuthGuard] },
+    { path: 'resetUsername', component: ResetUsernameComponent, canActivate: [NotAuthGuard] }
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

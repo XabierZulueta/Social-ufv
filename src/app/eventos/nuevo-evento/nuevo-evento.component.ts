@@ -29,6 +29,8 @@ export class NuevoEventoComponent implements OnInit {
   emailMessage;
   usernameValid;
   usernameMessage;
+  startMessage;
+  creditosMessage;
 
   constructor(
     private formBuilder: FormBuilder,

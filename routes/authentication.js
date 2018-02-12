@@ -114,7 +114,7 @@ module.exports = (router) => {
         } else if (!req.body.password) {
             res.json({ message: "No se ha proporcionado contraseña", success: false });
         } else {
-            User.findOne({ username: req.body.username.toLowerCase() }, (err, user) => {
+            User.findOne({ username: req.body.username.toLowerCase() }).select('username password active').exec((err, user) => {
                 if (err) {
                     res.json({ success: false, message: err });
                 } else if (!user) {
@@ -133,10 +133,66 @@ module.exports = (router) => {
         }
     });
 
+    router.post('/resend', (req, res) => {
+        if (!req.body.username) {
+            res.json({ message: "No se ha seleccionado ningun nombre de usuario", success: false });
+        } else if (!req.body.password) {
+            res.json({ message: "No se ha proporcionado contraseña", success: false });
+        } else {
+            console.log('user.find');
+            User.findOneAndUpdate(
+                { username: req.body.username.toLowerCase() },
+                { temporaryToken: jwt.sign({ username: req.body.username.toLowerCase() }, config.secret, { expiresIn: '24h' }) },
+                { new: true, fields: { "password": 1, "nombre": 1, "active": 1, "email": 1, "temporaryToken": 1 } },
+                (err, user) => {
+                    console.log(err);
+                    console.log(user);
+                    console.log(req.body);
+                    if (err) {
+                        res.json({ success: false, message: err });
+                    } else if (!user) {
+                        res.json({ success: false, message: "Usuario no existente." });
+                    } else if (!user.comparePassword(req.body.password)) {
+                        res.json({ success: false, message: "Usuario o contraseña incorrectos." });
+                    } else if (user.active) {
+                        res.json({ success: false, message: "Esta cuenta ya está activada  ." });
+                    } else {
+                        var options = {
+                            to: user.email,
+                            subject: 'Resend Activation link',
+                            text: 'Hola ' + user.nombre + '. Este es el link para activar tu cuenta.' +
+                                'la cuenta en (localhost.com: http://localhost:4200/activate/' + user.temporaryToken + ')',
+                            html: 'Hola ' + user.nombre + ', ' + '<br> <br> Este es el link para activar tu cuenta.' +
+                                'la cuenta en (localhost.com)<br><br> <a href="http://localhost:4200/activate/' + user.temporaryToken +
+                                '">http://localhost:4200/activate</a> '
+                        };
+
+                        var mail = new Mail({
+                            to: options.to,
+                            subject: options.subject,
+                            text: options.text,
+                            html: options.html,
+                            successCallback: function (suc) {
+                                console.log('success');
+                            },
+                            errorCallback: function (err) {
+                                console.log('error: ' + err);
+                            }
+                        });
+
+                        mail.send();
+                        res.json({ success: true, message: 'Email de confirmacion se ha enviado a ' + user.email });
+                    }
+                }
+            );
+        }
+    });
+
     router.put('/activate/:token', (req, res) => {
         const token = req.params.token;
         jwt.verify(token, config.secret, (err, decoded) => {
             if (err) {
+                console.log(err);
                 console.log('err');
                 res.json({ succes: false, message: 'Activation link has expired.' });
             } else {

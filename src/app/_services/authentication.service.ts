@@ -77,4 +77,8 @@ export class AuthenticationService {
     activateAccount(token) {
         return this.http.put(this.domain + 'authentication/activate/' + token, null).map(res => res.json());
     }
+
+    resend(user) {
+        return this.http.post(this.domain + 'authentication/resend', user).map(res => res.json());
+    }
 }
