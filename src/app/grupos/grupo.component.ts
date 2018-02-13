@@ -71,6 +71,7 @@ export class GrupoComponent implements OnInit {
     esperando: boolean;
     ahora: any;
     isAllow: boolean;
+    isAlumno: boolean;
 
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
@@ -235,7 +236,7 @@ export class GrupoComponent implements OnInit {
         }, 1500);
     }
 
-    updateEvents(event: object) {
+    async updateEvents(event: object) {
         this.gruposService.getById(this.grupo._id).subscribe(data => {
             if (!data.success) {
                 console.log(data);
@@ -248,6 +249,10 @@ export class GrupoComponent implements OnInit {
                 console.log(this.eventos);
             }
         });
+    }
+
+    isAlumnoFunction() {
+        this.isAlumno = localStorage.getItem('role') === 'alumno';
     }
 
     comprobarUser(): boolean {

@@ -1,6 +1,6 @@
 const User = require('../models/User.js');
 const jwt = require('jsonwebtoken');
-const config = require('./../config/config.dev');
+const config = require('./../config/config.local');
 const Mail = require('./../mail');
 
 module.exports = (router) => {
@@ -139,7 +139,6 @@ module.exports = (router) => {
         } else if (!req.body.password) {
             res.json({ message: "No se ha proporcionado contraseña", success: false });
         } else {
-            console.log('user.find');
             User.findOneAndUpdate(
                 { username: req.body.username.toLowerCase() },
                 { temporaryToken: jwt.sign({ username: req.body.username.toLowerCase() }, config.secret, { expiresIn: '24h' }) },
@@ -160,10 +159,9 @@ module.exports = (router) => {
                         var options = {
                             to: user.email,
                             subject: 'Resend Activation link',
-                            text: 'Hola ' + user.nombre + '. Este es el link para activar tu cuenta.' +
-                                'la cuenta en (localhost.com: http://localhost:4200/activate/' + user.temporaryToken + ')',
-                            html: 'Hola ' + user.nombre + ', ' + '<br> <br> Este es el link para activar tu cuenta.' +
-                                'la cuenta en (localhost.com)<br><br> <a href="http://localhost:4200/activate/' + user.temporaryToken +
+                            text: 'Hola ' + user.nombre + '. Este es el link para activar tu cuenta http://localhost:4200/activate/' + user.temporaryToken + '',
+                            html: 'Hola ' + user.nombre + ', ' + '<br> <br> Este es el link para activar tu cuenta. ' +
+                                '(localhost)<br><br> <a href="http://localhost:4200/activate/' + user.temporaryToken +
                                 '">http://localhost:4200/activate</a> '
                         };
 

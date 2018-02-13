@@ -44,7 +44,7 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
         <nav style="margin-bottom: 10px;margin-top:15px;text-align: center;">
             <button type="button" class="btn btn-outline-primary active" aria-expanded="true" href="#tab1" data-toggle="tab">Información</button>
             <button type="button" class="btn btn-outline-primary" href="#tab2" data-toggle="tab">Miembros</button>
-            <button type="button" class="btn btn-outline-primary" href="#tab3" data-toggle="tab">Eventos</button>
+            <button type="button" id="buttonEventos" class="btn btn-outline-primary" href="#tab3" data-toggle="tab">Eventos</button>
             <button *ngIf="isAllow" type="button" class="btn btn-outline-success" href="#tab4" data-toggle="tab">Nuevo Evento</button>
         </nav>
 
@@ -108,10 +108,10 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                                 </div>
                                 <br />
                                 <br />
-                                <div *ngIf="evento.apuntado==false && evento.start > ahora">
+                                <div *ngIf="isAlumno && evento.apuntado==false && evento.start > ahora">
                                     <button [disabled]="procesingRequest" type="button" (click)="apuntarEvento(grupo._id, evento.title);" class="btn btn-warning btn-lg btn-block">¡Quiero ir!</button>
                                 </div>
-                                <div *ngIf="evento.apuntado==true && evento.start > ahora ">
+                                <div *ngIf="isAlumno && evento.apuntado==true && evento.start > ahora ">
                                     <button [disabled]="procesingRequest" type="button" (click)="desapuntarEvento(grupo._id, evento.title);" class="btn btn-danger btn-lg btn-block">Darme de baja</button>
                                 </div>
                                 <!-- </form> -->

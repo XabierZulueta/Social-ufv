@@ -1,30 +1,35 @@
-<div class="login-form">
-  <!---728x90-->
-  <div class="container-fluid">
-    <div *ngIf="error" [class]="classError">
-      <strong>{{error}}</strong>
+<div class="container">
+  <div class="login-form">
+    <!---728x90-->
+    <div class="container-fluid">
+      <h2 class="h2 text-white">Enviar email de confirmacion</h2>
+      <br>
+      <br>
+      <div *ngIf="error" [class]="classError">
+        <strong>{{error}}</strong>
+      </div>
+      <!-- Login Form -->
+      <form [formGroup]="form" (submit)="sendActivationLink()">
+
+        <!-- Username Field -->
+        <div class="form-group">
+          <label for="username" class='text-white'>Username</label>
+          <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }">
+            <input class="form-control" type="text" name="username" formControlName="username" />
+          </div>
+        </div>
+
+        <!-- Password Field  -->
+        <div class="form-group">
+          <label for="password" class='text-white'>Password</label>
+          <div [ngClass]="{'has-error': form.controls.password.errors && form.controls.password.dirty, 'has-success': form.controls.password.valid && form.controls.password.dirty }">
+            <input class="form-control" type="password" name="password" formControlName="password" />
+          </div>
+        </div>
+        <!-- Submit Button -->
+        <input [disabled]="!form.valid" class="btn btn-success" type="submit" value="Send Activation Link" />
+      </form>
+      <a [routerLink]="['/login']" class="btn btn-link"> Log in </a>
     </div>
-    <!-- Login Form -->
-    <form [formGroup]="form" (submit)="sendActivationLink()">
-
-      <!-- Username Field -->
-      <div class="form-group">
-        <label for="username" class='text-white'>Username</label>
-        <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }">
-          <input class="form-control" type="text" name="username" formControlName="username" />
-        </div>
-      </div>
-
-      <!-- Password Field  -->
-      <div class="form-group">
-        <label for="password" class='text-white'>Password</label>
-        <div [ngClass]="{'has-error': form.controls.password.errors && form.controls.password.dirty, 'has-success': form.controls.password.valid && form.controls.password.dirty }">
-          <input class="form-control" type="password" name="password" formControlName="password" />
-        </div>
-      </div>
-      <!-- Submit Button -->
-      <input [disabled]="!form.valid" class="btn btn-success" type="submit" value="Send Activation Link" />
-    </form>
   </div>
-
 </div>

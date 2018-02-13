@@ -1,5 +1,7 @@
-
-<!--<form (ngSubmit)="onSubmit()" #grupoForm="ngForm">
+<app-nav-bar></app-nav-bar>
+<div class="container" id="contenido" style="background-color:#fff;margin-top:30px;padding-top: 15px;
+padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
+    <!--<form (ngSubmit)="onSubmit()" #grupoForm="ngForm">
     <div>
         <table class="table table-bordered">
 
@@ -40,17 +42,17 @@
         </table>
     </div>
 </form>-->
-<!-- Custom Success/Error Message -->
-<div class="row show-hide-message" *ngIf="message">
-    <div [ngClass]="messageClass">
-        {{ message }}
+    <!-- Custom Success/Error Message -->
+    <div class="row show-hide-message" *ngIf="message">
+        <div [ngClass]="messageClass">
+            {{ message }}
+        </div>
     </div>
-</div>
 
-<form (ngSubmit)='onSubmit()' [formGroup]='form' name='gruposForm' >
+    <form (ngSubmit)='onSubmit()' [formGroup]='form' name='gruposForm'>
         <div>
             <table class="table table-bordered">
-    
+
                 <thead class="thead-inverse">
                     <tr>
                         <th>Grupo</th>
@@ -62,7 +64,7 @@
                             <div class="col-lg-6 col-sm-6 col-12">
                                 <label>Imagen</label>
                                 <label class="btn btn-block btn-primary">
-                                   &hellip;
+                                    &hellip;
                                     <input type="file" style="display: none;" (change)="fileChangeEvent($event)">
                                 </label>
                             </div>
@@ -72,12 +74,13 @@
                         <td>
                             <label for="nombre">nombre</label>
                             <div [ngClass]="{'has-success': form.controls.nombre.valid, 'has-error': form.controls.nombre.dirty && form.controls.nombre.errors}">
-                                <input type="text" name="nombre" class="form-control" placeholder="* Nombre del grupo" autocomplete="off" formControlName="nombre" />
+                                <input type="text" name="nombre" class="form-control" placeholder="* Nombre del grupo" autocomplete="off" formControlName="nombre"
+                                />
                                 <ul class="help-block">
-                                <li *ngIf="form.controls.nombre.dirty && form.controls.nombre.errors?.required">This field is required.</li>
-                                <li *ngIf="(form.controls.nombre.dirty && form.controls.nombre.errors?.minlength) || (form.controls.nombre.dirty && form.controls.nombre.errors?.maxlength)">Max length: 50, Min length: 5</li>
-                                <li *ngIf="form.controls.nombre.dirty && form.controls.nombre.errors?.alphaNumericValidation">Must be a letter or number</li>
-                                </ul> 
+                                    <li *ngIf="form.controls.nombre.dirty && form.controls.nombre.errors?.required">This field is required.</li>
+                                    <li *ngIf="(form.controls.nombre.dirty && form.controls.nombre.errors?.minlength) || (form.controls.nombre.dirty && form.controls.nombre.errors?.maxlength)">Max length: 50, Min length: 5</li>
+                                    <li *ngIf="form.controls.nombre.dirty && form.controls.nombre.errors?.alphaNumericValidation">Must be a letter or number</li>
+                                </ul>
                             </div>
                         </td>
                     </tr>
@@ -85,11 +88,12 @@
                         <td>
                             <label for="informacion">Información</label>
                             <div [ngClass]="{'has-success': form.controls.informacion.valid, 'has-error': form.controls.informacion.dirty && form.controls.informacion.errors}">
-                            <textarea name="informacion" class="form-control" autocomplete="off" formControlName="informacion" rows="5" id="comment" required></textarea>
+                                <textarea name="informacion" class="form-control" autocomplete="off" formControlName="informacion" rows="5" id="comment"
+                                    required></textarea>
                                 <ul class="help-block">
-                                <li *ngIf="form.controls.informacion.dirty && form.controls.informacion.errors?.required">This field is required.</li>
-                                <li *ngIf="(form.controls.informacion.dirty && form.controls.informacion.errors?.minlength) || (form.controls.informacion.dirty && form.controls.informacion.errors?.maxlength)">Max length: 50, Min length: 5</li>
-                                <li *ngIf="form.controls.informacion.dirty && form.controls.informacion.errors?.alphaNumericValidation">Must be a letter or number</li>
+                                    <li *ngIf="form.controls.informacion.dirty && form.controls.informacion.errors?.required">This field is required.</li>
+                                    <li *ngIf="(form.controls.informacion.dirty && form.controls.informacion.errors?.minlength) || (form.controls.informacion.dirty && form.controls.informacion.errors?.maxlength)">Max length: 50, Min length: 5</li>
+                                    <li *ngIf="form.controls.informacion.dirty && form.controls.informacion.errors?.alphaNumericValidation">Must be a letter or number</li>
                                 </ul>
                             </div>
                         </td>
@@ -97,9 +101,12 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td><input type="submit" class="btn btn-primary" value="Enviar" [disabled]="!form.valid || procesing"></td>
+                        <td>
+                            <input type="submit" class="btn btn-primary" value="Enviar" [disabled]="!form.valid || procesing">
+                        </td>
                     </tr>
-                </tfoot> 
+                </tfoot>
             </table>
         </div>
     </form>
+</div>

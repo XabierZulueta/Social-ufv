@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../_services/authentication.service';
 
@@ -13,8 +13,9 @@ export class SendActivationLinkComponent implements OnInit {
   error;
   classError;
   constructor(
-    private auth: AuthenticationService,
+    private auth: AuthenticationService, private renderer: Renderer2,
     private formBuilder: FormBuilder) {
+    document.body.style.backgroundColor = '#003265';
     this.createForm();
   }
 
@@ -45,7 +46,7 @@ export class SendActivationLinkComponent implements OnInit {
     };
     this.auth.resend(user).subscribe(res => {
       this.error = res.message;
-      this.classError = this.error ? 'alert alert-danger' : 'alert alert-success';
+      this.classError = res.success ? 'alert alert-success' : 'alert alert-danger';
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { NotificacionesService } from '../../_services/notificaciones.service';
 
 @Component({
@@ -11,8 +11,12 @@ export class ConfirmacionAsistenciasComponent implements OnInit {
   grupos = [];
   procesingRequest = false;
 
-  constructor(
+  constructor(private renderer: Renderer2,
     private notificacionesService: NotificacionesService) {
+    this.renderer.removeStyle(
+      document.body,
+      'background-color'
+    );
     this.notificacionesService.getConfirmationEventos().subscribe(data => {
       if (data.success) {
         console.log(data);

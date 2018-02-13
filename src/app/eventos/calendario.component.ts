@@ -97,10 +97,10 @@ export class CalendarioComponent implements OnInit {
             this.router.navigateByUrl('/login');
         }
         // this.refresh.next();
-        // this.renderer.removeStyle(
-        //     document.body,
-        //     'background-color'
-        // );
+        this.renderer.removeStyle(
+            document.body,
+            'background-color'
+        );
         // this.renderer.setStyle(
         //     document.getElementById('contenido'),
         //     'box-shadow',

@@ -102,12 +102,13 @@ export class NuevoEventoComponent implements OnInit {
         console.log(data);
         this.update.emit();
         setTimeout(() => {
-          this.enableForm();
           this.loading = false;
+          document.getElementById('buttonEventos').click();
+          this.enableForm();
+          this.createForm();
         }, 1000);
       }
     });
-
   }
 
   checkTitle() {
