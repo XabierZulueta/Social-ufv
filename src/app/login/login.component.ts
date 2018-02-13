@@ -14,6 +14,7 @@ import { isValid } from 'date-fns';
     moduleId: module.id,
     templateUrl: 'login.component.html',
     animations: [fadeInAnimation],
+    styleUrls: ['./login.component.css'],
     // attach the fade in animation to the host (root) element of this component
     // tslint:disable-next-line:use-host-property-decorator
     host: { '[@fadeInAnimation]': '' }

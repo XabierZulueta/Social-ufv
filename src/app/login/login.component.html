@@ -1,100 +1,3 @@
-<style>
-    .background-blue {
-        background-color: rgb(0, 50, 101);
-    }
-
-    .login-form {
-        padding: 100px 0px 50px 0px;
-    }
-
-    .top-login {
-        width: 200px;
-        height: 200px;
-        display: block;
-        -webkit-transform: rotate(45deg) translate3d(0, 0, 0);
-        -moz-transform: rotate(45deg) translate3d(0, 0, 0);
-        -ms-transform: rotate(45deg) translate3d(0, 0, 0);
-        -o-transform: rotate(45deg) translate3d(0, 0, 0);
-        transform: rotate(45deg) translate3d(0, 0, 0);
-        margin: 0 auto 4em;
-        /* background: #fff;*/
-        position: relative;
-    }
-
-    .login-top {
-        max-width: 460px;
-        display: block;
-        margin: 0 auto;
-    }
-
-    .login-ic {
-        background: rgba(255, 255, 255, 0.32);
-        margin-bottom: 1.5em;
-        padding: 8px;
-    }
-
-    .log-bwn {
-        text-align: center;
-    }
-
-    .log-bwn input[type="submit"] {
-        font-size: 15px;
-        font-weight: 700;
-        color: #fff;
-        padding: 13px 0;
-        background: #ff3366;
-        display: inline-block;
-        width: 100%;
-        outline: none;
-        border: 2px solid #ff3366;
-        cursor: pointer;
-        text-transform: uppercase;
-    }
-
-    .login-ic input[type="text"],
-    .login-ic input[type="password"] {
-        float: left;
-        background: none;
-        outline: none;
-        font-size: 15px;
-        font-weight: 400;
-        color: #fff;
-        padding: 10px 16px;
-        border: none;
-        border-left: 1px solid #fff;
-        width: 82%;
-        margin-left: 7px;
-    }
-
-    .login-form h1 {
-        font-size: 2em;
-        color: #fff;
-        font-weight: 800;
-        text-transform: uppercase;
-        text-align: center;
-        margin-bottom: 2em;
-    }
-
-    .clear {
-        clear: both;
-    }
-
-    .top-login span img {
-        /* -webkit-transform: rotate(-45deg) translate3d(0, 0, 0); */
-        -moz-transform: rotate(-45deg) translate3d(0, 0, 0);
-        -ms-transform: rotate(-45deg) translate3d(0, 0, 0);
-        -o-transform: rotate(-45deg) translate3d(0, 0, 0);
-        transform: rotate(-45deg) translate3d(0, 0, 0);
-        margin-top: unset;
-        margin-left: unset;
-    }
-
-    .login-ic i {
-        font-size: 40px;
-        color: white;
-        float: left;
-    }
-</style>
 <div class="login-form">
     <div class="top-login">
         <span>
@@ -111,32 +14,35 @@
         <form [formGroup]="form" (submit)="onLoginSubmit()">
 
             <!-- Username Field -->
-            <div class="form-group">
-                <label for="username" class='text-white'>Username</label>
+            <div class="login-ic">
                 <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }">
+                    <i class="material-icons">person</i>
                     <input class="form-control" type="text" name="username" formControlName="username" />
                     <!-- Validation -->
                     <ul class="help-block">
-                        <li *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required.</li>
+                        <li *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">Este campo es obligatorio</li>
                     </ul>
                 </div>
+                <div class="clear"> </div>
             </div>
 
             <!-- Password Field  -->
-            <div class="form-group">
-                <label for="password" class='text-white'>Password</label>
+            <div class="login-ic">
                 <div [ngClass]="{'has-error': form.controls.password.errors && form.controls.password.dirty, 'has-success': form.controls.password.valid && form.controls.password.dirty }">
+                    <i class="material-icons">https</i>
                     <input class="form-control" type="password" name="password" formControlName="password" />
                     <!-- Validation -->
                     <ul class="help-block">
-                        <li *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required.</li>
+                        <li *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">Este campo es obligatorio</li>
                     </ul>
                 </div>
+                <div class="clear"> </div>
             </div>
             <!-- Submit Button -->
-            <input [disabled]="!form.valid || loading " class="btn btn-primary" type="submit" value="Login" />
+            <div class="log-bwn">
+                <input [disabled]="!form.valid || loading " type="submit" value="Iniciar sesión">
+            </div>
         </form>
         <a class="btn btn-primary" routerLink="/register" routerLinkActive="active" style="margin-top:10px;">Registrarse</a>
-        <a class='link' routerLink='' </div>
 
     </div>
