@@ -1,6 +1,6 @@
 const User = require('../models/User.js');
 const jwt = require('jsonwebtoken');
-const config = require('./../config/config.local');
+const config = require('./../config/config.dev');
 const Mail = require('./../mail');
 
 module.exports = (router) => {
