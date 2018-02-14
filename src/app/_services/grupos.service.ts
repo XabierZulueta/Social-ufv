@@ -12,6 +12,8 @@ import { AuthenticationService } from './authentication.service';
 export class GruposService {
 
     domain = this.authService.domain + 'grupos/';
+    domainTag = this.authService.domain + 'tags/';
+    domainImages = this.authService.domain + 'api/upload';
     options;
 
     constructor(private authService: AuthenticationService,
@@ -40,6 +42,18 @@ export class GruposService {
     getById(id) {
         this.createAuthenticationHeaders();
         return this.http.get(this.domain + id, this.options).map(res => res.json());
+    }
+
+    getTags() {
+        this.createAuthenticationHeaders();
+        return this.http.get(this.domainTag, this.options).map(res => res.json());
+    }
+
+    uploadImages(formData) {
+        console.log(formData);
+        this.createAuthenticationHeaders();
+        return this.http.post(this.domainImages, formData, this.options)
+            .map(response => response.json());
     }
 
     // addEvento(idGrupo, evento) {

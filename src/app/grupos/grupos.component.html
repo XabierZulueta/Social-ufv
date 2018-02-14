@@ -18,10 +18,10 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                             <mat-select placeholder="Filtros" #filtros multiple>
                                 <mat-select-trigger>
                                     <span *ngIf="filtros.value?.length > 0" class="example-additional-selection">
-                                        (+{{filtros.value.length}})
+                                        ({{filtros.value}})
                                     </span>
                                 </mat-select-trigger>
-                                <mat-option *ngFor="let tag of tags" [value]="tag.id" (click)="checkear2(tag.id,buscarNombre.value);">{{tag.descripcion}}</mat-option>
+                                <mat-option *ngFor="let tag of tags" [value]="tag" (click)="checkear2(tag, buscarNombre.value);">{{tag}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </td>
@@ -47,7 +47,7 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                                     <div class="control-group" style="padding: 10px; overflow: auto;   height: 50px;">
                                         <div class="controls span2">
                                             <td *ngFor="let tag of tags" style="padding-right: 15px;">
-                                                <mat-checkbox value="{{tag.id}}" (change)="checkear($event,buscarNombre.value);">{{tag.descripcion}}</mat-checkbox>
+                                                <mat-checkbox value="{{tag}}" (change)="checkear($event,buscarNombre.value);">{{tag}}</mat-checkbox>
                                             </td>
                                         </div>
                                     </div>

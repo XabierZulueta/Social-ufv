@@ -25,7 +25,7 @@ import { GruposService } from '../_services/grupos.service';
 
 export class GruposComponent implements OnInit {
     grupos: Array<any>;
-    tags: Array<Tags>;
+    tags: any;
     gruposTotal: Array<any>;
     gruposTag: Array<any>;
     grupo: any;
@@ -33,7 +33,7 @@ export class GruposComponent implements OnInit {
     isLogged: any;
     isLoading: boolean;
     pager: any = {};
-    tagschecked: Array<any>;
+    tagschecked: any;
 
     // paged items
     pagedItems: any[];
@@ -50,6 +50,9 @@ export class GruposComponent implements OnInit {
 
 
     ngOnInit() {
+        this.tagschecked = [];
+        this.gruposTotal = [];
+        this.gruposTag = [];
         this.isLoading = true;
         this.isLogged = this.authService.loggedIn();
         if (this.isLogged === false) {
@@ -62,60 +65,54 @@ export class GruposComponent implements OnInit {
             } else {
                 this.isLoading = false;
                 console.log(data);
-                this.grupos = data.grupos;
+                this.gruposTotal = data.grupos;
+                this.gruposTotal.sort(this.sortGruposByName);
+                this.grupos = this.gruposTotal;
                 this.setPage(1);
             }
         });
-        // this._dataService.getGeneral('tags').subscribe(res => { this.tags = res; });
+
+        this.grupoService.getTags().subscribe(data => {
+            if (!data.success) {
+                console.log(data.message);
+            } else {
+                this.tags = data.tags;
+            }
+        });
     }
 
     search(nombre) {
-
-        if (this.gruposTotal.length === 0) {
-            this.gruposTotal = this.grupos;
+        if (this.tagschecked.length !== 0) {
+            this.grupos = this.gruposTotal.filter(this.containsTag, this);
+            if (nombre) {
+                this.grupos = this.grupos.filter(grupo =>
+                    grupo.nombre.toLowerCase().includes(nombre.toLowerCase()));
+            }
+        } else if (nombre) {
+            this.grupos = this.gruposTotal.filter(grupo =>
+                grupo.nombre.toLowerCase().includes(nombre.toLowerCase()));
+        } else {
+            this.grupos = this.gruposTotal;
         }
 
-        this.grupos = [];
-        this.grupos = this.gruposTotal;
-
-        if (nombre.length !== 0 && this.tagschecked.length === 0) {
-            this.grupos = this.gruposTotal.filter(grupo =>
-                grupo.nombre.toUpperCase().includes(nombre.toUpperCase()));
-        } else if (this.tagschecked.length > 0 && nombre.length === 0) {
-            for (const g of this.grupos) {
-                if (this.arrayContainsArray(g.tags, this.tagschecked)) {
-                    if (this.gruposTag.indexOf(g) === -1) {
-                        this.gruposTag.push(g);
-                    }
-                }
-                if (!this.arrayContainsArray(g.tags, this.tagschecked)) {
-                    this.gruposTag.splice(this.gruposTag.indexOf(g), 1);
-                }
-            }
-            this.grupos = this.gruposTag;
-        } else if (this.tagschecked.length > 0 && nombre.length !== 0) {
-            this.grupos = this.gruposTotal.filter(grupo =>
-                grupo.nombre.toUpperCase().includes(nombre.toUpperCase()));
-            if (this.grupos.length > 0) {
-                this.gruposTag = [];
-                for (const g of this.grupos) {
-                    if (this.arrayContainsArray(g.tags, this.tagschecked)) {
-                        if (this.gruposTag.indexOf(g) === -1) {
-                            this.gruposTag.push(g);
-                        }
-                    }
-                    if (!this.arrayContainsArray(g.tags, this.tagschecked)) {
-                        this.gruposTag.splice(this.gruposTag.indexOf(g), 1);
-                    }
-                }
-                this.grupos = this.gruposTag;
-            }
-        }
-        this.grupos.sort(function (a, b) {
-            return (a.nombre > b.nombre) ? 1 : ((b.nombre > a.nombre) ? -1 : 0);
-        });
+        this.grupos.sort(this.sortGruposByName);
 
         this.setPage(1);
+    }
+
+    containsTag(grupo) {
+        let exists = false;
+        const tags = this.tagschecked;
+        grupo.tags.forEach(tag => {
+            if (tags.includes(tag)) {
+                exists = true;
+            }
+        });
+        return exists;
+    }
+
+    sortGruposByName(grupo1, grupo2) {
+        return grupo1.nombre.toLowerCase().localeCompare(grupo2.nombre.toLowerCase());
     }
 
     arrayContainsArray(superset, subset) {
@@ -137,25 +134,24 @@ export class GruposComponent implements OnInit {
         this.pager = this.pagerService.getPager(this.grupos.length, page);
 
         // get current page of items
-        console.log(this.grupos);
+        // console.log(this.grupos);
         this.pagedItems = this.grupos.slice(this.pager.startIndex, this.pager.endIndex + 1);
     }
 
     checkear(event, nombre) {
-        const index = this.tagschecked.indexOf(+event.source.value);
+        const index = this.tagschecked.indexOf(event.source.value);
         if (index === -1) {
-            this.tagschecked.push(+event.source.value);
+            this.tagschecked.push(event.source.value);
         } else {
             this.tagschecked.splice(index, 1);
         }
-
         this.search(nombre);
     }
 
     checkear2(value, nombre) {
-        const index = this.tagschecked.indexOf(+value);
+        const index = this.tagschecked.indexOf(value);
         if (index === -1) {
-            this.tagschecked.push(+value);
+            this.tagschecked.push(value);
         } else {
             this.tagschecked.splice(index, 1);
         }

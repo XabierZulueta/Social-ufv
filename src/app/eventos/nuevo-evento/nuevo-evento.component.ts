@@ -58,8 +58,32 @@ export class NuevoEventoComponent implements OnInit {
       creditos: ['0', Validators.compose([
         Validators.min(0), Validators.required]
       )]
-    });
+    }, { validator: this.compareDates('start', 'end') });
     this.enableForm();
+  }
+
+  compareDates(start, end) {
+    return (group: FormGroup) => {
+      const startDate = new Date(group.controls[start].value);
+      const endDate = new Date(group.controls[end].value);
+      console.log(group.controls[start].value);
+      console.log(group.controls[end].value);
+      console.log(typeof startDate);
+      console.log(endDate.toString());
+      console.log(startDate.toString() === 'Invalid Date');
+      console.log(!endDate);
+      if (startDate.toString() === 'Invalid Date' || endDate.toString() === 'Invalid Date') {
+        return {
+          'matchingPasswords': true
+        };
+      } else if (startDate < endDate) {
+        return null;
+      } else {
+        return {
+          'matchingPasswords': true
+        };
+      }
+    };
   }
 
   enableForm() {

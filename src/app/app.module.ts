@@ -59,6 +59,7 @@ import { CuentaActivadaComponent } from './_components/cuenta-activada/cuenta-ac
 import { SendActivationLinkComponent } from './_components/send-activation-link/send-activation-link.component';
 import { ResetPasswordComponent } from './_components/reset/reset-password/reset-password.component';
 import { ResetUsernameComponent } from './_components/reset/reset-username/reset-username.component';
+import { FileSelectDirective } from 'ng2-file-upload';
 
 
 @NgModule({
@@ -82,6 +83,7 @@ import { ResetUsernameComponent } from './_components/reset/reset-username/reset
     SendActivationLinkComponent,
     ResetPasswordComponent,
     ResetUsernameComponent,
+    FileSelectDirective
   ],
   imports: [
     BrowserModule,

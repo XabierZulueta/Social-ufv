@@ -26,8 +26,6 @@
           <input class='form-control' type="datetime-local" formControlName="start" name='start'>
           <ul>
             <li *ngIf="form.controls.start.errors?.required && form.controls.start.dirty" class="text-danger text-sm-left">This field is required</li>
-            <li *ngIf="form.controls.start.errors?.minlength && form.controls.start.dirty || form.controls.start.errors?.maxlength && form.controls.start.dirty "
-              class="text-warning">Minimum characters: 5, Maximum characters: 150</li>
             <li *ngIf="form.controls.start.errors?.validatestart && form.controls.start.dirty" class="text-warning">start must not have any special characters</li>
             <li *ngIf="startMessage" class="{{startMessageClass}} text-sm-left"> {{startMessage}} </li>
           </ul>
@@ -35,6 +33,10 @@
         <label for="end" class="col-2 col-form-label">Fecha de Fin: </label>
         <div class="col-4">
           <input class='form-control' type="datetime-local" formControlName="end" name='end'>
+        </div>
+
+        <div class="row">
+          <li *ngIf="form.controls.start.errors?.matchingPasswords" class="text-danger">La fecha de fin del evento no puede ser menor que la de comienzo. Por favor revise las fechas.</li>
         </div>
       </div>
 

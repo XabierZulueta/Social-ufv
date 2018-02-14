@@ -227,56 +227,6 @@ module.exports = (router) => {
                 });
             }
         });
-        // User.findOne({ temporaryToken: req.params.token }, (err, user) => {
-        //     if (err) {
-        //         console.log('err');
-        //         res.json({ succes: false, message: err });
-        //     } else {
-        //         console.log('user');
-        //         const token = req.params.token;
-        //         jwt.verify(token, config.secret, (err, decoded) => {
-        //             if (err) {
-        //                 console.log('err');
-        //                 res.json({ succes: false, message: 'Activation link has expired.' });
-        //             } else if (!user) {
-        //                 console.log('No user found');
-        //                 res.json({ succes: false, message: 'Activation link has expired.' });
-        //             } else {
-        //                 console.log('todo ok continuamos.');
-        //                 user.temporaryToken = '';
-        //                 user.active = true;
-        //                 user.save((err) => {
-        //                     if (err) {
-        //                         console.log('error al guardar entonces.');
-        //                         console.log(err);
-        //                         res.json({ succes: false, message: err });
-        //                     } else {
-
-        //                         var options = {
-        //                             to: user.email,
-        //                             subject: 'Localhost cuenta activada!',
-        //                             message: 'Hello' + user.name + ', ' + '<br> <br> Tu cuenta ha sido activada correctamente'
-        //                         };
-
-        //                         var mail = new Mail({
-        //                             to: options.to,
-        //                             subject: options.subject,
-        //                             message: options.message,
-        //                             successCallback: function (suc) {
-        //                                 console.log('success');
-        //                             },
-        //                             errorCallback: function (err) {
-        //                                 console.log('error: ' + err);
-        //                             }
-        //                         });
-
-        //                         res.json({ succes: true, message: 'Account has been activated.' });
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     }
-        // });
     });
 
     router.use((req, res, next) => {

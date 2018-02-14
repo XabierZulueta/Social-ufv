@@ -15,8 +15,9 @@ module.exports = (router) => {
         Grupo.find({}, (err, grupos) => {
             if (err) {
                 res.json({ success: false, message: err });
+            } else {
+                res.json({ success: true, message: 'Grupos', grupos: grupos });
             }
-            res.json({ success: true, message: 'Grupos', grupos: grupos });
         });
     });
 
@@ -24,8 +25,9 @@ module.exports = (router) => {
         Grupo.find({}, (err, grupos) => {
             if (err) {
                 res.json({ success: false, message: err });
+            } else {
+                res.json({ success: true, message: 'Grupos', grupos: grupos });
             }
-            res.json({ success: true, message: 'Grupos', grupos: grupos });
         });
     });
 
@@ -56,6 +58,7 @@ module.exports = (router) => {
                     let grupo = new Grupo({
                         nombre: req.body.nombre,
                         imagen: req.body.imagen,
+                        tags: req.body.tags,
                         informacion: req.body.informacion,
                         administrador: req.body.administrador,
                     });
@@ -183,11 +186,21 @@ module.exports = (router) => {
         }
     });
 
+    router.get('/grupos/tags', (req, res) => {
+        Grupo.distinct('tags', (err, tags) => {
+            if (err) {
+                console.log(err);
+                res.json({ success: false, message: err });
+            } else {
+                res.json({ success: true, message: 'tags', tags: tags });
+            }
+        })
+    });
+
     return router;
 };
 
 checkIfUserCanModifyGrupos = function (req, res, callback) {
-    console.log('holi?');
     if (!req.body.username) {
         console.log('esque le falta username?');
         return callback(null, { success: false, message: 'Parametros incorrectos para este tipo de peticion.' });

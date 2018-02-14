@@ -27,7 +27,8 @@ var GrupoSchema = new mongoose.Schema({
   administrador: String,
   equipo: [String],
   eventos: [{ type: EventSchema }],
-  followers: [{ name: { type: String, required: true }, confirmed: { type: Boolean } }]
+  followers: [{ name: { type: String, required: true }, confirmed: { type: Boolean } }],
+  tags: [{ type: String, lowercase: true }]
 });
 
 GrupoSchema.pre('save', function (next) {
