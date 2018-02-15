@@ -22,13 +22,15 @@ export class NotificacionesService {
       username, this.authService.options).map(res => res.json());
   }
 
-  putRequestEvent(grupoName, eventoName, personName, confirmation) {
+  putRequestEvent(grupoName, eventoName, personName, confirmation, message?) {
     const body = {
       grupo: grupoName,
       evento: eventoName,
       usuario: personName,
-      confirmacion: confirmation
+      confirmacion: confirmation,
+      message: message
     };
+    console.log(body);
     this.authService.createAuthenticationHeaders();
     return this.http.put(this.domain + 'eventos/confirmarAsistencia/',
       body, this.authService.options).map(res => res.json());

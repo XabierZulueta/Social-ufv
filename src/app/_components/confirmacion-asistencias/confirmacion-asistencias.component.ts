@@ -1,5 +1,8 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, Inject } from '@angular/core';
 import { NotificacionesService } from '../../_services/notificaciones.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { DialogComponent } from '../dialog-modal/dialog.component';
+
 
 @Component({
   selector: 'app-confirmacion-asistencias',
@@ -10,8 +13,11 @@ export class ConfirmacionAsistenciasComponent implements OnInit {
 
   grupos = [];
   procesingRequest = false;
+  animal;
+  dialogComponent: MatDialogRef<DialogComponent>;
 
   constructor(private renderer: Renderer2,
+    private dialog: MatDialog,
     private notificacionesService: NotificacionesService) {
     this.renderer.removeStyle(
       document.body,
@@ -35,6 +41,21 @@ export class ConfirmacionAsistenciasComponent implements OnInit {
     });
   }
 
+  openDialog(grupoName, eventoName, personName) {
+    this.dialogComponent = this.dialog.open(DialogComponent, {
+      width: '450px',
+      data: { name: personName }
+    });
+
+    this.dialogComponent.afterClosed().subscribe(result => {
+      console.log('The dialog was closed ${result}');
+      if (!!result && result !== 'false') {
+        this.putRequestEvent(grupoName, eventoName, personName, false, result);
+      }
+    });
+
+  }
+
   sendDenyToEvent(grupoName, eventoName, personName) {
     this.putRequestEvent(grupoName, eventoName, personName, false);
   }
@@ -43,7 +64,7 @@ export class ConfirmacionAsistenciasComponent implements OnInit {
     this.putRequestEvent(grupoName, eventoName, personName, true);
   }
 
-  private putRequestEvent(grupoName, eventoName, personName, conf) {
+  private putRequestEvent(grupoName, eventoName, personName, conf, message?) {
     if (typeof conf !== 'boolean') {
       alert('Se ha producido algun fallo');
     } else {

@@ -72,13 +72,15 @@ module.exports = (router) => {
                         if (personIndex !== -1) {
                             if (typeof grupo.eventos[eventIndex].go[personIndex].confirmed === 'undefined') {
                                 grupo.eventos[eventIndex].go[personIndex].confirmed = req.body.confirmacion;
-
+                                if (req.body.message) {
+                                    grupo.eventos[eventIndex].go[personIndex].message = req.body.message;
+                                }
                                 User.findOne({ name: req.body.usuario }).select('creditos').exec((err, user) => {
                                     if (err) {
                                         res.json({ success: false, message: err });
                                     } else if (!user) {
                                         creditosConseguidos = 0;
-                                        next();
+                                        console.log();
                                     } else {
                                         creditosConseguidos += user.creditos;
                                         console.log();

@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Hola, vas a denegar la confirmacion de la siguiente persona:
+  <strong>{{data.name}}</strong>
+</h1>
+<div mat-dialog-content>
+  <p>Por favor, aniada un motivo.</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.mensaje" placeholder="Motivo">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close="false">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data.mensaje" cdkFocusInitial>Ok</button>
+</div>

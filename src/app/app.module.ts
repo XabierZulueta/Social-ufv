@@ -60,6 +60,8 @@ import { SendActivationLinkComponent } from './_components/send-activation-link/
 import { ResetPasswordComponent } from './_components/reset/reset-password/reset-password.component';
 import { ResetUsernameComponent } from './_components/reset/reset-username/reset-username.component';
 import { FileSelectDirective } from 'ng2-file-upload';
+import { MatDialogModule } from '@angular/material';
+import { DialogComponent } from './_components/dialog-modal/dialog.component';
 
 
 @NgModule({
@@ -83,9 +85,14 @@ import { FileSelectDirective } from 'ng2-file-upload';
     SendActivationLinkComponent,
     ResetPasswordComponent,
     ResetUsernameComponent,
-    FileSelectDirective
+    FileSelectDirective,
+    DialogComponent
+  ],
+  entryComponents: [
+    DialogComponent
   ],
   imports: [
+    MatDialogModule,
     BrowserModule,
     DayPilotModule,
     CommonModule,
