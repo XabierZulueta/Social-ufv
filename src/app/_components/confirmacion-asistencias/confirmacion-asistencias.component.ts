@@ -69,7 +69,7 @@ export class ConfirmacionAsistenciasComponent implements OnInit {
       alert('Se ha producido algun fallo');
     } else {
       this.procesingRequest = true;
-      this.notificacionesService.putRequestEvent(grupoName, eventoName, personName, conf).subscribe(data => {
+      this.notificacionesService.putRequestEvent(grupoName, eventoName, personName, conf, message).subscribe(data => {
         if (!data.success) {
           alert('Error al guardar el registro: ' + data.message);
         } else {
