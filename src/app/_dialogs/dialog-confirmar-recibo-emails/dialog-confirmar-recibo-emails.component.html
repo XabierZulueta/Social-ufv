@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Hola,
+  <strong>{{data.name}}</strong>
+</h1>
+<div mat-dialog-content>
+  <p>Se va a procesar tu peticion para seguir a este grupo. ?Desea recibir notificaciones para los nuevos eventos?</p>
+</div>
+<div mat-dialog-actions>
+  <button style="float:left" mat-button mat-dialog-close="false">Cancelar</button>
+  <button mat-button mat-dialog-close="NO">No, gracias</button>
+  <button mat-button mat-dialog-close="SI" cdkFocusInitial>Ok</button>
+</div>

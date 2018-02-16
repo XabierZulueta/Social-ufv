@@ -61,7 +61,8 @@ import { ResetPasswordComponent } from './_components/reset/reset-password/reset
 import { ResetUsernameComponent } from './_components/reset/reset-username/reset-username.component';
 import { FileSelectDirective } from 'ng2-file-upload';
 import { MatDialogModule } from '@angular/material';
-import { DialogComponent } from './_components/dialog-modal/dialog.component';
+import { DialogComponent } from './_dialogs/dialog-modal/dialog.component';
+import { DialogConfirmarReciboEmailsComponent } from './_dialogs/dialog-confirmar-recibo-emails/dialog-confirmar-recibo-emails.component';
 
 
 @NgModule({
@@ -86,7 +87,8 @@ import { DialogComponent } from './_components/dialog-modal/dialog.component';
     ResetPasswordComponent,
     ResetUsernameComponent,
     FileSelectDirective,
-    DialogComponent
+    DialogComponent,
+    DialogConfirmarReciboEmailsComponent
   ],
   entryComponents: [
     DialogComponent
