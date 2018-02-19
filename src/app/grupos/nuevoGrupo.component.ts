@@ -15,11 +15,8 @@ import { ENTER, ZERO } from '@angular/cdk/keycodes';
 import { ErrorStateMatcher } from '@angular/material/core';
 // import the file uploader plugin
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
-<<<<<<< HEAD
 import { UserService } from '../_services/user.service';
-=======
 import { MatChipInputEvent } from '@angular/material';
->>>>>>> 24182beaa1e733fd3877b02c61bde48d4fb4fdad
 // define the constant url we would be uploading to.
 const URL = 'http://localhost:8080/upload';
 
@@ -108,13 +105,9 @@ export class NuevoGrupoComponent implements OnInit {
                 Validators.minLength(5),
                 Validators.maxLength(500),
             ])],
-<<<<<<< HEAD
             representante: localStorage.getItem('usename'),
-            tags: ''
-=======
             tags: '',
             newTag: ''
->>>>>>> 24182beaa1e733fd3877b02c61bde48d4fb4fdad
         });
         this.form.get('newTag').disable();
     }
