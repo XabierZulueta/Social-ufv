@@ -17,6 +17,7 @@ import { CuentaActivadaComponent } from './_components/cuenta-activada/cuenta-ac
 import { SendActivationLinkComponent } from './_components/send-activation-link/send-activation-link.component';
 import { ResetPasswordComponent } from './_components/reset/reset-password/reset-password.component';
 import { ResetUsernameComponent } from './_components/reset/reset-username/reset-username.component';
+import { NewPasswordComponent } from './_components/reset/new-password/new-password.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full', component: CalendarioComponent },
@@ -33,7 +34,8 @@ const routes: Routes = [
     { path: 'activate/:token', component: CuentaActivadaComponent },
     { path: 'resend', component: SendActivationLinkComponent },
     { path: 'resetPassword', component: ResetPasswordComponent, canActivate: [NotAuthGuard] },
-    { path: 'resetUsername', component: ResetUsernameComponent, canActivate: [NotAuthGuard] }
+    { path: 'resetUsername', component: ResetUsernameComponent, canActivate: [NotAuthGuard] },
+    { path: 'reset/:token', component: NewPasswordComponent, canActivate: [NotAuthGuard] }
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

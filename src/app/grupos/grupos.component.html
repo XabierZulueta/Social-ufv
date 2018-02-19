@@ -2,63 +2,61 @@
 <div class="container" id="contenido" style="background-color:#fff;margin-top:30px;padding-top: 15px;
 padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
     <h1 style="display: inline;">Grupos</h1>
-    <form class="form-inline my-2 my-lg-0 " style="padding:10px;">
-        <table>
-            <tbody>
-                <tr>
-                    <td>
-                        <mat-form-field class="example-full-width">
-                            <input matInput #buscarNombre placeholder="Buscar" (keyup)="search(buscarNombre.value)">
-                        </mat-form-field>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <mat-form-field>
-                            <mat-select placeholder="Filtros" #filtros multiple>
-                                <mat-select-trigger>
-                                    <span *ngIf="filtros.value?.length > 0" class="example-additional-selection">
-                                        ({{filtros.value}})
-                                    </span>
-                                </mat-select-trigger>
-                                <mat-option *ngFor="let tag of tags" [value]="tag" (click)="checkear2(tag, buscarNombre.value);">{{tag}}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div *ngIf="isLoading">
-                            <img style="width:25px;" src="http://www.freetoursbyfoot.com/wp-content/uploads/2017/05/loading.gif" />
-                        </div>
-                    </td>
-                    <td>
-                        <div id="accordion" role="tablist">
-                            <div class="card">
-                                <div class="card-header" id="headingOne" role="tab">
-                                    <h5 class="mb-0">
-                                        <a style="color:black;text-decoration:none;" class="collapsed" aria-controls="collapseOne" aria-expanded="false" data-toggle="collapse"
-                                            href="#collapseOne">
-                                            Filtros
-                                        </a>
-                                    </h5>
-                                </div>
-                                <div class="collapse" aria-expanded="false" aria-labelledby="headingOne" data-parent="#accordion" id="collapseOne" role="tabpanel">
-                                    <div class="control-group" style="padding: 10px; overflow: auto;   height: 50px;">
-                                        <div class="controls span2">
-                                            <td *ngFor="let tag of tags" style="padding-right: 15px;">
-                                                <mat-checkbox value="{{tag}}" (change)="checkear($event,buscarNombre.value);">{{tag}}</mat-checkbox>
-                                            </td>
-                                        </div>
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width">
+                        <input matInput #buscarNombre placeholder="Buscar" (keyup)="search(buscarNombre.value)">
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <mat-select placeholder="Filtros" #filtros multiple>
+                            <mat-select-trigger>
+                                <span *ngIf="filtros.value?.length > 0" class="example-additional-selection">
+                                    ({{filtros.value}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let tag of tags" [value]="tag" (click)="checkear2(tag, buscarNombre.value);">{{tag}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div *ngIf="isLoading">
+                        <img style="width:25px;" src="http://www.freetoursbyfoot.com/wp-content/uploads/2017/05/loading.gif" />
+                    </div>
+                </td>
+                <td>
+                    <div id="accordion" role="tablist">
+                        <div class="card">
+                            <div class="card-header" id="headingOne" role="tab">
+                                <h5 class="mb-0">
+                                    <a style="color:black;text-decoration:none;" class="collapsed" aria-controls="collapseOne" aria-expanded="false" data-toggle="collapse"
+                                        href="#collapseOne">
+                                        Filtros
+                                    </a>
+                                </h5>
+                            </div>
+                            <div class="collapse" aria-expanded="false" aria-labelledby="headingOne" data-parent="#accordion" id="collapseOne" role="tabpanel">
+                                <div class="control-group" style="padding: 10px; overflow: auto;   height: 50px;">
+                                    <div class="controls span2">
+                                        <td *ngFor="let tag of tags" style="padding-right: 15px;">
+                                            <mat-checkbox value="{{tag}}" (change)="checkear($event,buscarNombre.value);">{{tag}}</mat-checkbox>
+                                        </td>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <ul *ngIf="pager.pages && pager.pages.length && pager.totalPages>1" class="pagination justify-content-center">
         <li [ngClass]="{disabled:pager.currentPage === 1}" class="page-item" role="button">
             <a class="page-link" (click)="setPage(1)">
@@ -84,11 +82,23 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
         <div class="col-md-4" *ngFor="let g of pagedItems">
             <div class="thumbnail">
                 <a [routerLink]="['/grupo', g._id]">
-                    <img style="width:100px; height:100px;" [src]="g.imagen">
+                    <img style="width:100px; height:100px;" [src]="g.imagen || 'http://placehold.it/100x100'">
                     <div class="caption">
                         <p>{{g.nombre}}</p>
                     </div>
                 </a>
+            </div>
+        </div>
+        <div *ngIf='pagedItems == 0'>
+            <div class="container">
+                <div class="col-6">
+                    <p>No hay grupos disponibles! Se el primero en crear un nuevo grupo!</p>
+                </div>
+                <div class="col-7">
+                    <button class="btn btn-default pull-right">
+                        <a routerLink="/nuevo/grupo"> Nuevo grupo</a>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
