@@ -1,6 +1,5 @@
 const User = require('../models/User.js');
 const Grupo = require('../models/Models.js').Grupo;
-const functions = require('./AuthFunctions');
 const nodemailer = require('nodemailer');
 
 var Mail = require('../mail');

@@ -77,6 +77,18 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                     <button *ngIf='newTag' type="button" mat-icon-button (click)='addToTags()'>Añade nuevo tag!</button>
                 </div>
             </div>
+
+            <div class="row" *ngIf='isAdmin'>
+                <div class="col-12">
+                    <mat-form-field>
+                        <mat-select placeholder="Representante" formControlName="representante" single>
+                            <mat-option *ngFor="let user of representantes" [value]="user.username">{{user.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Guardar grupo" [disabled]="!form.valid || procesing">
+
         </div>
         <input type="submit" class="btn btn-primary" value="Guardar grupo" [disabled]="!form.valid || procesing">
     </form>

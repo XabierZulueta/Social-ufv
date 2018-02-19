@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2, Inject } from '@angular/core';
 import { NotificacionesService } from '../../_services/notificaciones.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DialogComponent } from '../dialog-modal/dialog.component';
+import { DialogComponent } from '../../_dialogs/dialog-modal/dialog.component';
 
 
 @Component({

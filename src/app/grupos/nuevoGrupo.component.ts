@@ -15,7 +15,11 @@ import { ENTER, ZERO } from '@angular/cdk/keycodes';
 import { ErrorStateMatcher } from '@angular/material/core';
 // import the file uploader plugin
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
+<<<<<<< HEAD
+import { UserService } from '../_services/user.service';
+=======
 import { MatChipInputEvent } from '@angular/material';
+>>>>>>> 24182beaa1e733fd3877b02c61bde48d4fb4fdad
 // define the constant url we would be uploading to.
 const URL = 'http://localhost:8080/upload';
 
@@ -54,13 +58,16 @@ export class NuevoGrupoComponent implements OnInit {
     file: any; // the file that caused the action
     form;
     tags;
+    isAdmin: boolean;
     formTags = [];
     newTag;
     procesing = false;
+    representantes;
     // Create an instance of the DataService through dependency injection
     constructor(private _dataService: DataService,
         private route: ActivatedRoute,
         private grupoService: GruposService,
+        private userService: UserService,
         private http: Http,
         private formBuilder: FormBuilder,
         private el: ElementRef,
@@ -69,14 +76,24 @@ export class NuevoGrupoComponent implements OnInit {
         this.createGrupoForm();
         if (this.authService.loggedIn() === false) {
             this.router.navigateByUrl('/login');
-        }
-        this.grupoService.getTags().subscribe(data => {
-            if (!data.success) {
-                console.log(data.message);
-            } else {
-                this.tags = data.tags;
+        } else {
+            this.grupoService.getTags().subscribe(data => {
+                if (!data.success) {
+                    console.log(data.message);
+                } else {
+                    this.tags = data.tags;
+                }
+            });
+            this.isAdmin = localStorage.getItem('role') === 'admin';
+
+            if (this.isAdmin) {
+                this.userService.getAllRepresentantes().subscribe(data => {
+                    if (data.success) {
+                        this.representantes = data.representantes;
+                    }
+                });
             }
-        });
+        }
     }
 
     createGrupoForm() {
@@ -91,8 +108,13 @@ export class NuevoGrupoComponent implements OnInit {
                 Validators.minLength(5),
                 Validators.maxLength(500),
             ])],
+<<<<<<< HEAD
+            representante: localStorage.getItem('usename'),
+            tags: ''
+=======
             tags: '',
             newTag: ''
+>>>>>>> 24182beaa1e733fd3877b02c61bde48d4fb4fdad
         });
         this.form.get('newTag').disable();
     }

@@ -21,6 +21,16 @@ export class UserService {
         private http: Http) { }
 
 
+    createAuthenticationHeaders() {
+        this.authService.loadToken();
+        this.options = new RequestOptions({
+            headers: new Headers({
+                'content-type': 'application/json',
+                'authorization': this.authToken
+            })
+        });
+    }
+
     getAll() {
         return this.http.get(this.domain + '/api/users', this.jwt()).map((response: Response) => response.json());
     }
@@ -39,6 +49,11 @@ export class UserService {
 
     delete(id: number) {
         return this.http.delete(this.domain + '/api/users/' + id, this.jwt()).map((response: Response) => response.json());
+    }
+
+    getAllRepresentantes() {
+        this.createAuthenticationHeaders();
+        return this.http.delete(this.domain + '/users/representantes', this.options).map(res => res.json());
     }
 
     // private helper methods
