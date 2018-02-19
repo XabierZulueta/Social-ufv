@@ -144,7 +144,8 @@ const userSchema = new Schema({
   nombre: { type: String, required: true, default: '' },
   password: { type: String, required: true, validate: passwordValidators, select: false },
   active: { type: Boolean, required: true, default: false },
-  temporaryToken: { type: String, required: false }
+  temporaryToken: { type: String, required: false },
+  resetToken: { type: String, required: false }
 });
 
 // Schema Middleware to Encrypt Password

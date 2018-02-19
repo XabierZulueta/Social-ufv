@@ -28,7 +28,8 @@ var GrupoSchema = new mongoose.Schema({
   equipo: [String],
   eventos: [{ type: EventSchema }],
   followers: [{ name: { type: String, required: true }, confirmed: { type: Boolean } }],
-  tags: [{ type: String, lowercase: true }]
+  tags: [{ type: String, lowercase: true }],
+  informacion: String
 });
 
 GrupoSchema.pre('save', function (next) {
@@ -36,7 +37,7 @@ GrupoSchema.pre('save', function (next) {
     if (err) {
       next(new Error('Se ha producido un error' + err.message));
     } else if (!user) {
-      next(new Error('No se ha encontrado el usuario'));
+      next(new Error('Ese administrador no esta registrado en el sistema'));
     } else {
       next();
     }

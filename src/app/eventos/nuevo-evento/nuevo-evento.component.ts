@@ -66,12 +66,7 @@ export class NuevoEventoComponent implements OnInit {
     return (group: FormGroup) => {
       const startDate = new Date(group.controls[start].value);
       const endDate = new Date(group.controls[end].value);
-      console.log(group.controls[start].value);
-      console.log(group.controls[end].value);
-      console.log(typeof startDate);
-      console.log(endDate.toString());
-      console.log(startDate.toString() === 'Invalid Date');
-      console.log(!endDate);
+
       if (startDate.toString() === 'Invalid Date' || endDate.toString() === 'Invalid Date') {
         return {
           'matchingPasswords': true
@@ -90,9 +85,6 @@ export class NuevoEventoComponent implements OnInit {
     this.form.controls['title'].enable();
     this.form.controls['start'].enable();
     this.form.controls['end'].enable();
-    // this.form.controls['go'].enable();
-    // this.form.controls['maxPersonas'].enable();
-    // this.form.controls['description'].enable();
     this.form.controls['creditos'].enable();
   }
 
@@ -100,9 +92,6 @@ export class NuevoEventoComponent implements OnInit {
     this.form.controls['title'].disable();
     this.form.controls['start'].disable();
     this.form.controls['end'].disable();
-    // this.form.controls['go'].disable();
-    // this.form.controls['maxPersonas'].disable();
-    // this.form.controls['description'].disable();
     this.form.controls['creditos'].disable();
   }
 

@@ -1,6 +1,11 @@
 <app-nav-bar></app-nav-bar>
 <div class="container" id="contenido" style="background-color:#fff;margin-top:30px;padding-top: 15px;
 padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
+
+    <section class="mat-typography">
+        <h1>Añadir nuevo grupo</h1>
+    </section>
+
     <!-- Custom Success/Error Message -->
     <div class="row show-hide-message" *ngIf="message">
         <div [ngClass]="messageClass">
@@ -13,11 +18,16 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
             <div class="row">
                 <div class="col-lg-6 col-sm-6 col-12">
                     <label>Imagen</label>
+                    <!-- <label> -->
+                    <!-- <input type="file" style="display: none;" (change)="fileChangeEvent($event)"> -->
+                    <!-- <input class="btn btn-default" type="file" name="photo" ng2FileSelect (change)="fileChangeEvent($event)"> -->
+                    <input type="file" ng2FileSelect [uploader]="uploader" (change)="fileChangeEvent($event)" />
+                    <!-- </label> -->
+                    <!-- <label>Imagen</label>
                     <label class="btn btn-block btn-primary">
                         &hellip;
-                        <!-- <input type="file" style="display: none;" (change)="fileChangeEvent($event)"> -->
-                        <input type="file" name="photo" ng2FileSelect [uploader]="uploader">
-                    </label>
+                        <input type="file" style="display: none;" (change)="fileChangeEvent($event)">
+                    </label> -->
                 </div>
             </div>
             <div class="row">
@@ -34,25 +44,40 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                 </mat-form-field>
             </div>
             <div class='row'>
-                <mat-form-field>
-                    <textarea matInput placeholder="Introduzca informacion para el grupo" name="informacion" class="form-control" rows="5" autocomplete="off"
-                        formControlName="informacion"></textarea>
-                    <mat-hint>Este campo es obligatorio!</mat-hint>
-                    <mat-error *ngIf="(form.controls.nombre.dirty && form.controls.nombre.errors?.minlength) || (form.controls.nombre.dirty && form.controls.nombre.errors?.maxlength)">
-                        Max length: 50, Min length: 5
-                    </mat-error>
-                    <mat-error *ngIf="(form.controls.informacion.dirty && form.controls.informacion.errors?.minlength) || (form.controls.informacion.dirty && form.controls.informacion.errors?.maxlength)">
-                        La descripcion es
-                        <strong>obligatorio</strong>
-                    </mat-error>
-                </mat-form-field>
+                <div class="col-4">
+                    <mat-form-field>
+                        <textarea matInput placeholder="Introduzca informacion para el grupo" name="informacion" class="form-control" rows="5" autocomplete="off"
+                            formControlName="informacion"></textarea>
+                        <mat-hint>Este campo es obligatorio!</mat-hint>
+                        <mat-error *ngIf="(form.controls.nombre.dirty && form.controls.nombre.errors?.minlength) || (form.controls.nombre.dirty && form.controls.nombre.errors?.maxlength)">
+                            Max length: 50, Min length: 5
+                        </mat-error>
+                        <mat-error *ngIf="(form.controls.informacion.dirty && form.controls.informacion.errors?.minlength) || (form.controls.informacion.dirty && form.controls.informacion.errors?.maxlength)">
+                            La descripcion es
+                            <strong>obligatorio</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-8">
+                    <mat-form-field>
+                        <mat-select placeholder="Tags" formControlName="tags" multiple>
+                            <mat-option *ngFor="let tag of tags" [value]="tag">{{tag}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-                <mat-form-field>
-                    <mat-select placeholder="Tags" formControlName="tags" multiple>
-                        <mat-option *ngFor="let tag of tags" [value]="tag">{{tag}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                    <button *ngIf="!newTag" type="button" mat-fab color="primary" (click)='createNewTag()'>
+                        <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+                    </button>
+
+                    <mat-form-field *ngIf='newTag'>
+                        <input matInput placeholder="Nuevo Tag" formControlName="newTag">
+                        <mat-hint>Nuevo Tag para el grupo</mat-hint>
+                    </mat-form-field>
+
+                    <button *ngIf='newTag' type="button" mat-icon-button (click)='addToTags()'>Añade nuevo tag!</button>
+                </div>
             </div>
+
             <div class="row" *ngIf='isAdmin'>
                 <div class="col-12">
                     <mat-form-field>
@@ -63,6 +88,8 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                 </div>
             </div>
             <input type="submit" class="btn btn-primary" value="Guardar grupo" [disabled]="!form.valid || procesing">
+
         </div>
+        <input type="submit" class="btn btn-primary" value="Guardar grupo" [disabled]="!form.valid || procesing">
     </form>
 </div>

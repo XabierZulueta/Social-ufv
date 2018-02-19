@@ -10,11 +10,16 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { fadeInAnimation } from '../_animations/fadein.animation';
 import { FormBuilder, FormGroupDirective, NgForm, FormGroup, Validators, FormControl } from '@angular/forms';
 import { GruposService } from '../_services/grupos.service';
+import { ENTER, ZERO } from '@angular/cdk/keycodes';
 
 import { ErrorStateMatcher } from '@angular/material/core';
 // import the file uploader plugin
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
+<<<<<<< HEAD
 import { UserService } from '../_services/user.service';
+=======
+import { MatChipInputEvent } from '@angular/material';
+>>>>>>> 24182beaa1e733fd3877b02c61bde48d4fb4fdad
 // define the constant url we would be uploading to.
 const URL = 'http://localhost:8080/upload';
 
@@ -37,7 +42,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 
 export class NuevoGrupoComponent implements OnInit {
-    public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'photo' });
+    separatorKeysCodes = [ENTER, ZERO];
     matcher = new MyErrorStateMatcher();
     domain = this.authService.domain;
     message: any;
@@ -54,6 +59,8 @@ export class NuevoGrupoComponent implements OnInit {
     form;
     tags;
     isAdmin: boolean;
+    formTags = [];
+    newTag;
     procesing = false;
     representantes;
     // Create an instance of the DataService through dependency injection
@@ -101,9 +108,15 @@ export class NuevoGrupoComponent implements OnInit {
                 Validators.minLength(5),
                 Validators.maxLength(500),
             ])],
+<<<<<<< HEAD
             representante: localStorage.getItem('usename'),
             tags: ''
+=======
+            tags: '',
+            newTag: ''
+>>>>>>> 24182beaa1e733fd3877b02c61bde48d4fb4fdad
         });
+        this.form.get('newTag').disable();
     }
 
     enableForm() {
@@ -118,8 +131,8 @@ export class NuevoGrupoComponent implements OnInit {
         this.form.get('tags').disable();
     }
 
-    onSubmit() {
-        this.uploader.uploadAll();
+    async onSubmit() {
+        this.upload();
         this.procesing = true;
         this.disableForm();
         // this.upload();
@@ -155,28 +168,18 @@ export class NuevoGrupoComponent implements OnInit {
         this.enableForm();
     }
 
-    upload() {
-        // locate the file element meant for the file upload.
-        const inputEl: HTMLInputElement = this.el.nativeElement.querySelector('#photo');
-        // get the total amount of files attached to the file input.
-        const fileCount: number = inputEl.files.length;
-        // create a new fromdata instance
-        const formData = new FormData();
-        // check if the filecount is greater than zero, to be sure a file was selected.
-        if (fileCount > 0) { // a file was selected
-            // append the key name 'photo' with the first file in the element
-            formData.append('photo', inputEl.files.item(0));
-            // call the angular http method
-            this.http
-                // post the form data to the url defined above and map the response.
-                // Then subscribe to initiate the post. if you don't subscribe, angular wont post.
-                .post(URL, formData).map(res => res.json()).subscribe(
-                // map the success function and alert the response
-                (success) => {
-                    alert(success._body);
-                },
-                (error) => alert(error));
+    async upload() {
+        const formData: any = new FormData();
+        const files: Array<File> = this.filesToUpload;
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append('uploads[]', files[i], files[i]['name']);
         }
+        // formData.append("uploads[]", files[0], files[0]['name']);
+        // this.address.documents = files.toString();
+        this.http.post('http://localhost:8080/api/upload', formData)
+            .map(res => res.json())
+            .subscribe();
     }
 
     fileChangeEvent(fileInput: any) {
@@ -188,13 +191,22 @@ export class NuevoGrupoComponent implements OnInit {
         this.authService.getProfile().subscribe(prof => {
             this.username = prof.user.username;
         });
+    }
 
-        // override the onAfterAddingfile property of the uploader so it doesn't authenticate with //credentials.
-        this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
-        // overide the onCompleteItem property of the uploader so we are
-        // able to deal with the server response.
-        this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-            console.log('ImageUpload:uploaded:', item, status, response);
-        };
+    createNewTag() {
+        this.form.get('newTag').enable();
+        this.newTag = true;
+    }
+
+    addToTags() {
+        this.tags.push(this.form.get('newTag').value);
+        let arr = this.form.get('tags').value;
+        if (arr) {
+            arr.push(this.form.get('newTag').value);
+        } else {
+            arr = this.form.get('newTag').value;
+        }
+        this.form.controls['tags'].setValue(arr);
+        this.newTag = false;
     }
 }

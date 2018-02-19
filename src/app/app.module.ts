@@ -60,9 +60,10 @@ import { SendActivationLinkComponent } from './_components/send-activation-link/
 import { ResetPasswordComponent } from './_components/reset/reset-password/reset-password.component';
 import { ResetUsernameComponent } from './_components/reset/reset-username/reset-username.component';
 import { FileSelectDirective } from 'ng2-file-upload';
-import { MatDialogModule } from '@angular/material';
 import { DialogComponent } from './_dialogs/dialog-modal/dialog.component';
 import { DialogConfirmarReciboEmailsComponent } from './_dialogs/dialog-confirmar-recibo-emails/dialog-confirmar-recibo-emails.component';
+import { MatDialogModule, MatAutocompleteModule, MatChipsModule } from '@angular/material';
+import { NewPasswordComponent } from './_components/reset/new-password/new-password.component';
 
 
 @NgModule({
@@ -88,12 +89,15 @@ import { DialogConfirmarReciboEmailsComponent } from './_dialogs/dialog-confirma
     ResetUsernameComponent,
     FileSelectDirective,
     DialogComponent,
-    DialogConfirmarReciboEmailsComponent
+    DialogConfirmarReciboEmailsComponent,
+    NewPasswordComponent
   ],
   entryComponents: [
     DialogComponent
   ],
   imports: [
+    MatChipsModule,
+    MatAutocompleteModule,
     MatDialogModule,
     BrowserModule,
     DayPilotModule,

@@ -31,6 +31,6 @@ export class NavBarComponent implements OnInit {
   }
 
   isAdmin() {
-    return this.role === 'alumno';
+    return this.role === 'admin';
   }
 }

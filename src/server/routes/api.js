@@ -13,7 +13,7 @@ var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './dist/assets/uploads/');
         //EXPLICAR A MANZA
-        cb(null, './src/assets/uploads/')
+        cb(null, './src/assets/uploads/');
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -22,6 +22,8 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 router.post("/upload", upload.array("uploads[]", 12), function (req, res) {
+    console.log(req.files);
+    console.log('no tengo ni idea de lo que pasa');
     res.send(req.files);
 });
 
@@ -104,7 +106,7 @@ router.get('/groups/tags', (req, res) => {
                 sendError(err, res);
             });
         db.close();
-    })
+    });
 });
 
 
@@ -157,7 +159,7 @@ router.post('/peticiones', (req, res) => {
                     res.send('Success');
             });
         db.close();
-    })
+    });
 });
 
 //Delete peticion
@@ -192,7 +194,7 @@ router.get('/grupo/:id/npeticiones', (req, res) => {
                 sendError(err, res);
             });
         db.close();
-    })
+    });
 });
 
 // Get peticiones by groupId
@@ -376,7 +378,7 @@ router.get('/grupo/:id/nusers', (req, res) => {
                 sendError(err, res);
             });
         db.close();
-    })
+    });
 });
 
 //Authenticate
@@ -410,7 +412,7 @@ router.post('/groups', (req, res) => {
                     res.send('Success');
             });
         db.close();
-    })
+    });
 });
 //Get users by group id
 router.get('/users/grupo/:id', (req, res) => {
@@ -429,7 +431,7 @@ router.get('/users/grupo/:id', (req, res) => {
                 sendError(err, res);
             });
         db.close();
-    })
+    });
 });
 
 // Get group max id
@@ -483,7 +485,7 @@ router.put('/event/:id', (req, res) => {
                     res.send('Success');
             });
         db.close();
-    })
+    });
 });
 
 // Get events by group id
@@ -508,7 +510,7 @@ router.get('/events/:id', (req, res) => {
 //Post events
 router.post('/events', (req, res) => {
     res.send('success');
-    console.log('not posible')
+    console.log('not posible');
     req.body.start = new Date(req.body.start);
     req.body.id = parseInt(req.body.id);
     connection((db) => {
@@ -520,7 +522,7 @@ router.post('/events', (req, res) => {
                     res.send('Success');
             });
         db.close();
-    })
+    });
 });
 
 //Delete user. Le elimina también de los eventos a los que está apuntado.
@@ -577,7 +579,7 @@ router.post('/users', (req, res) => {
                     res.send('Success');
             });
         db.close();
-    })
+    });
 });
 
 // Get events
