@@ -12,46 +12,80 @@
         </div>
         <!-- Login Form -->
         <form [formGroup]="form" (submit)="onLoginSubmit()">
+            <!-- <div class="login-ic">
+                <i class="material-icons">person</i>
+                <input type="text" value='Usuario' name="username" [(ngModel)]="model.username" #username="ngModel" required>
+                <div class="clear"> </div>
+            </div>
+            <div *ngIf="f.submitted && !username.valid" class="text text-danger" style="margin-top: -1.5em;"> El username es obligatorio
+                <br/>
+                <br/>
+            </div>
+            <div class="login-ic">
+                <i class="material-icons">https</i>
+                <input type="password" value='Contraseña' name="password" [(ngModel)]="model.password" #password="ngModel" required>
+                <div class="clear"> </div>
+            </div>
+            <div *ngIf="f.submitted && !password.valid" class="text text-danger" style="margin-top: -1.5em;"> La contraseña es obligatoria
+                <br/>
+                <br/>
+            </div>
+            <div class="log-bwn">
+                <input type="submit" value="Iniciar sesión">
+            </div> -->
 
             <!-- Username Field -->
-            <div class="form-group">
-                <label for="username" class='text-white'>Username</label>
-                <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }">
-                    <input class="form-control" type="text" name="username" formControlName="username" />
-                    <!-- Validation -->
-                    <ul class="help-block">
-                        <li *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required.</li>
-                    </ul>
-                </div>
+            <div class="login-ic">
+                <!-- <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }"> -->
+                <i class="material-icons">person</i>
+                <input value='Usuario' type="text" name="username" required formControlName="username" />
+                <!-- </div> -->
+                <div class="clear"></div>
             </div>
+            <!-- Validation -->
+            <ul class="help-block">
+                <li *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required.</li>
+            </ul>
 
             <!-- Password Field  -->
-            <div class="form-group">
-                <label for="password" class='text-white'>Password</label>
+            <div class="login-ic">
+
+                <i class="material-icons">https</i>
+                <input value='Usuario' type="password" name="password" required formControlName="password" />
+                <div class="clear"></div>
+                <!-- <label for="password" class='text-white'>Password</label>
                 <div [ngClass]="{'has-error': form.controls.password.errors && form.controls.password.dirty, 'has-success': form.controls.password.valid && form.controls.password.dirty }">
+                    <i class="material-icons">https</i>
                     <input class="form-control" type="password" name="password" formControlName="password" />
-                    <!-- Validation -->
+                    Validation
                     <ul class="help-block">
                         <li *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required.</li>
                     </ul>
-                </div>
+                </div> -->
             </div>
+            <ul class="help-block">
+                <li *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required.</li>
+            </ul>
             <!-- Submit Button -->
-            <div class="row">
-                <div class="col-6">
-                    <a class="btn btn-secondary" routerLink="/register" routerLinkActive="active" style="margin-top:10px;">Registrarse</a>
-                </div>
-                <div class="col-6">
-                    <input [disabled]="!form.valid || loading " class="btn btn-success float-right" type="submit" value="Login" />
-                </div>
+            <div class="log-bwn">
+                <input [disabled]="!form.valid || loading " class="btn btn-success float-right" type="submit" value="Iniciar sesión" />
+                <div class="clear"></div>
             </div>
         </form>
-
         <div class="row">
-            <a class="badge badge-info" routerLink="/resetUsername" routerLinkActive="active" style="margin-top:10px;">Olvido de nombre de usuario</a>
+            <div class="col-12">
+                <a class="float-right badge badge-primary" routerLink="/register" routerLinkActive="active" style="margin-top:10px;">Registrarse</a>
+            </div>
         </div>
         <div class="row">
-            <a class="badge badge-warning" routerLink="/resetPassword" routerLinkActive="active" style="margin-top:10px;">Olvido de contraseña</a>
+            <div class="col-12">
+                <a class="float-right badge badge-info" routerLink="/resetUsername" routerLinkActive="active" style="margin-top:10px;">Olvido de nombre de usuario</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <a class="float-right badge badge-warning" routerLink="/resetPassword" routerLinkActive="active" style="margin-top:10px;">Olvido de contraseña</a>
+            </div>
         </div>
     </div>
 
