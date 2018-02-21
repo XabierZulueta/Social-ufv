@@ -15,8 +15,6 @@ import { ENTER, ZERO } from '@angular/cdk/keycodes';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { UserService } from '../_services/user.service';
 import { MatChipInputEvent } from '@angular/material';
-// define the constant url we would be uploading to.
-const URL = 'http://localhost:8080/upload';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -168,7 +166,7 @@ export class NuevoGrupoComponent implements OnInit {
         }
         // formData.append("uploads[]", files[0], files[0]['name']);
         // this.address.documents = files.toString();
-        this.http.post('http://localhost:8080/api/upload', formData)
+        this.http.post('/api/upload', formData)
             .map(res => res.json())
             .subscribe();
     }

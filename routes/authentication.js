@@ -19,9 +19,9 @@ module.exports = (router) => {
                     to: user.email,
                     subject: 'Localhost usuario olvidado.',
                     text: 'Hola ' + user.nombre + '! Tu nombre de usuario es: ' + user.username +
-                        '. Puede entrar con el siguiente enlace: http://localhost:4200/login',
+                        '. Puede entrar con el siguiente enlace: ' + config.url_web + '/login',
                     html: 'Hola ' + user.nombre + '! ' + '<br> <br> Tu nombre de usuario es: ' + user.username +
-                        '<br><br>Puede entrar con el siguiente enlace: <a href="http://localhost:4200/login/">social-ufv</a> '
+                        '<br><br>Puede entrar con el siguiente enlace: <a href="' + config.url_web + '/login">social-ufv</a> '
                 };
 
                 var mail = new Mail({
@@ -63,9 +63,9 @@ module.exports = (router) => {
                             to: user.email,
                             subject: 'Localhost contraseña olvidada olvidado.',
                             text: 'Hola ' + user.nombre + '! Has solicidado el cambio de contraseña, por favor pincha en el siguiente enlace para cambiar la contraseña: ' +
-                                ' http://localhost:4200/reset/' + user.resetToken,
+                                config.url_web + ' /reset/' + user.resetToken,
                             html: 'Hola ' + user.nombre + '! ' + '<br> <br> Has solicidado el cambio de contraseña, por favor pincha en el siguiente enlace para cambiar la contraseña: ' +
-                                '<a href="http://localhost:4200/reset/' + user.resetToken + '">Cambiar contraseña</a> '
+                                '<a href="' + config.url_web + '/reset/' + user.resetToken + '">Cambiar contraseña</a> '
                         };
 
                         var mail = new Mail({
@@ -101,7 +101,7 @@ module.exports = (router) => {
                     if (err) {
                         res.json({ success: false, message: 'El link de la contraseña ha expirado: ' + err });
                     } else {
-                        res.json({ success: true, message: 'Usuario encontrado', user: user })
+                        res.json({ success: true, message: 'Usuario encontrado', user: user });
                     }
                 });
             }
@@ -146,10 +146,10 @@ module.exports = (router) => {
                                 to: user.email,
                                 subject: 'Localhost activation link',
                                 text: 'Hello ' + user.nombre + ', ' + '<br> <br> Por favor pincha en el enlace para confirmar ' +
-                                    'la cuenta en (localhost.com: http://localhost:4200/activate/' + user.temporaryToken + ')',
+                                    'la cuenta en (localhost.com: ' + config.url_web + '/activate/' + user.temporaryToken + ')',
                                 html: 'Hello ' + user.nombre + ', ' + '<br> <br> Por favor pincha en el enlace para confirmar ' +
-                                    'la cuenta en (localhost.com)<br><br> <a href="http://localhost:4200/activate/' + user.temporaryToken +
-                                    '">http://localhost:4200/activate</a> '
+                                    'la cuenta en (localhost.com)<br><br> <a href="' + config.url_web + '/activate/' + user.temporaryToken +
+                                    '">Activar Cuenta</a> '
                             };
 
                             var mail = new Mail({
@@ -261,10 +261,10 @@ module.exports = (router) => {
                         var options = {
                             to: user.email,
                             subject: 'Resend Activation link',
-                            text: 'Hola ' + user.nombre + '. Este es el link para activar tu cuenta http://localhost:4200/activate/' + user.temporaryToken + '',
+                            text: 'Hola ' + user.nombre + '. Este es el link para activar tu cuenta ' + config.url_web + '/activate/' + user.temporaryToken + '',
                             html: 'Hola ' + user.nombre + ', ' + '<br> <br> Este es el link para activar tu cuenta. ' +
-                                '(localhost)<br><br> <a href="http://localhost:4200/activate/' + user.temporaryToken +
-                                '">http://localhost:4200/activate</a> '
+                                '(localhost)<br><br> <a href="' + config.url_web + '/activate/' + user.temporaryToken +
+                                '">Activar cuenta</a> '
                         };
 
                         var mail = new Mail({
