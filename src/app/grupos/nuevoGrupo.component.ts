@@ -13,8 +13,6 @@ import { GruposService } from '../_services/grupos.service';
 import { ENTER, ZERO } from '@angular/cdk/keycodes';
 
 import { ErrorStateMatcher } from '@angular/material/core';
-// import the file uploader plugin
-import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 import { UserService } from '../_services/user.service';
 import { MatChipInputEvent } from '@angular/material';
 // define the constant url we would be uploading to.
