@@ -23,16 +23,12 @@
       <div class="form-group row">
         <label for="start" class="col-2 col-form-label">Fecha de comienzo: </label>
         <div class="col-4">
-          <input class='form-control' type="datetime-local" formControlName="start" name='start'>
+          <my-date-range-picker name="start" [options]="myDateRangePickerOptions" formControlName="start"></my-date-range-picker>
           <ul>
             <li *ngIf="form.controls.start.errors?.required && form.controls.start.dirty" class="text-danger text-sm-left">This field is required</li>
             <li *ngIf="form.controls.start.errors?.validatestart && form.controls.start.dirty" class="text-warning">start must not have any special characters</li>
             <li *ngIf="startMessage" class="{{startMessageClass}} text-sm-left"> {{startMessage}} </li>
           </ul>
-        </div>
-        <label for="end" class="col-2 col-form-label">Fecha de Fin: </label>
-        <div class="col-4">
-          <input class='form-control' type="datetime-local" formControlName="end" name='end'>
         </div>
 
         <div class="row">

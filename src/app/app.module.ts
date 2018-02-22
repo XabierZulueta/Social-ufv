@@ -63,6 +63,7 @@ import { DialogComponent } from './_dialogs/dialog-modal/dialog.component';
 import { DialogConfirmarReciboEmailsComponent } from './_dialogs/dialog-confirmar-recibo-emails/dialog-confirmar-recibo-emails.component';
 import { MatDialogModule, MatAutocompleteModule, MatChipsModule } from '@angular/material';
 import { NewPasswordComponent } from './_components/reset/new-password/new-password.component';
+import { MyDateRangePickerModule } from 'mydaterangepicker';
 
 
 @NgModule({
@@ -94,6 +95,7 @@ import { NewPasswordComponent } from './_components/reset/new-password/new-passw
     DialogComponent
   ],
   imports: [
+    MyDateRangePickerModule,
     MatChipsModule,
     MatAutocompleteModule,
     MatDialogModule,
