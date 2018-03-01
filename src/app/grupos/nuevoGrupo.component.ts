@@ -192,14 +192,28 @@ export class NuevoGrupoComponent implements OnInit {
     }
 
     addToTags() {
-        this.tags.push(this.form.get('newTag').value);
-        let arr = this.form.get('tags').value;
+        const nuevoTag = this.form.get('newTag').value.trim();
+
+        let arr = this.form.get('tags').value || [];
+        console.log(arr.find(obj => obj.toLowerCase() === nuevoTag.toLowerCase()));
+        if (nuevoTag !== '' && !arr.find(obj => obj.toLowerCase() === nuevoTag.toLowerCase())) {
+            this.tags.push(nuevoTag);
+        }
+
         if (arr) {
-            arr.push(this.form.get('newTag').value);
+            if (nuevoTag !== '' && !arr.find(obj => obj.toLowerCase() === nuevoTag.toLowerCase())) {
+                arr.push(nuevoTag);
+            }
         } else {
-            arr = this.form.get('newTag').value;
+            arr = [];
+            if (nuevoTag !== '') {
+                arr.push(nuevoTag);
+            }
         }
         this.form.controls['tags'].setValue(arr);
         this.newTag = false;
+        this.form.patchValue({
+            newTag: '',
+        });
     }
 }
