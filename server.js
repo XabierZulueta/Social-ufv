@@ -24,10 +24,6 @@ mongoose.connect(config.uri)
     .then(() => console.log('connection successful ' + config.db))
     .catch((err) => console.error(err));
 
-
-// EVENTOS
-// var evento = require('./routes/eventos2');
-
 const app = express();
 
 //Cross origin
@@ -65,6 +61,6 @@ app.use(function (req, res, next) {
 });
 
 // const server = http.createServer(app);
-app.listen(port, () => console.log('Running on 127.0.0.1:' + port));
+app.listen(port, () => console.log('Running on que 127.0.0.1:' + port));
 
 module.exports = app;

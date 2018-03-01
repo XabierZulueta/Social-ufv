@@ -16,17 +16,20 @@ export class CuentaActivadaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('Se mete por el componente');
     this.route.params.subscribe(params => {
       // In a real app: dispatch action to load the details here.
       this.auth.activateAccount(params['token']).subscribe(res => {
         if (!res.success) {
+          console.log('Success');
           this.message = res.message;
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 1000);
         } else {
+          console.log('Fail');
           this.message = res.message;
         }
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 1000);
       });
     });
   }
