@@ -1,8 +1,8 @@
-const crypto = require('crypto').randomBytes(256).toString('hex');
+var randomBytes = require('randombytes')(256).toString('hex');
 
 module.exports = {
     name: 'desarrollo',
     db: 'social-ufv',
     uri: 'mongodb://jorge:contrasena@ds159274.mlab.com:59274/social-ufv',
-    secret: crypto
+    secret: randomBytes
 }
