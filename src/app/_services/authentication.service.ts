@@ -5,11 +5,12 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import { UserService } from './user.service';
 import { tokenNotExpired } from 'angular2-jwt';
+import '../../../config/config.local';
 
 @Injectable()
 export class AuthenticationService {
 
-    domain = 'http://localhost:8080/';
+    domain = '';
     authToken;
     user;
     options;
