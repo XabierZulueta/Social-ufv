@@ -10,7 +10,7 @@ import '../../../config/config.local';
 @Injectable()
 export class AuthenticationService {
 
-    domain = '';
+    domain = 'http://localhost:8080/';
     authToken;
     user;
     options;

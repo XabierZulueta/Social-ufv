@@ -3,7 +3,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
-const config = require('./config/config.dev');
+const config = require('./config/config.local');
 const authentication = require('./routes/authentication')(router);
 const tags = require('./routes/tags')(router);
 const notifications = require('./routes/notificaciones')(router);
@@ -61,6 +61,6 @@ app.use(function (req, res, next) {
 });
 
 // const server = http.createServer(app);
-app.listen(port, () => console.log('Running on que 127.0.0.1:' + port));
+app.listen(port, () => console.log('Running on ' + config.name + ': ' + + port));
 
 module.exports = app;
