@@ -14,7 +14,6 @@ const multer = require('multer');
 const port = process.env.PORT || 8080;
 // API file for interacting with MongoDB
 const api = require('./src/server/routes/api');
-const fileUpload = require('express-fileupload');
 
 var mongoose = require('mongoose');
 
