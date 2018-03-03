@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { Router } from '@angular/router';
 import { EventosService } from '../../_services/eventos.service';
+import { IMyDrpOptions } from 'mydaterangepicker';
 
 @Component({
   moduleId: module.id,
@@ -11,6 +12,18 @@ import { EventosService } from '../../_services/eventos.service';
   styleUrls: ['./nuevo-evento.component.css']
 })
 export class NuevoEventoComponent implements OnInit {
+
+  myDateRangePickerOptions: IMyDrpOptions = {
+    dateFormat: 'dd mmm yyyy',
+    firstDayOfWeek: 'mo',
+    sunHighlight: true,
+    height: '34px',
+    width: '260px',
+    inline: false,
+    alignSelectorRight: false,
+    indicateInvalidDateRange: true
+  };
+
   titleMessageClass: string;
   titleMessage: string;
   titleValid: boolean;
@@ -46,52 +59,46 @@ export class NuevoEventoComponent implements OnInit {
       start: ['', Validators.compose([
         Validators.required]
       )],
-      end: [''],
-      // go: ['', Validators.compose([]
-      // )],
-      // maxPersonas: ['', Validators.compose([
-      //   Validators.min(1)
-      // ]
-      // )],
-      // description: ['', Validators.compose([]
-      // )],
       creditos: ['0', Validators.compose([
         Validators.min(0), Validators.required]
       )]
-    }, { validator: this.compareDates('start', 'end') });
+    });
     this.enableForm();
   }
 
-  compareDates(start, end) {
-    return (group: FormGroup) => {
-      const startDate = new Date(group.controls[start].value);
-      const endDate = new Date(group.controls[end].value);
-
-      if (startDate.toString() === 'Invalid Date' || endDate.toString() === 'Invalid Date') {
-        return {
-          'matchingPasswords': true
-        };
-      } else if (startDate < endDate) {
-        return null;
-      } else {
-        return {
-          'matchingPasswords': true
-        };
+  setDateRange(): void {
+    // Set date range (today) using the patchValue function
+    const date = new Date();
+    this.form.patchValue({
+      start: {
+        beginDate: {
+          year: date.getFullYear(),
+          month: date.getMonth() + 1,
+          day: date.getDate()
+        },
+        endDate: {
+          year: date.getFullYear(),
+          month: date.getMonth() + 1,
+          day: date.getDate()
+        }
       }
-    };
+    });
+  }
+
+  clearDateRange(): void {
+    // Clear the date range using the patchValue function
+    this.form.patchValue({ start: '' });
   }
 
   enableForm() {
     this.form.controls['title'].enable();
     this.form.controls['start'].enable();
-    this.form.controls['end'].enable();
     this.form.controls['creditos'].enable();
   }
 
   disabledForm() {
     this.form.controls['title'].disable();
     this.form.controls['start'].disable();
-    this.form.controls['end'].disable();
     this.form.controls['creditos'].disable();
   }
 
@@ -101,9 +108,9 @@ export class NuevoEventoComponent implements OnInit {
     const body = {
       evento: {
         title: this.form.get('title').value,
-        start: this.form.get('start').value,
+        start: this.form.get('start').value.beginJsDate,
+        end: this.form.get('start').value.endJsDate,
         creditos: this.form.get('creditos').value,
-        end: this.form.get('end').value
       },
       idGrupo: this.grupoPadre._id
     };

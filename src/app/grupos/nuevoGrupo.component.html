@@ -23,14 +23,7 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                         &hellip;
                         <input type="file" style="display: none;" (change)="fileChangeEvent($event)">
                     </label>
-                    <!-- <label>Imagen</label> -->
-                    <!-- <label> -->
-                    <!-- <input type="file" style="display: none;" (change)="fileChangeEvent($event)"> -->
-                    <!-- <input class="btn btn-default" type="file" name="photo" ng2FileSelect (change)="fileChangeEvent($event)"> -->
-                    <!-- <input type="file" (change)="fileChangeEvent($event)" /> -->
-                    <!-- </label> -->
-                    <!-- <label>Imagen</label>
-                    <label class="btn btn-block btn-primary">
+                    <!-- <label class="btn btn-block btn-primary">
                         &hellip;
                         <input type="file" style="display: none;" (change)="fileChangeEvent($event)">
                     </label> -->
@@ -67,6 +60,7 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                     </mat-form-field>
                 </div>
                 <div class="col-3">
+
                     <mat-form-field>
                         <mat-select placeholder="Tags" formControlName="tags" multiple>
                             <mat-option *ngFor="let tag of tags" [value]="tag">{{tag}}</mat-option>
@@ -91,8 +85,8 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
             </div>
 
             <div class="row" *ngIf='isAdmin'>
-                <div class="col-12">
-                    <mat-form-field>
+                <div class="col-4">
+                    <mat-form-field class="example-full-width">
                         <mat-select placeholder="Representante" formControlName="representante" single>
                             <mat-option *ngFor="let user of representantes" [value]="user.username">{{user.nombre}}</mat-option>
                         </mat-select>

@@ -35,7 +35,6 @@ router.post("/upload", upload.array("uploads[]", 12), function (req, res) {
 // Connect
 const connection = (closure) => {
     return MongoClient.connect(config.uri, (err, db) => {
-        //return MongoClient.connect('mongodb://localhost:27017/mean', (err, db) => {
         if (err) return console.log(err);
         closure(db);
     });

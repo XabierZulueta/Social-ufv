@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
+// tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 
