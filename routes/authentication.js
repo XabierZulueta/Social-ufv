@@ -246,9 +246,6 @@ module.exports = (router) => {
                 { temporaryToken: jwt.sign({ username: req.body.username.toLowerCase() }, config.secret, { expiresIn: '24h' }) },
                 { new: true, fields: { "password": 1, "nombre": 1, "active": 1, "email": 1, "temporaryToken": 1 } },
                 (err, user) => {
-                    console.log(err);
-                    console.log(user);
-                    console.log(req.body);
                     if (err) {
                         res.json({ success: false, message: err });
                     } else if (!user) {
@@ -292,8 +289,6 @@ module.exports = (router) => {
         const token = req.params.token;
         jwt.verify(token, config.secret, (err, decoded) => {
             if (err) {
-                console.log(err);
-                console.log('err');
                 res.json({ success: false, message: 'Activation link has expired.' });
             } else {
                 console.log('todo ok continuamos.');
@@ -334,7 +329,6 @@ module.exports = (router) => {
     router.use((req, res, next) => {
         const token = req.headers.authorization;
         if (!token) {
-            console.log('Se mete por aqui...');
             res.json({ success: false, message: 'No token provided.' });
         } else {
             jwt.verify(token, config.secret, (err, decoded) => {

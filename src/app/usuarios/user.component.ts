@@ -6,6 +6,7 @@ import { Grupo } from '../grupos/grupo';
 import { fadeInAnimation } from '../_animations/fadein.animation';
 import { Evento } from '../eventos/evento';
 import { JwtHelper } from 'angular2-jwt';
+import { EventosService } from '../_services/eventos.service';
 
 @Component({
     selector: 'app-user',
@@ -28,7 +29,9 @@ export class UserComponent implements OnInit {
     step = 0;
 
     constructor(private _dataService: DataService,
-        private route: ActivatedRoute, private authService: AuthenticationService,
+        private route: ActivatedRoute,
+        private authService: AuthenticationService,
+        private eventosService: EventosService,
         private router: Router) {
         this.ultimoEvento = [];
         this.organizador = { id: 0, nombre: '', imagen: '', informacion: '' };
@@ -69,11 +72,10 @@ export class UserComponent implements OnInit {
 
         //     this.getHobbies(this.user);
         //     });
-        // this._dataService.getUltimoEvento(this.id)
-        //     .subscribe(res => {
-        //         this.ultimoEvento = res;
-        //         this.getOrganizador(this.ultimoEvento[0].organizador.id);
-        //     });
+        this._dataService.getUltimoEvento(this.id).subscribe(res => {
+            this.ultimoEvento = res;
+            this.getOrganizador(this.ultimoEvento[0].organizador.id);
+        });
         this.grupos = false;
         this.gruposid = new Array<any>();
     }

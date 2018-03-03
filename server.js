@@ -9,6 +9,7 @@ const tags = require('./routes/tags')(router);
 const notifications = require('./routes/notificaciones')(router);
 const eventos = require('./routes/eventos')(router);
 const grupos = require('./routes/grupos')(router);
+const users = require('./routes/users')(router);
 const cors = require('cors');
 const multer = require('multer');
 const port = process.env.PORT || 8080;
@@ -43,6 +44,8 @@ app.use(tags);
 app.use(notifications);
 app.use(grupos);
 app.use(eventos);
+app.use(users);
+
 
 // API location
 app.use('/api', api);

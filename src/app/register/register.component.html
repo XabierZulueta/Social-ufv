@@ -183,13 +183,15 @@
             </div>
 
             <!-- Submit Input -->
-
-            <input [disabled]="!form.valid || loading || !emailValid || !usernameValid" type="submit" class="btn btn-primary" value="Registrarse"
-            />
+            <div class="log-bwn">
+                <input [disabled]="!form.valid || loading || !emailValid || !usernameValid" class="btn btn-success float-right" type="submit"
+                    value="Registrarse" />
+                <div class="clear"></div>
+            </div>
 
         </form>
         <!-- Registration Form /-->
-        <a class="btn btn-primary" routerLink="/login" routerLinkActive="active" style="margin-top:10px;">Login</a>
+        <a class="badge badge-pill badge-primary float-right" routerLink="/login" routerLinkActive="active" style="margin-top:10px;">Login</a>
     </div>
 
 </div>

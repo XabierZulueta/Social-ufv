@@ -12,7 +12,6 @@ import { AuthenticationService } from './authentication.service';
 export class UserService {
 
     domain = this.authService.domain;
-    authToken;
     user;
     options;
 
@@ -26,34 +25,35 @@ export class UserService {
         this.options = new RequestOptions({
             headers: new Headers({
                 'content-type': 'application/json',
-                'authorization': this.authToken
+                'authorization': this.authService.authToken
             })
         });
     }
 
     getAll() {
-        return this.http.get(this.domain + '/api/users', this.jwt()).map((response: Response) => response.json());
+        return this.http.get(this.domain + 'api/users', this.jwt()).map((response: Response) => response.json());
     }
 
     getById(id: number) {
-        return this.http.get(this.domain + '/api/users/' + id, this.jwt()).map((response: Response) => response.json());
+        return this.http.get(this.domain + 'api/users/' + id, this.jwt()).map((response: Response) => response.json());
     }
 
     create(user: User) {
-        return this.http.post(this.domain + '/api/users', user, this.jwt()).map((response: Response) => response.json());
+        return this.http.post(this.domain + 'api/users', user, this.jwt()).map((response: Response) => response.json());
     }
 
     update(user: User) {
-        return this.http.put(this.domain + '/api/users/' + user.id, user, this.jwt()).map((response: Response) => response.json());
+        return this.http.put(this.domain + 'api/users/' + user.id, user, this.jwt()).map((response: Response) => response.json());
     }
 
     delete(id: number) {
-        return this.http.delete(this.domain + '/api/users/' + id, this.jwt()).map((response: Response) => response.json());
+        return this.http.delete(this.domain + 'api/users/' + id, this.jwt()).map((response: Response) => response.json());
     }
 
     getAllRepresentantes() {
+        console.log('hola');
         this.createAuthenticationHeaders();
-        return this.http.delete(this.domain + '/users/representantes', this.options).map(res => res.json());
+        return this.http.get(this.domain + 'users/representantes', this.options).map(res => res.json());
     }
 
     // private helper methods

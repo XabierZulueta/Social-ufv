@@ -105,3 +105,7 @@
 .example-full-width {
     width: 100%;
 }
+
+mat-label {
+    color: Green;
+  }

@@ -31,7 +31,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
     selector: 'app-nuevo-grupo',
     templateUrl: './nuevoGrupo.component.html',
-    styleUrls: ['./grupo.component.css'],
+    styleUrls: ['./grupo.component.css', './reset.css'],
     animations: [fadeInAnimation],
     // attach the fade in animation to the host (root) element of this component
     // tslint:disable-next-line:use-host-property-decorator
@@ -85,6 +85,7 @@ export class NuevoGrupoComponent implements OnInit {
 
             if (this.isAdmin) {
                 this.userService.getAllRepresentantes().subscribe(data => {
+                    console.log(data);
                     if (data.success) {
                         this.representantes = data.representantes;
                     }
@@ -215,5 +216,9 @@ export class NuevoGrupoComponent implements OnInit {
         this.form.patchValue({
             newTag: '',
         });
+    }
+
+    toggleTag() {
+        this.newTag = false;
     }
 }
