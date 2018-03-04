@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const multer = require('multer');
-const config = require('../../../config/config.local');
+const config = require('../../../config/config.dev');
 var jwt = require('jwt-simple');
 /*
     SECCION SUBIDA DE FICHEROS
