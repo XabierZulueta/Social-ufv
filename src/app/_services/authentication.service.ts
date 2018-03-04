@@ -86,11 +86,20 @@ export class AuthenticationService {
         return this.http.get(this.domain + 'authentication/reset/username/' + email).map(res => res.json());
     }
 
-    resetPassword(username) {
+    resetPassword(username, password) {
         const body = {
-            username: username
+            username: username,
+            password: password
         };
         return this.http.put(this.domain + 'authentication/reset/password', body).map(res => res.json());
+    }
+
+    savePasswords(username, password) {
+        const body = {
+            username: username,
+            password: password
+        };
+        return this.http.put(this.domain + 'authentication/save/password', body).map(res => res.json());
     }
 
     getUserResetPassword(token) {

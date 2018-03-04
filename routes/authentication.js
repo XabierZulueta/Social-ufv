@@ -5,7 +5,7 @@ const Mail = require('./../mail');
 
 module.exports = (router) => {
 
-    router.get('/reset/username/:email', (req, res) => {
+    router.get('/authentication/reset/username/:email', (req, res) => {
         User.findOne({ email: req.params.email }).select('nombre username email').exec((err, user) => {
             if (err) {
                 res.json({ success: false, message: err });
@@ -43,7 +43,8 @@ module.exports = (router) => {
         });
     });
 
-    router.put('/reset/password', (req, res) => {
+    router.put('/authentication/reset/password', (req, res) => {
+        console.log(req.body.username);
         User.findOne({ username: req.body.username }).select('nombre username resetToken email active').exec((err, user) => {
             if (err) {
                 res.json({ success: false, message: err });
@@ -52,8 +53,8 @@ module.exports = (router) => {
             } else if (!user.active) {
                 res.json({ success: false, message: 'La cuenta todavia no ha sido activada.' });
             } else {
-                user.resetToken = jwt.sign({ username: req.body.username.toLowerCase() }, config.secret, { expiresIn: '24h' });
-
+                user.resetToken = jwt.sign({ username: req.body.username.toLowerCase() }, config.secret, { expiresIn: '72h' });
+                console.log(user);
                 user.save((err) => {
                     if (err) {
                         res.json({ success: false, message: err });
@@ -82,24 +83,24 @@ module.exports = (router) => {
                         });
                         mail.send();
                         res.json({ success: true, message: 'Por favor, revise el correo para cambiar la contraseña' });
-
                     }
                 });
             }
         });
     });
 
-    router.get('reset/password/:token', (req, res) => {
-        User.findOne({ resetToken: req.param.token }, (err, user) => {
+    router.get('/authentication/reset/password/:token', (req, res) => {
+        User.findOne({ resetToken: req.params.token }, (err, user) => {
             if (err) {
                 res.json({ success: false, message: err });
             } else if (!user) {
                 res.json({ success: false, message: 'No se ha encontrado usuario con ese nombre', redirect: true });
             } else {
-                const token = req.param.token;
+                const token = req.params.token;
+
                 jwt.verify(token, config.secret, (err, decoded) => {
                     if (err) {
-                        res.json({ success: false, message: 'El link de la contraseña ha expirado: ' + err });
+                        res.json({ success: false, message: 'El link de la contraseña ha expirado: ', error: err, decoded: decoded });
                     } else {
                         res.json({ success: true, message: 'Usuario encontrado', user: user });
                     }
@@ -108,7 +109,56 @@ module.exports = (router) => {
         });
     });
 
-    router.post('/register', (req, res) => {
+    router.put('/authentication/save/password', (req, res) => {
+        console.log(req.body);
+        if (!req.body.password) {
+            res.json({ success: false, message: 'No se ha facilitado contraseña' });
+        } else {
+            User.findOne({ username: req.body.username }).select('nombre resetToken password username email').exec((err, user) => {
+                if (err) {
+                    res.json({ success: false, message: err });
+                } else if (!user) {
+                    res.json({ success: false, message: 'No se ha encontrado usuario con ese nombre', redirect: true });
+                } else {
+                    user.password = req.body.password;
+                    user.resetToken = false;
+
+                    user.save((err, user) => {
+                        if (err) {
+                            res.json({ success: false, message: err });
+                        } else {
+
+                            var options = {
+                                to: user.email,
+                                subject: 'Contraseña cambiada.',
+                                text: 'Hola ' + user.nombre + '! Tu contraseña ha sido cambiada correctamente.' + config.url_web + '/login/',
+                                html: 'Hola ' + user.nombre + '! ' + '<br> <br> Tu contraseña ha sido cambiada correctamente.' +
+                                    '<a href="' + config.url_web + '/login/">Log in</a> '
+                            };
+
+                            var mail = new Mail({
+                                to: options.to,
+                                subject: options.subject,
+                                text: options.text,
+                                html: options.html,
+                                successCallback: function (suc) {
+                                    console.log('success');
+                                },
+                                errorCallback: function (err) {
+                                    console.log('error: ' + err);
+                                }
+                            });
+                            mail.send();
+
+                            res.json({ success: true, message: 'Contraseña cambiada correctamente' });
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    router.post('/authentication/register', (req, res) => {
         if (!req.body.email) {
             res.json({ message: "Sent malphormed EMAIL", success: false });
         } else {
@@ -174,7 +224,7 @@ module.exports = (router) => {
         }
     });
 
-    router.get('/checkEmail/:email', (req, res) => {
+    router.get('/authentication/checkEmail/:email', (req, res) => {
         if (!req.params.email) {
             res.json({ success: false, message: "No se ha especificado e-mail." });
         } else {
@@ -192,7 +242,7 @@ module.exports = (router) => {
         }
     });
 
-    router.get('/checkUsername/:username', (req, res) => {
+    router.get('/authentication/checkUsername/:username', (req, res) => {
         if (!req.params.username) {
             res.json({ success: false, message: "No se ha especificado e-mail." });
         } else {
@@ -210,7 +260,7 @@ module.exports = (router) => {
         }
     });
 
-    router.post('/login', (req, res) => {
+    router.post('/authentication/login', (req, res) => {
         if (!req.body.username) {
             res.json({ message: "No se ha seleccionado ningun nombre de usuario", success: false });
         } else if (!req.body.password) {
@@ -235,7 +285,7 @@ module.exports = (router) => {
         }
     });
 
-    router.post('/resend', (req, res) => {
+    router.post('/authentication/resend', (req, res) => {
         if (!req.body.username) {
             res.json({ message: "No se ha seleccionado ningun nombre de usuario", success: false });
         } else if (!req.body.password) {
@@ -285,7 +335,7 @@ module.exports = (router) => {
         }
     });
 
-    router.put('/activate/:token', (req, res) => {
+    router.put('/authentication/activate/:token', (req, res) => {
         const token = req.params.token;
         jwt.verify(token, config.secret, (err, decoded) => {
             if (err) {
@@ -328,6 +378,7 @@ module.exports = (router) => {
 
     router.use((req, res, next) => {
         const token = req.headers.authorization;
+        console.log('router.use');
         if (!token) {
             res.json({ success: false, message: 'No token provided.' });
         } else {
@@ -342,7 +393,7 @@ module.exports = (router) => {
         }
     });
 
-    router.get('/profile', (req, res) => {
+    router.get('/authentication/profile', (req, res) => {
         User.findOne({ _id: req.decoded.userid }, (err, data) => {
             if (err) {
                 res.json({ success: false, message: err });

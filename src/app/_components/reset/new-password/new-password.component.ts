@@ -18,6 +18,7 @@ export class NewPasswordComponent implements OnInit {
   classError;
   loading;
   user;
+  disableFormParam = false;
 
   constructor(
     private authGuard: AuthGuard,
@@ -34,11 +35,18 @@ export class NewPasswordComponent implements OnInit {
       this.authService.getUserResetPassword(params['token']).subscribe(res => {
         console.log(res);
         if (!res.success) {
+          this.error = res.message;
+          this.classError = 'alert alert-danger';
+          this.disableFormParam = true;
+          console.log(res);
           // setTimeout(() => {
           //   this.router.navigate(['/login']);
           // }, 1000);
         } else {
           this.user = res.user;
+          console.log(res);
+          this.error = 'Introduzca una nueva contraseña';
+          this.classError = 'alert alert-success';
         }
       });
     });
@@ -92,7 +100,7 @@ export class NewPasswordComponent implements OnInit {
   onSetNewPassword() {
     this.disableForm();
     this.loading = true;
-    this.authService.resetPassword(this.form.get('password').value).subscribe(data => {
+    this.authService.savePasswords(this.user.username, this.form.get('password').value).subscribe(data => {
       this.error = data.message;
       if (data.success) {
         this.classError = 'alert alert-success';

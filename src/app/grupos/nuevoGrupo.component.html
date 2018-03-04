@@ -50,10 +50,10 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                         <textarea matInput placeholder="Introduzca informacion para el grupo" name="informacion" class="form-control" rows="5" autocomplete="off"
                             formControlName="informacion"></textarea>
                         <mat-hint>Este campo es obligatorio!</mat-hint>
-                        <mat-error *ngIf="(form.controls.nombre.dirty && form.controls.nombre.errors?.minlength) || (form.controls.nombre.dirty && form.controls.nombre.errors?.maxlength)">
+                        <mat-error *ngIf="(form.controls.informacion.dirty && form.controls.informacion.errors?.minlength) || (form.controls.nombre.dirty && form.controls.nombre.errors?.maxlength)">
                             Max length: 50, Min length: 5
                         </mat-error>
-                        <mat-error *ngIf="(form.controls.informacion.dirty && form.controls.informacion.errors?.minlength) || (form.controls.informacion.dirty && form.controls.informacion.errors?.maxlength)">
+                        <mat-error *ngIf="(form.controls.informacion.dirty && form.controls.informacion.hasError('required'))">
                             La descripcion es
                             <strong>obligatorio</strong>
                         </mat-error>

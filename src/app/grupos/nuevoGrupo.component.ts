@@ -36,7 +36,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 export class NuevoGrupoComponent implements OnInit {
     separatorKeysCodes = [ENTER, ZERO];
-    matcher = new MyErrorStateMatcher();
+    // matcher = new MyErrorStateMatcher();
     domain = this.authService.domain;
     message: any;
     messageClass: string;
@@ -179,7 +179,12 @@ export class NuevoGrupoComponent implements OnInit {
 
     ngOnInit() {
         this.authService.getProfile().subscribe(prof => {
-            this.username = prof.user.username;
+            if (prof.success) {
+                this.username = prof.user.username;
+            } else {
+                this.authService.logout();
+                this.router.navigateByUrl('/login');
+            }
         });
     }
 

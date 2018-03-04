@@ -50,7 +50,6 @@ export class EventosService {
     }
 
     getAll() {
-        console.log('que pasa?');
         this.createAuthenticationHeaders();
         return this.http.get(this.domain + '', this.options).map(res => res.json());
     }
@@ -58,5 +57,10 @@ export class EventosService {
     addEvento(evento) {
         this.createAuthenticationHeaders();
         return this.http.post(this.domain + evento.idGrupo, evento, this.options).map(res => res.json());
+    }
+
+    getUltimoEvento(username) {
+        this.createAuthenticationHeaders();
+        return this.http.get(this.domain + 'ultimo/' + username, this.options).map(res => res.json());
     }
 }

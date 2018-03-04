@@ -4,12 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
 const config = require('./config/config.local');
-const authentication = require('./routes/authentication')(router);
-const tags = require('./routes/tags')(router);
-const notifications = require('./routes/notificaciones')(router);
-const eventos = require('./routes/eventos')(router);
-const grupos = require('./routes/grupos')(router);
-const users = require('./routes/users')(router);
+
 const cors = require('cors');
 const multer = require('multer');
 const port = process.env.PORT || 8080;
@@ -39,30 +34,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Angular DIST output folder
 app.use(express.static(__dirname + '/dist'));
 
-app.use('/authentication', authentication);
-app.use(tags);
-app.use(notifications);
-app.use(grupos);
-app.use(eventos);
-app.use(users);
-
+app.use(require('./routes/authentication')(router));
+app.use(require('./routes/tags')(router));
+app.use(require('./routes/notificaciones')(router));
+app.use(require('./routes/grupos')(router));
+app.use(require('./routes/eventos')(router));
+app.use(require('./routes/users')(router));
 
 // API location
 app.use('/api', api);
 
-// // Send all other requests to the Angular app
-// app.get('*', (req, res) => {
-//     res.send(path.join(__dirname + '/dist/index.html'));
-// });
-
-// catch 404 and forward to error handler
-// app.use(function (req, res, next) {
-//     var err = new Error('Not Found');
-//     err.status = 404;
-//     next(err);
-// });
+// Send all other requests to the Angular app
+app.get('*', (req, res) => {
+    res.send(path.join(__dirname + '/dist/index.html'));
+});
 
 // const server = http.createServer(app);
-app.listen(port, () => console.log('Running on ' + config.name + ': ' + + port));
+app.listen(port, () => console.log('Running on ' + config.name + ': ' + port));
 
 module.exports = app;

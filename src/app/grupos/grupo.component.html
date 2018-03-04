@@ -24,13 +24,10 @@ padding-bottom: 15px;border-radius: 5px;margin-bottom: 40px;">
                         <i class="material-icons">settings</i>
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" [routerLink]="['/nuevoEvento', grupo.id]">Nuevo Evento</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" [routerLink]="['/peticiones', grupo.id]">Peticiones
+                        <a class="dropdown-item" [routerLink]="['/notificaciones']">Peticiones
                             <span *ngIf="npeticiones>0" class="badge badge-notify" style="background: red;position:relative;/* top: -20px; *//* left: -24px; */z-index: 1000;">
                                 {{npeticiones}}</span>
                         </a>
-
                     </div>
                 </div>
                 <span *ngIf="npeticiones>0" class="badge badge-notify" style="background: red;position:relative;top: -20px;left: -24px;z-index: 1000;">

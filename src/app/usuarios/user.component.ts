@@ -63,6 +63,15 @@ export class UserComponent implements OnInit {
 
         this.authService.getProfile().subscribe(profile => {
             this.user = profile.user;
+
+            this.eventosService.getUltimoEvento(this.user.username).subscribe(res => {
+                if (res.success) {
+                    this.ultimoEvento = res.eventos;
+                } else {
+                    this.ultimoEvento = [];
+                }
+            });
+
         });
 
         // this._dataService.getById(this.id, '')
@@ -72,10 +81,6 @@ export class UserComponent implements OnInit {
 
         //     this.getHobbies(this.user);
         //     });
-        this._dataService.getUltimoEvento(this.id).subscribe(res => {
-            this.ultimoEvento = res;
-            this.getOrganizador(this.ultimoEvento[0].organizador.id);
-        });
         this.grupos = false;
         this.gruposid = new Array<any>();
     }

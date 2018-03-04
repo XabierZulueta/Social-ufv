@@ -6,6 +6,19 @@ module.exports = (router) => {
 
     // GET ALL (READ)
     router.get('/eventos/', (req, res) => {
+
+        // Grupos.aggregate([
+        //     {$unwind : "$eventos"},
+        //     {$match : {"eventos.go.name" : "username2"}},
+        //     {$project : {
+        //                  _id:0,
+        //                  grupo: "$nombre",
+        //                  title : "$eventos.title", 
+        //                  start: "$eventos.start",
+        //                  go : "$eventos.go"}},
+        //     {$sort: {"eventos.start": -1}}
+        // ])
+
         Grupo.find({
             $and: [
                 { "eventos": { $ne: [] } },
@@ -176,7 +189,7 @@ module.exports = (router) => {
     */
     router.put('/eventos/:idGrupo/', (req, res) => {
         if (!req.body.title) {
-            res.json({ success: false, message: 'No se ha especificado el titulo del evento que se quiere modificar.' }); nb
+            res.json({ success: false, message: 'No se ha especificado el titulo del evento que se quiere modificar.' });
         } else {
             Grupo.find({ _id: req.params.idGrupo, "eventos.title": req.body.title }, (err, grupo) => {
                 if (err) {
@@ -193,10 +206,37 @@ module.exports = (router) => {
                         } else {
                             res.json({ success: true, message: 'Evento modificado correctamente.' });
                         }
-                    })
+                    });
                 }
-            })
+            });
         }
+    });
+
+    router.get('/eventos/ultimo/:username', (req, res) => {
+        Grupo.aggregate([
+            { $unwind: "$eventos" },
+            { $match: { "eventos.go.name": req.params.username } },
+            {
+                $project: {
+                    _id: 0,
+                    grupo: "$nombre",
+                    organizador: "$administrador",
+                    status: "$eventos.status",
+                    title: "$eventos.title",
+                    start: "$eventos.start",
+                    creditos: "$eventos.creditos",
+                    go: "$eventos.go"
+                }
+            },
+            { $limit: 1 },
+            { $sort: { "eventos.start": -1 } }
+        ], (err, eventos) => {
+            if (eventos.length == 0) {
+                res.json({ success: false, message: 'No se ha encontrado eventos para este usuario.' });
+            } else {
+                res.json({ success: true, message: 'Eventos', lastEvento: eventos });
+            }
+        });
     });
 
     return router;
@@ -237,4 +277,4 @@ checkIfUserCanModifyGrupos = function (req, res, callback) {
             }
         });
     }
-}
+};
