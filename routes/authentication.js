@@ -44,7 +44,6 @@ module.exports = (router) => {
     });
 
     router.put('/authentication/reset/password', (req, res) => {
-        console.log(req.body.username);
         User.findOne({ username: req.body.username }).select('nombre username resetToken email active').exec((err, user) => {
             if (err) {
                 res.json({ success: false, message: err });

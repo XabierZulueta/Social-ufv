@@ -86,10 +86,9 @@ export class AuthenticationService {
         return this.http.get(this.domain + 'authentication/reset/username/' + email).map(res => res.json());
     }
 
-    resetPassword(username, password) {
+    resetPassword(username) {
         const body = {
-            username: username,
-            password: password
+            username: username
         };
         return this.http.put(this.domain + 'authentication/reset/password', body).map(res => res.json());
     }
